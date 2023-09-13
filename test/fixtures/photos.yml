@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  photo_dsc: MyString
+  filename: MyString
+  rating: 1
+  photodate: 2023-09-12 19:17:43
+  latitude: 1.5
+  longitude: 1.5
+  notes: MyString
+  talent: one
+  photoshoot: one
+
+two:
+  photo_dsc: MyString
+  filename: MyString
+  rating: 1
+  photodate: 2023-09-12 19:17:43
+  latitude: 1.5
+  longitude: 1.5
+  notes: MyString
+  talent: two
+  photoshoot: two
