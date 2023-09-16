@@ -1,0 +1,10 @@
+= form_for @talent do |f|
+  - if @talent.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@talent.errors.count, "error")} prohibited this talent from being saved:"
+      %ul
+        - @talent.errors.full_messages.each do |message|
+          %li= message
+
+  .actions
+    = f.submit 'Save'
