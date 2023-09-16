@@ -1,6 +1,6 @@
 require "test_helper"
 
-class PhotoshootTest < ActiveSupport::TestCase
+class PortfolioTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
