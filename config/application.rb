@@ -12,9 +12,9 @@ module Gallery
     config.load_defaults 7.0
 
 # APPLICATION constants ... #TODO replace with config file?
-    config.app_name  "Gallery"
-    config.app_version  "0.01"
-    config.photo_path  ( ENV["GALLERY_PATH"]  ||  "/home/daudi/Pictures" )
+    config.app_name    = "Gallery"
+    config.app_version =  "0.01"
+    config.photo_path  = ( ENV["GALLERY_PATH"]  ||  "/home/daudi/Pictures" )
     
  
     # Configuration for the application, engines, and railties goes here.
