@@ -15,6 +15,8 @@ module Gallery
     config.app_name    = "Gallery"
     config.app_version =  "0.01"
     config.photo_path  = ( ENV["GALLERY_PATH"]  ||  "/home/daudi/Pictures" )
+
+    config.sass.preferred_syntax = :sass
     
  
     # Configuration for the application, engines, and railties goes here.
