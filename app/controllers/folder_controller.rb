@@ -1,4 +1,6 @@
 class FolderController < ApplicationController
+  include FolderHelper
+
   # GALLERY_PATH, GALLERY_BASE, GALLERY_SOURCE
   # Rails.configuration.photo_path  -- string for basic path to photos: ex $HOME
   # Rails.configuration.photo_base  -- string for photos folder: ex Pictures
@@ -12,12 +14,7 @@ class FolderController < ApplicationController
   end
 
   def selectfolder
-    @folders = Dir.children( 
-        File.join(
-          Rails.configuration.photo_path,
-          Rails.configuration.photo_base
-        )
-      )
+    @folders = picture_source_folders
   end
 
   def loadphotos
