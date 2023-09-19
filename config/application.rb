@@ -14,7 +14,9 @@ module Gallery
 # APPLICATION constants ... #TODO replace with config file?
     config.app_name    = "Gallery"
     config.app_version =  "0.01"
-    config.photo_path  = ( ENV["GALLERY_PATH"]  ||  "/home/daudi/Pictures" )
+    config.photo_path   = ( ENV["GALLERY_PATH"]  ||  ENV["HOME"]  || "/" )
+    config.photo_base   = ( ENV["GALLERY_BASE"]   || "Pictures" )
+    config.photo_source = ( ENV["GALLERY_SOURCE"]  || "darktable_exported" )
 
  
     # Configuration for the application, engines, and railties goes here.

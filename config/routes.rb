@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   get 'photo/show'
   get 'folder/index'
   get 'folder/show'
+  get 'folder/selectfolder'
   post 'folder/loadphotos'
   resources :talent
   resources :portfolio
