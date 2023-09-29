@@ -44,6 +44,7 @@ gem "bootsnap", require: false
 
 # misc dev stuff
 gem 'pp'
+gem 'exiftool'
 
 # use HAML for views
 gem 'haml'
