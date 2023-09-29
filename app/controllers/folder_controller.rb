@@ -18,5 +18,11 @@ class FolderController < ApplicationController
   end
 
   def loadphotos
+    # params[:folder] has the selection
+    # steps
+    # validate path = picpath + folder + photo_source
+    # @photos <= get all jpg children in folder
+    # @photos.each { get file info, exifinfo; create a photo rec, save}
+    #
   end
 end
