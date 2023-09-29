@@ -1,5 +1,4 @@
-%h3 Select a folder to load into Gallery
+%h5 Select a folder to access
 = form_with url: folder_loadphotos_path do |f|
-  = f.label(:folder, 'Select folder:&emsp;'.html_safe)
   = f.select(:folder, @folders)
-  = f.submit "Load&raquo;".html_safe
+  = f.submit "Access&raquo;".html_safe
