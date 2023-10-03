@@ -29,5 +29,14 @@ module FolderHelper
     return selects
   end
 
+  def file_to_path( folder )
+    return File.join(
+        Rails.configuration.photo_path,
+        Rails.configuration.photo_base,
+        folder,
+        Rails.configuration.photo_source
+     )    
+  end
+
 
 end  # module

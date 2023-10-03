@@ -18,11 +18,21 @@ class FolderController < ApplicationController
   end
 
   def loadphotos
-    # params[:folder] has the selection
-    # steps
-    # validate path = picpath + folder + photo_source
-    # @photos <= get all jpg children in folder
-    # @photos.each { get file info, exifinfo; create a photo rec, save}
-    #
+    
+    folder = params[:folder]
+    dirpath = file_to_path( folder )
+    Dir.exist?(dirpath)
+    photos = Dir.glob("*.jpg")  # {jpg¸ JPEG}
+    photos.each do |photofile|
+      f = File.new( photofile )
+      f.birthtime   # time for creation of file
+      meta = Exiftool.new( photofile )
+      m = meta.to_hash
+      # m[ :longitude ] ... etc
+      # photodatetime
+      # width
+      # height
+    end
+
   end
 end
