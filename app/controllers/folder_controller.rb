@@ -21,17 +21,25 @@ class FolderController < ApplicationController
     
     folder = params[:folder]
     dirpath = file_to_path( folder )
-    Dir.exist?(dirpath)
-    photos = Dir.glob("*.jpg")  # {jpg¸ JPEG}
-    photos.each do |photofile|
-      f = File.new( photofile )
-      f.birthtime   # time for creation of file
-      meta = Exiftool.new( photofile )
-      m = meta.to_hash
-      # m[ :longitude ] ... etc
-      # photodatetime
-      # width
-      # height
+    # puts "LOADPHOTOS folder: #{folder}, path: #{dirpath}"
+
+    if Dir.exist?(dirpath)
+      @photos = Dir.glob( File.join(dirpath, "*.jpg") )  # {jpg¸ JPEG}
+
+      @photos.each do |photofile|
+        f = File.new( photofile )
+        birth = f.birthtime   # time for creation of file
+        meta = Exiftool.new( photofile )
+        m = meta.to_hash
+        lat =    m[:gps_latitude ]
+        long =   m[:gps_longitude ]
+        dtime =  m[:create_date ]
+        width =  m[:image_width ]
+        height = m[:image_height ]
+        break
+      end
+    else
+      puts "LOADPATH path doesn't exist"
     end
 
   end
