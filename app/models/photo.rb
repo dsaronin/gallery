@@ -23,6 +23,8 @@ class Photo < ApplicationRecord
 #      t.datetime :photodate
 #      t.float :latitude
 #      t.float :longitude
+#      t.integer  :width
+#      t.integer  :height
 #      t.string :notes
 #      t.references :folder, null: false, foreign_key: true
 #      t.references :talent, null: true, foreign_key: true

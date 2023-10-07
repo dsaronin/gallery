@@ -24,6 +24,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_16_021431) do
     t.string "filename"
     t.integer "rating"
     t.datetime "photodate"
+    t.integer "width"
+    t.integer "height"
     t.float "latitude"
     t.float "longitude"
     t.string "notes"

@@ -5,6 +5,8 @@ class CreatePhotos < ActiveRecord::Migration[7.0]
       t.string :filename
       t.integer :rating
       t.datetime :photodate
+      t.integer  :width
+      t.integer  :height
       t.float :latitude
       t.float :longitude
       t.string :notes

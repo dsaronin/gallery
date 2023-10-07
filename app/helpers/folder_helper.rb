@@ -38,5 +38,10 @@ module FolderHelper
      )    
   end
 
+  def fn_to_dsc( f, dirpath )
+    rx = Regexp.new( "^"+dirpath+"/" )
+    return f.gsub(rx,"").gsub(/\.\w+$/,"").gsub(/_(sm|lg)$/,"")
+  end
+
 
 end  # module
