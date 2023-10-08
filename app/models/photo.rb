@@ -9,8 +9,8 @@ class Photo < ApplicationRecord
   belongs_to :portfolio, optional: true
   belongs_to :talent, optional: true
  
-  validates :latitude, numericality: true
-  validates :longitude, numericality: true
+  validates :latitude, numericality: {allow_nil: true}
+  validates :longitude, numericality: {allow_nil: true}
   validates :rating, numericality: { only_integer: true, in: (0..5), allow_nil: true }
   validates_presence_of  :photo_dsc
   validates_presence_of  :filename

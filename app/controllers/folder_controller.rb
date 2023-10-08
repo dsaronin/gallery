@@ -40,15 +40,15 @@ class FolderController < ApplicationController
         height = m[:image_height ]
         dsc = fn_to_dsc( photofile, dirpath )
         puts "LOADPHOTOS: #{photofile}, #{dsc}, #{dtime}, #{width}, #{height}"
-        @pic = folder.photos.create(
-          photodate: dtime,
+        @pic = folder.photos.create!(
+          photo_dsc: dsc,
+          filename: photofile,
+          photodate: dtime.sub(/:/,"/").sub(/:/,"/").to_datetime,
           latitude: lat, longitude: long,
           width: width, height: height
         )
         break
       end
-      folder.save
-      puts @pic.inspect
     else
       puts "LOADPATH path doesn't exist"
     end
