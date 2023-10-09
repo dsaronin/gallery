@@ -21,11 +21,11 @@ class FolderController < ApplicationController
 
   def loadphotos
     
-    my_folder = params[:folder]
-    dirpath = file_to_path( my_folder )
-    folder = Folder.create( name: my_folder, path: dirpath )
+    @my_folder = params[:folder]
+    dirpath = file_to_path( @my_folder )
+    folder = Folder.create( name: @my_folder, path: dirpath )
 
-    # puts "LOADPHOTOS folder: #{my_folder}, path: #{dirpath}"
+    # puts "LOADPHOTOS folder: #{@my_folder}, path: #{dirpath}"
 
     if Dir.exist?(dirpath)
       @photos = Dir.glob( File.join(dirpath, "*.jpg") )  # {jpg¸ JPEG}
@@ -52,16 +52,9 @@ class FolderController < ApplicationController
       end
     else
       puts "LOADPATH path doesn't exist"
+      @fail = true
     end
 
   end
-end
-#      :photo_dsc
-#      :filename
-#      :rating
-#      :photodate
-#      :latitude
-#      :longitude
-#      :width
-#      :height
-#
+
+end    # class controller
