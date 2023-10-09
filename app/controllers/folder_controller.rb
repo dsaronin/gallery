@@ -14,7 +14,9 @@ class FolderController < ApplicationController
   end
 
   def selectfolder
-    @folders = picture_source_folders
+    folders = Folder.all
+    @folder_list = folders.map {|f| f.name}
+    @folders = picture_source_folders - @folder_list
   end
 
   def loadphotos
@@ -47,7 +49,6 @@ class FolderController < ApplicationController
           latitude: lat, longitude: long,
           width: width, height: height
         )
-        break
       end
     else
       puts "LOADPATH path doesn't exist"
