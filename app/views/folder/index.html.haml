@@ -1,2 +1,9 @@
-%h1 Folder#index
-%p Find me in app/views/folder/index.html.haml
+%h4 Available Folders
+%p click name to show all pics in folder
+.list
+  - if @list.empty?
+    %p There are no folders to show; select something to load.
+  - else
+    - xleft = @list.length.div(2)
+    = render partial: 'list_column', :locals => {:mylist => @list[0..xleft-1]}
+    = render partial: 'list_column', :locals => {:mylist => @list[xleft..@list.length-1]}

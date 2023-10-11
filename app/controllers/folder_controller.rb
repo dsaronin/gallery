@@ -1,24 +1,35 @@
 class FolderController < ApplicationController
   include FolderHelper
-
+# ----------------------------------------------------------
   # GALLERY_PATH, GALLERY_BASE, GALLERY_SOURCE
   # Rails.configuration.photo_path  -- string for basic path to photos: ex $HOME
   # Rails.configuration.photo_base  -- string for photos folder: ex Pictures
   # Rails.configuration.photo_source  -- string for subdirectories containing photos for sourcing: ex darktable_exported
-  #
-
+# ----------------------------------------------------------
+# index -- show all loaded folders; allow user to select one
+# ----------------------------------------------------------
   def index
+    @list = Folder.all
   end
 
+# ----------------------------------------------------------
+# show  -- show thumbnail pics of all photos in selected folder
+# ----------------------------------------------------------
   def show
   end
 
+# ----------------------------------------------------------
+# selectfolder  -- show all non-loaded pic folders; all user to select one
+# ----------------------------------------------------------
   def selectfolder
     folders = Folder.all
     @folder_list = folders.map {|f| f.name}
     @folders = picture_source_folders - @folder_list
   end
 
+# ----------------------------------------------------------
+# loadphotos  -- loads into db all photos from the selected folder
+# ----------------------------------------------------------
   def loadphotos
     
     @my_folder = params[:folder]
@@ -54,7 +65,14 @@ class FolderController < ApplicationController
       puts "LOADPATH path doesn't exist"
       @fail = true
     end
-
   end
 
+# ----------------------------------------------------------
+# update  -- rechecks a folder for any recent unload pics & loads them
+# ----------------------------------------------------------
+# ----------------------------------------------------------
+# destroy  -- destorys a folder (from db) and all its related pics
+# ----------------------------------------------------------
+
+# ----------------------------------------------------------
 end    # class controller
