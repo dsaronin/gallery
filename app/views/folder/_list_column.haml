@@ -1,4 +1,4 @@
 .column
   %ul
     - mylist.each do |f|
-      %li= f.name
+      %li= link_to f.name, folder_show_path(f)

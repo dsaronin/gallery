@@ -1,5 +1,7 @@
 class FolderController < ApplicationController
   include FolderHelper
+  before_action :validate_folder, :only => [:update, :edit, :destroy, :show]
+ 
 # ----------------------------------------------------------
   # GALLERY_PATH, GALLERY_BASE, GALLERY_SOURCE
   # Rails.configuration.photo_path  -- string for basic path to photos: ex $HOME
@@ -73,6 +75,21 @@ class FolderController < ApplicationController
 # ----------------------------------------------------------
 # destroy  -- destorys a folder (from db) and all its related pics
 # ----------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+  def validate_folder()
+    @folder = Folder.find(params[:id])
+    true     # returning true continues controller action
+    
+  rescue ActiveRecord::RecordNotFound
+      flash[:notice] = "folder doesn't exist"
+      flash[:show_flash] = true
+      # redirect_back
+      false
+  end
+
+# ------------------------------------------------------------------------------
+
 
 # ----------------------------------------------------------
 end    # class controller
