@@ -1,2 +1,10 @@
-%h1 Folder#show
-%p Find me in app/views/folder/show.html.haml
+%h4= @folder.name 
+%i Click thumbnail to see photo
+.thumbnails
+  %dl
+    - @folder.photos.each do |p|
+      %dt
+        %img{ :src => p.filename, :class => 'image', :alt => "#{p.photo_dsc}" }
+      %dd= p.photo_dsc
+      - break
+

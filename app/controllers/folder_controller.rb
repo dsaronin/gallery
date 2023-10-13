@@ -1,6 +1,6 @@
 class FolderController < ApplicationController
   include FolderHelper
-  before_action :validate_folder, :only => [:update, :edit, :destroy, :show]
+  before_action :validate_folder, :only => [:show]
  
 # ----------------------------------------------------------
   # GALLERY_PATH, GALLERY_BASE, GALLERY_SOURCE
@@ -78,10 +78,13 @@ class FolderController < ApplicationController
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
   def validate_folder()
+    puts "SHOW: id #{params[:id]}"
     @folder = Folder.find(params[:id])
+    puts "SHOW: folder found"
     true     # returning true continues controller action
     
   rescue ActiveRecord::RecordNotFound
+    puts "SHOW: ERROR NOT FOUND"
       flash[:notice] = "folder doesn't exist"
       flash[:show_flash] = true
       # redirect_back
