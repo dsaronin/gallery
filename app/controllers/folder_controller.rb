@@ -57,7 +57,7 @@ class FolderController < ApplicationController
         puts "LOADPHOTOS: #{photofile}, #{dsc}, #{dtime}, #{width}, #{height}"
         @pic = folder.photos.create!(
           photo_dsc: dsc,
-          filename: photofile,
+          filename: filepath_to_fn(photofile),
           photodate: dtime.sub(/:/,"/").sub(/:/,"/").to_datetime,
           latitude: lat, longitude: long,
           width: width, height: height

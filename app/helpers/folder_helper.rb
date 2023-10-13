@@ -1,21 +1,21 @@
 module FolderHelper
 
-  def picture_sub_folders
-    picpath = File.join(
+  def make_picpath()
+    return File.join(
       Rails.configuration.photo_path,
       Rails.configuration.photo_base
     ) 
+  end
 
+  def picture_sub_folders
+    picpath = make_picpath
     return Dir.children( picpath ).select { |f| 
       File.directory?( File.join(picpath, f) ) 
     }
   end
 
   def picture_source_folders
-    picpath = File.join(
-      Rails.configuration.photo_path,
-      Rails.configuration.photo_base
-    ) 
+    picpath = make_picpath
     picglob = File.join(
       picpath,
       "**",
@@ -43,5 +43,10 @@ module FolderHelper
     return f.gsub(rx,"").gsub(/\.\w+$/,"").gsub(/_(sm|lg)$/,"")
   end
 
+  def filepath_to_fn( fp )
+    picpath = "^" + make_picpath + "/"
+    pprex = Regexp.new( picpath )
+    return fp.gsub(pprex,"")
+  end
 
 end  # module
