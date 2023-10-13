@@ -18,6 +18,7 @@ module Gallery
     config.photo_base   = ( ENV["GALLERY_BASE"]   || "Pictures" )
     config.photo_source = ( ENV["GALLERY_SOURCE"]  || "darktable_exported" )
 
+    config.public_file_server.enabled = true
  
     # Configuration for the application, engines, and railties goes here.
     #

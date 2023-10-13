@@ -3,7 +3,7 @@
 .thumbnails
   %dl
     - @folder.photos.each do |p|
-      %dt= image_tag( "photos/#{p.filename}" )
+      %dt
+        %img{ :src => public_fn(p.filename), :class => 'image', :alt => "#{p.photo_dsc}" }
       %dd= p.photo_dsc
-      - break
-
+      

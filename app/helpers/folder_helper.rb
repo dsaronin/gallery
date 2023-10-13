@@ -47,6 +47,10 @@ module FolderHelper
     picpath = "^" + make_picpath + "/"
     pprex = Regexp.new( picpath )
     return fp.gsub(pprex,"")
+  end 
+
+  def public_fn(fn)
+    return File.join( '..', 'photos', fn )
   end
 
 end  # module
