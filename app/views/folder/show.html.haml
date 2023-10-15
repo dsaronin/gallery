@@ -1,9 +1,8 @@
 %h4= @folder.name 
-%i Click thumbnail to see photo
-.thumbnails
-  %dl
-    - @folder.photos.each do |p|
-      %dt
-        %img{ :src => public_fn(p.filename), :class => 'image', :alt => "#{p.photo_dsc}" }
-      %dd= p.photo_dsc
-      
+%i click thumbnail to select
+- @folder.photos.each do |p|
+  .thumbnail
+    %a{ href: url_for(p)}
+      %img{ :src => public_fn(p.filename), :class => 'image', :alt => "#{p.photo_dsc}" }
+    = link_to p.photo_dsc, p
+
