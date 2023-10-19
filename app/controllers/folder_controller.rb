@@ -78,9 +78,7 @@ class FolderController < ApplicationController
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
   def validate_folder()
-    puts "SHOW: id #{params[:id]}"
     @folder = Folder.find(params[:id])
-    puts "SHOW: folder found"
     true     # returning true continues controller action
     
   rescue ActiveRecord::RecordNotFound
