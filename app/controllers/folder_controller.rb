@@ -46,7 +46,7 @@ class FolderController < ApplicationController
 
       @photos.each do |photofile|
         f = File.new( photofile )
-        birth = f.birthtime   # time for creation of file
+        birth = f.ctime   # time for creation of file
         m = meta_all.result_for( photofile ).to_hash
         lat =    m[:gps_latitude ]
         long =   m[:gps_longitude ]

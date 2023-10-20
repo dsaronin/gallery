@@ -1,2 +1,6 @@
-%h4 Photo#show
-
+%h4= @photo.photo_dsc
+- orient = ( @photo.width/@photo.height >= 0.95 ? "landscape" : "portrait" )
+%img{ :src => public_fn(@photo.filename), :class => orient, :alt => "#{@photo.photo_dsc}" }
+#photo-data
+  %p
+    this is a bunch of data.
