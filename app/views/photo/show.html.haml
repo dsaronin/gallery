@@ -1,6 +1,14 @@
-%h4= @photo.photo_dsc
+%h5= @photo.photo_dsc
 - orient = ( @photo.width/@photo.height >= 0.95 ? "landscape" : "portrait" )
 %img{ :src => public_fn(@photo.filename), :class => orient, :alt => "#{@photo.photo_dsc}" }
 #photo-data
+  %i= @photo.filename
   %p
-    this is a bunch of data.
+    = @photo.photodate.strftime "%m/%d/%Y"
+    &emsp;
+    = @photo.latitude 
+    &emsp;
+    = @photo.longitude
+  %p= @photo.notes
+  %p portfolios: 
+  %p galleries: 
