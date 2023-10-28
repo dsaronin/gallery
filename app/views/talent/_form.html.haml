@@ -6,5 +6,20 @@
         - @talent.errors.full_messages.each do |message|
           %li= message
 
+  = f.label( :talent_code, 'talent_code*', {:title => "DFP talent code"} ) 
+  = f.text_field :talent_code
+  = f.label( :talent_name, 'talent name*', {:title => "talent's professional talenting name"} ) 
+  = f.text_field :talent_name
+  = f.label( :first_name, 'First name*', {:title => "first and last names"} ) 
+  = f.text_field :first_name
+  = f.label( :last_name, 'Last name*', {:title => "Your first and last names"} ) 
+  = f.text_field :last_name
+  = f.label( :talent_dob, 'talent_dob', {:title => "talent dob"} ) 
+  = f.calendar_date_select :talent_dob
+  = f.label( :talent_release, 'talent_release date', {:title => "talent release signed date"} ) 
+  = f.calendar_date_select( "talent_release", {:id => 'talent_release'} )
+
   .actions
     = f.submit 'Save'
+
+

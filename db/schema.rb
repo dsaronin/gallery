@@ -48,17 +48,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_16_021431) do
   end
 
   create_table "talents", force: :cascade do |t|
-    t.string "model_code"
-    t.string "model_name"
+    t.string "talent_code"
+    t.string "talent_nbr"
+    t.string "talent_name"
     t.string "first_name"
     t.string "last_name"
-    t.string "gender"
-    t.integer "shoot_age"
-    t.date "model_release"
-    t.string "model_nbr"
+    t.date "talent_dob"
+    t.date "talent_release"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["model_code"], name: "index_talents_on_model_code", unique: true
+    t.index ["talent_code"], name: "index_talents_on_talent_code", unique: true
   end
 
   add_foreign_key "photos", "folders"
