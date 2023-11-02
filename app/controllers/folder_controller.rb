@@ -25,7 +25,7 @@ class FolderController < ApplicationController
 # ----------------------------------------------------------
   def selectfolder
     folders = Folder.all
-    @folder_list = folders.map {|f| f.name}
+    @folder_list = folders.map {|f| f.fname}
     @folders = picture_source_folders - @folder_list
   end
 
@@ -36,9 +36,9 @@ class FolderController < ApplicationController
     
     @my_folder = params[:folder]
     dirpath = file_to_path( @my_folder )
-    folder = Folder.create( name: @my_folder, path: dirpath )
+    folder = Folder.create( fname: @my_folder, fpath: dirpath )
 
-    # puts "LOADPHOTOS folder: #{@my_folder}, path: #{dirpath}"
+    # puts "LOADPHOTOS folder: #{@my_folder}, fpath: #{dirpath}"
 
     if Dir.exist?(dirpath)
       @photos = Dir.glob( File.join(dirpath, "*.jpg") )  # {jpg¸ JPEG}

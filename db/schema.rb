@@ -12,11 +12,11 @@
 
 ActiveRecord::Schema[7.0].define(version: 2023_09_16_021431) do
   create_table "folders", force: :cascade do |t|
-    t.string "name"
-    t.string "path"
+    t.string "fname"
+    t.string "fpath"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_folders_on_name", unique: true
+    t.index ["fname"], name: "index_folders_on_fname", unique: true
   end
 
   create_table "photos", force: :cascade do |t|
@@ -47,7 +47,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_16_021431) do
     t.index ["name"], name: "index_portfolios_on_name", unique: true
   end
 
-  create_table "talents", force: :cascade do |t|
+  create_table "talent", force: :cascade do |t|
     t.string "talent_code"
     t.string "talent_nbr"
     t.string "talent_name"
@@ -57,10 +57,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_16_021431) do
     t.date "talent_release"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["talent_code"], name: "index_talents_on_talent_code", unique: true
+    t.index ["talent_code"], name: "index_talent_on_talent_code", unique: true
   end
 
   add_foreign_key "photos", "folders"
   add_foreign_key "photos", "portfolios"
-  add_foreign_key "photos", "talents"
+  add_foreign_key "photos", "talent"
 end

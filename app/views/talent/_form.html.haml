@@ -8,16 +8,22 @@
 
   = f.label( :talent_code, 'talent_code*', {:title => "DFP talent code"} ) 
   = f.text_field :talent_code
+  %br
   = f.label( :talent_name, 'talent name*', {:title => "talent's professional talenting name"} ) 
   = f.text_field :talent_name
+  %br
   = f.label( :first_name, 'First name*', {:title => "first and last names"} ) 
   = f.text_field :first_name
+  %br
   = f.label( :last_name, 'Last name*', {:title => "Your first and last names"} ) 
   = f.text_field :last_name
+  %br
   = f.label( :talent_dob, 'talent_dob', {:title => "talent dob"} ) 
-  = f.calendar_date_select :talent_dob
+  = f.date_field :talent_dob
+  %br
   = f.label( :talent_release, 'talent_release date', {:title => "talent release signed date"} ) 
-  = f.calendar_date_select( "talent_release", {:id => 'talent_release'} )
+  = f.date_field( "talent_release", {:id => 'talent_release'} )
+  %br
 
   .actions
     = f.submit 'Save'

@@ -7,12 +7,12 @@ class Folder < ApplicationRecord
 
   has_many :photos, dependent: :destroy
 
-  validates_presence_of  :name
-  validates_presence_of  :path
+  validates_presence_of  :fname
+  validates_presence_of  :fpath
 
 # ------------------------------------------------------------------------------
-#      t.string :name
-#      t.string :path
+#      t.string :fname
+#      t.string :fpath
 # ------------------------------------------------------------------------------
 
 

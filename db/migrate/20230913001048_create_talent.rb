@@ -1,6 +1,6 @@
-class CreateTalents < ActiveRecord::Migration[7.0]
+class CreateTalent < ActiveRecord::Migration[7.0]
   def change
-    create_table :talents do |t|
+    create_table :talent do |t|
       t.string :talent_code
       t.string :talent_nbr
       t.string :talent_name
@@ -11,6 +11,6 @@ class CreateTalents < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
-    add_index :talents, :talent_code, unique: true
+    add_index :talent, :talent_code, unique: true
   end
 end
