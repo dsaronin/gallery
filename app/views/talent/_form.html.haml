@@ -15,8 +15,11 @@
   = f.label( :first_name, 'First name*', {:title => "first and last names"} ) 
   = f.text_field :first_name
   %br
-  = f.label( :last_name, 'Last name*', {:title => "Your first and last names"} ) 
+  = f.label( :last_name, 'Last name', {:title => "Your first and last names"} ) 
   = f.text_field :last_name
+  %br
+  = f.label( :talent_nbr, 'phone', {:title => "contact phone number"} ) 
+  = f.text_field :talent_nbr
   %br
   = f.label( :talent_dob, 'talent_dob', {:title => "talent dob"} ) 
   = f.date_field :talent_dob
