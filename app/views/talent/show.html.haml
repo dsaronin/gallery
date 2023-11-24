@@ -1,6 +1,11 @@
-%p#notice= notice
-
-
-= link_to 'Edit', edit_talent_path(@talent)
-\|
-= link_to 'Back', talent_index_path
+%h4= @talent.talent_name
+%i= @talent.talent_code
+%p= "#{@talent.first_name} #{@talent.last_name}"
+%p= number_to_phone(@talent.talent_nbr)
+%p= time_ago_in_words(@talent.talent_dob) + " old"
+%p= "model release: " + @talent.talent_release.to_s
+\
+\
+= link_to 'edit &raquo;'.html_safe, edit_talent_path(@talent)
+\&emsp;
+= link_to 'talent list &raquo;'.html_safe, talent_index_path
