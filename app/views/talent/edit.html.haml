@@ -1,7 +1,7 @@
 %h1 Editing talent
 
 = render 'form'
-
-= link_to 'Show', @talent
+%br
+= link_to 'view &raquo;'.html_safe, @talent
 \|
-= link_to 'Back', talent_path
+= link_to 'talent list &raquo;'.html_safe, talent_index_path

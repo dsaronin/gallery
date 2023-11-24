@@ -9,10 +9,10 @@
     - @talents.each do |talent|
       %tr
         %td= talent.talent_name
-        %td= link_to 'view&raquo;'.html_safe, talent
-        %td= link_to 'edit&raquo;'.html_safe, edit_talent_path(talent)
-        %td= link_to 'delete&raquo;'.html_safe, talent, method: :delete, data: { confirm: 'Are you sure?' }
+        %td= link_to 'view &raquo;'.html_safe, talent
+        %td= link_to 'edit &raquo;'.html_safe, edit_talent_path(talent)
+        %td= link_to 'delete &raquo;'.html_safe, talent, method: :delete, data: { confirm: 'Are you sure?' }
 
 %br
 
-= link_to '+New', new_talent_path
+= link_to '+NEW &raquo;'.html_safe, new_talent_path
