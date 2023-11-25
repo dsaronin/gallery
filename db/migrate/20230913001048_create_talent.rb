@@ -8,6 +8,7 @@ class CreateTalent < ActiveRecord::Migration[7.0]
       t.string :last_name
       t.date :talent_dob
       t.date :talent_release
+      t.references :cover, null: true, foreign_key: true
 
       t.timestamps
     end
