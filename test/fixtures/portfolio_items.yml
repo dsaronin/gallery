@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  comment: MyString
+  position: 1
+  portfolio: one
+  photo: one
+
+two:
+  comment: MyString
+  position: 1
+  portfolio: two
+  photo: two
