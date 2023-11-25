@@ -1,5 +1,6 @@
 class Talent < ApplicationRecord
   has_many :photos
+  has_one  :cover, class_name: "Photo"
 end
 
 # -----------------------------
