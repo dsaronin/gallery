@@ -1,4 +1,5 @@
 class PortfolioItem < ApplicationRecord
   belongs_to :portfolio
-  belongs_to :photo
+  has_one :photo
+  acts_as_list 
 end
