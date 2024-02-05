@@ -27,8 +27,8 @@
   = f.label( :talent_release, 'talent_release date', {:title => "talent release signed date"} ) 
   = f.date_field( "talent_release", {:id => 'talent_release'} )
   %br
-
   .actions
-    = f.submit 'Save'
+    = f.submit "&emsp;Save&emsp;".html_safe
+  = f.label( :talent_xxx, "&emsp;".html_safe, {:title => "blank for submit button"} ) 
 
 
