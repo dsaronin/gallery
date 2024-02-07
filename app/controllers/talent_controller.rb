@@ -1,3 +1,8 @@
+# ----------------------------------------------------------
+# Gallery: A Photographer's gallery/portfolio tool
+# Copyright (c) 2024 David S Anderson, All Rights Reserved
+# ----------------------------------------------------------
+
 class TalentController < ApplicationController
   before_action :set_talent, only: %i[ show edit update destroy ]
 

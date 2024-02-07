@@ -1,3 +1,8 @@
+# ----------------------------------------------------------
+# Gallery: A Photographer's gallery/portfolio tool
+# Copyright (c) 2024 David S Anderson, All Rights Reserved
+# ----------------------------------------------------------
+
 class FolderController < ApplicationController
   include FolderHelper
   before_action :validate_folder, :only => [:show]
