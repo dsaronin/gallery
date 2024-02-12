@@ -1,2 +1,5 @@
-%h1 Portfolio#new
-%p Find me in app/views/portfolio/new.html.haml
+%h1 New portfolio
+
+= render 'form'
+%br
+= link_to 'portfolio list &raquo;'.html_safe, portfolio_index_path

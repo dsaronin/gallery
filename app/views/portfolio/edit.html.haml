@@ -1,2 +1,7 @@
-%h1 Portfolio#edit
-%p Find me in app/views/portfolio/edit.html.haml
+%h1 Editing portfolio
+
+= render 'form'
+%br
+= link_to 'view &raquo;'.html_safe, @portfolio
+\|
+= link_to 'portfolio list &raquo;'.html_safe, portfolio_index_path
