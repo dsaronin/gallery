@@ -165,7 +165,7 @@ GEM
     jbuilder (2.15.1)
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
-    json (3.1.0)
+    json (2.21.2)
     logger (1.7.0)
     loofah (2.25.2)
       crass (~> 1.0.2)
@@ -357,6 +357,7 @@ DEPENDENCIES
   haml-rails
   importmap-rails
   jbuilder
+  json (< 3.0)
   pp
   puma (~> 6.0)
   rails (~> 7.1.0)

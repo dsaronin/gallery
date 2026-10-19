@@ -1,6 +1,6 @@
 class Talent < ApplicationRecord
   has_many :photos
-  has_one  :cover, class_name: "Photo"
+  belongs_to :cover, class_name: "Photo", optional: true
 end
 
 # -----------------------------

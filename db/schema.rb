@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_25_213606) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_25_213606) do
   create_table "folders", force: :cascade do |t|
     t.string "fname"
     t.string "fpath"
@@ -80,5 +80,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_25_213606) do
   add_foreign_key "photos", "talent"
   add_foreign_key "portfolio_items", "photos"
   add_foreign_key "portfolio_items", "portfolios"
-  add_foreign_key "talent", "covers"
+  add_foreign_key "talent", "photos", column: "cover_id"
 end

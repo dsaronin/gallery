@@ -1,4 +1,6 @@
 %h4 Available Folders
+%p
+  = link_to "Select Folders to Ingest", folder_selectfolder_path, class: "btn"
 %i click name to show all pics in folder
 .list
   - if @list.empty?
