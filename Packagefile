@@ -1,0 +1,6 @@
+# list of system names for packages required by the application
+# Note: this should be the name by which the package will be invoked
+# in a system call
+
+[DPKG]
+exiftool
