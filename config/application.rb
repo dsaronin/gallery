@@ -1,4 +1,5 @@
 require_relative "boot"
+require_relative "../lib/gallery/environ"
 
 require "rails/all"
 
@@ -10,22 +11,19 @@ module Gallery
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
+    config.autoload_lib(ignore: %w[assets tasks])
+
+    # Synchronize Rails configuration with Gallery::Environ
+    env = Gallery::Environ.instance
 
 # APPLICATION constants ... #TODO replace with config file?
-    config.app_name    = "Gallery"
-    config.app_version =  "0.01"
-    config.photo_path   = ( ENV["GALLERY_PATH"]  ||  ENV["HOME"]  || "/" )
-    config.photo_base   = ( ENV["GALLERY_BASE"]   || "Pictures" )
-    config.photo_source = ( ENV["GALLERY_SOURCE"]  || "darktable_exported" )
+    config.app_name     = env.app_name
+    config.app_version  = env.app_version
+    config.photo_path   = env.photo_path
+    config.photo_base   = env.photo_base
+    config.photo_source = env.photo_source
 
     config.public_file_server.enabled = true
  
-    # Configuration for the application, engines, and railties goes here.
-    #
-    # These settings can be overridden in specific environments using the files
-    # in config/environments, which are processed later.
-    #
-    # config.time_zone = "Central Time (US & Canada)"
-    # config.eager_load_paths << Rails.root.join("extras")
-  end
-end
+  end   # class Application
+end    # module Gallery
