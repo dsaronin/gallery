@@ -41,7 +41,12 @@ class FolderController < ApplicationController
     
     @my_folder = params[:folder]
     dirpath = file_to_path( @my_folder )
-    folder = Folder.create( fname: @my_folder, fpath: dirpath )
+    folder = Folder.find_or_create_by!( fname: @my_folder ) do |f|
+      f.fpath = dirpath
+    end
+
+    # Session state hook
+    gallery_state.current_folder_id = folder.id
 
     # puts "LOADPHOTOS folder: #{@my_folder}, fpath: #{dirpath}"
 
@@ -60,9 +65,13 @@ class FolderController < ApplicationController
         height = m[:image_height ]
         dsc = fn_to_dsc( photofile, dirpath )
         puts "LOADPHOTOS: #{photofile}, #{dsc}, #{dtime}, #{width}, #{height}"
+
+        target_fn = filepath_to_fn(photofile)
+        next if folder.photos.exists?(filename: target_fn)
+
         @pic = folder.photos.create!(
           photo_dsc: dsc,
-          filename: filepath_to_fn(photofile),
+          filename: target_fn,
           photodate: dtime.sub(/:/,"/").sub(/:/,"/").to_datetime,
           latitude: lat, longitude: long,
           width: width, height: height
@@ -84,6 +93,7 @@ class FolderController < ApplicationController
 # ------------------------------------------------------------------------------
   def validate_folder()
     @folder = Folder.find(params[:id])
+    gallery_state.current_folder_id = @folder.id
     true     # returning true continues controller action
     
   rescue ActiveRecord::RecordNotFound

@@ -20,6 +20,52 @@ class Environ
   include Singleton
   extend AnsiColor
   
+# +++++++++++++++++++++++++++++++++++++++++++++++++
+  # --- Nested Session State Container ---
+  # This will maintain user state & preferences across sessions
+  # ******************************************************
+    class SessionState
+      SESSION_KEY = :gallery_state
+
+      attr_accessor :current_folder_id
+
+      def initialize(attrs = {})
+        attrs = attrs.symbolize_keys if attrs.respond_to?(:symbolize_keys)
+        attrs ||= {}
+
+        @current_folder_id = attrs[:current_folder_id]
+      end
+
+      # Hydrates state from the Rails session
+      def self.load(session)
+        raw = session[SESSION_KEY] || {}
+        new(raw)
+      end
+
+      # Serializes state back to the Rails session
+      def persist!(session)
+        session[SESSION_KEY] = to_h
+      end
+
+      def to_h
+        {
+          current_folder_id: @current_folder_id
+        }
+      end
+
+      # Safe record finder
+      def current_folder
+        return nil unless @current_folder_id
+        Folder.find_by(id: @current_folder_id)
+      end
+
+      def clear!(session)
+        session.delete(SESSION_KEY)
+        @current_folder_id = nil
+      end
+    end  # class SessionState
+    
+# +++++++++++++++++++++++++++++++++++++++++++++++++
 #module constants
 
   APP_NAME = "GALLERY"
