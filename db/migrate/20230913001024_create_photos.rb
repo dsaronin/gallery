@@ -3,7 +3,7 @@ class CreatePhotos < ActiveRecord::Migration[7.0]
     create_table :photos do |t|
       t.string :photo_dsc
       t.string :filename
-      t.integer :rating
+      t.integer :stars, default: 0, null: false
       t.datetime :photodate
       t.integer  :width
       t.integer  :height

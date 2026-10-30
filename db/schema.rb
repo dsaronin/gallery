@@ -22,7 +22,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_25_213606) do
   create_table "photos", force: :cascade do |t|
     t.string "photo_dsc"
     t.string "filename"
-    t.integer "rating"
+    t.integer "stars", default: 0, null: false
     t.datetime "photodate"
     t.integer "width"
     t.integer "height"

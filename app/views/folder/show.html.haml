@@ -1,8 +1,10 @@
 %h4= @folder.fname 
 %i click thumbnail to select
-- @folder.photos.each do |p|
-  .thumbnail
-    %a{ href: url_for(p)}
-      %img{ :src => public_fn(p.filename), :class => 'image', :alt => "#{p.photo_dsc}" }
-    = link_to p.photo_dsc, p
+.thumbnail-grid
+  - @folder.photos.each do |p|
+    .thumbnail
+      %a{ href: url_for(p)}
+        %img{ :src => public_fn(p.filename), :class => 'image', :alt => "#{p.photo_dsc}" }
+      -# = render partial: "photo/star_rating", locals: { photo: p }
+      = link_to p.photo_dsc, p
 

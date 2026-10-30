@@ -12,7 +12,7 @@ class Photo < ApplicationRecord
  
   validates :latitude, numericality: {allow_nil: true}
   validates :longitude, numericality: {allow_nil: true}
-  validates :rating, numericality: { only_integer: true, in: (0..5), allow_nil: true }
+  validates :stars, numericality: { only_integer: true, in: -1..5 }
   validates_presence_of  :photo_dsc
   validates_presence_of  :filename
   validates_presence_of  :photodate
@@ -20,7 +20,7 @@ class Photo < ApplicationRecord
 # ------------------------------------------------------------------------------
 #      t.string :photo_dsc
 #      t.string :filename
-#      t.integer :rating
+#      t.integer :stars
 #      t.datetime :photodate
 #      t.float :latitude
 #      t.float :longitude
@@ -31,7 +31,26 @@ class Photo < ApplicationRecord
 #      t.references :talent, null: true, foreign_key: true
 #      t.references :portfolio, null: true, foreign_key: true
 # ------------------------------------------------------------------------------
+# Scopes
+  scope :active_candidates, -> { where("stars >= 0") }
+  scope :showable,          -> { where("stars >= 3") }
+  scope :rejected,          -> { where(stars: -1) }
+  scope :unrated,           -> { where(stars: 0) }
+  scope :rated,             -> { where("stars >= 1") }
+  scope :by_stars,          ->(val) { where(stars: val) }
 
+  # Predicates & Helper Methods
+  def rejected?
+    stars == -1
+  end
+
+  def unrated?
+    stars == 0
+  end
+
+  def rated?
+    stars.positive?
+  end
 
 
 

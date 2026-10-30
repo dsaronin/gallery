@@ -259,11 +259,21 @@ a#right-next
       list-style: disc
       list-style-position: outside
 
+.thumbnail-grid
+  display: grid
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr))
+  gap: 0.25em 0.15em
+  justify-items: center
+  margin: 0.5em auto
+  width: 100%
+
 .thumbnail
-  margin: 0.25em auto
-  width: 100px
-  height: 125px
-  float: left
+  margin: 0
+  width: 90px
+  display: flex
+  flex-direction: column
+  align-items: center
+  background-color: colors.$colorBGray050
 
   a
     padding-top: 0.25em !important
@@ -276,7 +286,7 @@ a#right-next
   img
     vertical-align: bottom
     border: 0
-    width: 70px
+    width: 70pxRoot Font-Size Media Queries
 
 .portrait
   max-width: 1500px
@@ -319,25 +329,25 @@ table
 // PORTRAIT
 @media (min-width: 350px) and (max-width: 419px)
   html
-    font-size: 18px
+    font-size: 22px
 @media (min-width: 420px) and (max-width: 550px)
   html
-    font-size: 20px
+    font-size: 22px
 @media (min-width: 550px) and (max-width: 767px)
   html
-    font-size: 24px
+    font-size: 22px
 
 // LANDSCAPE
 @media (min-width: 768px) and (max-width: 991px)
   html
-    font-size: 20px
+    font-size: 24px
 @media (min-width: 992px) and (max-width: 1199px)
   html
     font-size: 24px
 @media (min-width: 1200px) and (max-width: 1399px)
   html
-    font-size: 28px
+    font-size: 24px
 @media (min-width: 1400px)
   html
-    font-size: 32px
+    font-size: 28px
 
