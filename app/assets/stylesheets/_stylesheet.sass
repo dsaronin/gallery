@@ -274,6 +274,7 @@ a#right-next
   display: flex
   flex-direction: column
   align-items: center
+  padding-bottom: 0.25em
   background-color: colors.$colorBGray050
 
   a
@@ -283,6 +284,9 @@ a#right-next
     display: block !important
     font-size: 50% !important
     color: #555 !important
+
+    &:hover
+      background-color: colors.$colorBGray100 !important
     
   img
     vertical-align: bottom
@@ -293,6 +297,7 @@ a#right-next
   display: flex
   justify-content: center
   align-items: center
+  margin: 0
 
   form, .star-form
     display: inline-flex
@@ -314,14 +319,14 @@ a#right-next
     border-radius: 2px
 
   .star-btn
-    color: colors.$colorBGray200
+    color: colors.$colorBGray400
 
     &:hover
-      color: colors.$colorAccent700
-      background-color: colors.$colorBGray300 !important
+      color: colors.$colorPrimaryAccent700
+      background-color: colors.$colorBGray200 !important
 
     &.active
-      color: colors.$colorAccent700
+      color: colors.$colorPrimaryAccent700
 
   .reject-btn
     color: colors.$colorBGray200
@@ -330,7 +335,7 @@ a#right-next
 
     &:hover
       color: colors.$TURKIYE_RED
-      background-color: colors.$colorBGray300 !important
+      background-color: colors.$colorBGray200 !important
 
     &.active
       color: colors.$TURKIYE_RED
