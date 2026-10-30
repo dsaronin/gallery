@@ -5,6 +5,6 @@
     .thumbnail
       %a{ href: url_for(p)}
         %img{ :src => public_fn(p.filename), :class => 'image', :alt => "#{p.photo_dsc}" }
-      -# = render partial: "photo/star_rating", locals: { photo: p }
+      = render partial: "photo/star_rating", locals: { photo: p }
       = link_to p.photo_dsc, p
 
