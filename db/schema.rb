@@ -10,7 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_25_213606) do
+ActiveRecord::Schema[7.1].define(version: 2026_10_30_225152) do
+  create_table "categories", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_categories_on_name", unique: true
+  end
+
   create_table "folders", force: :cascade do |t|
     t.string "fname"
     t.string "fpath"
@@ -61,6 +68,17 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_25_213606) do
     t.index ["name"], name: "index_portfolios_on_name", unique: true
   end
 
+  create_table "tags", force: :cascade do |t|
+    t.integer "category_id", null: false
+    t.string "name", null: false
+    t.boolean "theme", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id", "name"], name: "index_tags_on_category_id_and_name", unique: true
+    t.index ["category_id"], name: "index_tags_on_category_id"
+    t.index ["theme"], name: "index_tags_on_theme"
+  end
+
   create_table "talent", force: :cascade do |t|
     t.string "talent_code"
     t.string "talent_nbr"
@@ -80,5 +98,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_25_213606) do
   add_foreign_key "photos", "talent"
   add_foreign_key "portfolio_items", "photos"
   add_foreign_key "portfolio_items", "portfolios"
+  add_foreign_key "tags", "categories"
   add_foreign_key "talent", "photos", column: "cover_id"
 end

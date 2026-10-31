@@ -27,13 +27,14 @@ class Environ
     class SessionState
       SESSION_KEY = :gallery_state
 
-      attr_accessor :current_folder_id
+      attr_accessor :current_folder_id, :current_category_id
 
       def initialize(attrs = {})
         attrs = attrs.symbolize_keys if attrs.respond_to?(:symbolize_keys)
         attrs ||= {}
 
         @current_folder_id = attrs[:current_folder_id]
+        @current_category_id = attrs[:current_category_id]
       end
 
       # Hydrates state from the Rails session
@@ -49,7 +50,8 @@ class Environ
 
       def to_h
         {
-          current_folder_id: @current_folder_id
+          current_folder_id: @current_folder_id,
+          current_category_id: @current_category_id
         }
       end
 
@@ -58,10 +60,16 @@ class Environ
         return nil unless @current_folder_id
         Folder.find_by(id: @current_folder_id)
       end
-
+      
+      def current_category
+        return nil unless @current_category_id
+        Category.find_by(id: @current_category_id)
+      end
+      
       def clear!(session)
         session.delete(SESSION_KEY)
         @current_folder_id = nil
+        @current_category_id = nil
       end
     end  # class SessionState
     

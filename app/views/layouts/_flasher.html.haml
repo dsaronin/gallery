@@ -1,0 +1,9 @@
+-# Flash notification bar (mirrors angalia flasher)
+- error_msg = flash[:error] || flash[:alert]
+- notice_msg = flash[:notice]
+
+- unless notice_msg.nil? && error_msg.nil?
+  #flash-message
+    %p
+      = ("&diams;&nbsp;" + error_msg.to_s + notice_msg.to_s + "&nbsp;&diams;").html_safe
+

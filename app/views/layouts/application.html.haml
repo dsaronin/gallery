@@ -28,7 +28,7 @@
       #wrapper
         #actionbox
           = yield @action_box
-          = yield :flasher
+          = render 'layouts/flasher'
 
         #content
           != yield
