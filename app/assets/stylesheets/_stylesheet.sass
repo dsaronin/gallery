@@ -340,6 +340,92 @@ a#right-next
     &.active
       color: colors.$TURKIYE_RED
 
+#photo-tags
+  margin: 0 auto
+  width: 80%
+
+  .photo-tags-container
+    margin: 0.3em auto
+    width: 80%
+    display: flex
+    flex-wrap: wrap
+    align-items: center
+    gap: 0.3em
+    font-size: 70%
+
+    strong
+      color: colors.$BG_HEADER
+      margin-right: 0.25em
+
+    .no-tags-notice
+      color: colors.$colorBGray300
+      font-style: italic
+
+    .tag-badges
+      display: inline-flex
+      flex-wrap: wrap
+      gap: 0.25em
+
+    .tag-badge
+      display: inline-flex
+      align-items: center
+      padding: 0.1em 0.35em
+      background-color: colors.$colorSecondary050
+      border: 1px solid colors.$colorSecondary100
+      color: colors.$colorSecondary900
+      line-height: 1.2
+
+      .tag-category
+        font-size: 85%
+        color: colors.$colorSecondary600
+        margin-right: 0.2em
+
+      .tag-name
+        font-weight: bold
+
+      .tag-remove-btn
+        background: none !important
+        border: none !important
+        outline: none !important
+        cursor: pointer
+        font-size: 90% !important
+        padding: 0 0 0 0.3em !important
+        margin: 0 !important
+        color: colors.$colorBGray400
+        line-height: 1
+        width: auto !important
+
+        &:hover
+          color: colors.$TURKIYE_RED
+
+    .inline-tag-form
+      display: inline-flex
+      align-items: center
+      margin-left: 0.5em
+      gap: 0.2em
+
+      select.tag-select
+        width: auto
+        margin: 0
+        padding: 0.1em 0.3em
+        font-size: 80%
+        background-color: colors.$colorBGray050
+        border: 1px solid colors.$colorBGray100
+
+      .btn-tag-add
+        width: auto !important
+        padding: 0.1em 0.4em !important
+        margin: 0 !important
+        font-size: 80% !important
+        background-color: colors.$FG_HEADER
+        color: colors.$BG_HEADER
+        border: 1px solid colors.$colorBGray100
+        cursor: pointer
+
+        &:hover
+          background-color: colors.$colorBGray100
+
+// *****************************************************
 .portrait
   max-width: 1500px
 

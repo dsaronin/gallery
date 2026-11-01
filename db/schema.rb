@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_10_30_225152) do
+ActiveRecord::Schema[7.1].define(version: 2026_10_31_230247) do
   create_table "categories", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -47,6 +47,13 @@ ActiveRecord::Schema[7.1].define(version: 2026_10_30_225152) do
   create_table "photos_portfolio_items", id: false, force: :cascade do |t|
     t.integer "photo_id", null: false
     t.integer "portfolio_item_id", null: false
+  end
+
+  create_table "photos_tags", id: false, force: :cascade do |t|
+    t.integer "photo_id", null: false
+    t.integer "tag_id", null: false
+    t.index ["photo_id", "tag_id"], name: "index_photos_tags_on_photo_id_and_tag_id", unique: true
+    t.index ["tag_id", "photo_id"], name: "index_photos_tags_on_tag_id_and_photo_id"
   end
 
   create_table "portfolio_items", force: :cascade do |t|

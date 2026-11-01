@@ -1,10 +1,13 @@
 class PhotoController < ApplicationController
-    before_action :validate_photo, :only => [:show, :update]
+    before_action :validate_photo, :only => [:show, :update, :assign_tag, :remove_tag]
  
   def index
   end
 
   def show
+    @assigned_tags = @photo.tags.includes(:category).order("categories.name, tags.name")
+    @categories    = Category.includes(:tags).order(:name)
+    @available_tags = Tag.where.not(id: @photo.tag_ids).order(:name)
   end
 
   def update
@@ -24,6 +27,27 @@ class PhotoController < ApplicationController
     end
   end
 
+  def assign_tag
+    tag = Tag.find(params[:tag_id])
+    @photo.tags << tag unless @photo.tags.include?(tag)
+    gallery_state.current_category_id = tag.category_id
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to photo_path(@photo) }
+    end
+  end
+
+  def remove_tag
+    tag = Tag.find(params[:tag_id])
+    @photo.tags.destroy(tag)
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to photo_path(@photo) }
+    end
+  end
+
   private
 
   def photo_params
@@ -37,7 +61,7 @@ class PhotoController < ApplicationController
     
   rescue ActiveRecord::RecordNotFound
     puts "SHOW: ERROR NOT FOUND"
-      flash[:notice] = "photo doesn't exist"
+      flash[:notice] = "photo not found"
       flash[:show_flash] = true
       redirect_back fallback_location: root_path
       false

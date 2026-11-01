@@ -1,0 +1,18 @@
+= turbo_frame_tag "photo_tags_#{photo.id}" do
+  .photo-tags-container
+    %strong Tags:
+    - if photo.tags.empty?
+      %span.no-tags-notice No tags yet…
+    - else
+      .tag-badges
+        - photo.tags.includes(:category).order("categories.name, tags.name").each do |tag|
+          %span.tag-badge
+            %span.tag-category= "#{tag.category.name}:"
+            %span.tag-name= tag.name
+            = button_to "&times;".html_safe, remove_tag_photo_path(photo, tag_id: tag.id), method: :delete, class: "tag-remove-btn", title: "Remove tag #{tag.name}"
+
+    - available = Tag.includes(:category).where.not(id: photo.tag_ids).order("categories.name, tags.name")
+    - if available.any?
+      = form_with url: assign_tag_photo_path(photo), method: :post, class: "inline-tag-form" do |f|
+        = f.grouped_collection_select :tag_id, Category.includes(:tags).order(:name), :tags, :name, :id, :name, { prompt: "Add a tag..." }, { class: "tag-select" }
+        = f.submit "+ Add", class: "btn-tag-add"
