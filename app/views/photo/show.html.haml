@@ -1,18 +1,36 @@
-%h5= @photo.photo_dsc
-- orient = ( @photo.width/@photo.height >= 0.95 ? "landscape" : "portrait" )
-%img{ :src => public_fn(@photo.filename), :class => orient, :alt => "#{@photo.photo_dsc}" }
+- orient = (@photo.width.to_f / @photo.height.to_f >= 0.90 ? "landscape" : "portrait")
 
-#photo-tags
-  = render partial: "photo/tags", locals: { photo: @photo }
+#photo-show-container{ class: orient }
+  #photo-stage
+    %img{ src: public_fn(@photo.filename), class: orient, alt: @photo.photo_dsc }
 
-#photo-data
-  %i= @photo.filename
-  %p
-    = @photo.photodate.strftime "%m/%d/%Y"
-    &emsp;
-    = @photo.latitude 
-    &emsp;
-    = @photo.longitude
-  %p= @photo.notes
-  %p portfolios: 
-  %p galleries: 
+  #photo-info-pane
+    .pane-header
+      %h3= @photo.photo_dsc.presence || "???"
+
+    .pane-meta-row
+      .meta-details
+        %p.filename= @photo.filename
+        %p.specs
+          = @photo.photodate&.strftime("%m/%d/%Y") || "~"
+          &emsp;
+          = "#{@photo.width} × #{@photo.height}"
+          - if @photo.latitude.present? && @photo.longitude.present?
+            &emsp;
+            = "#{@photo.latitude}, #{@photo.longitude}"
+        - if @photo.notes.present?
+          %p.notes= @photo.notes
+
+      .meta-actions
+        = render partial: "photo/star_rating", locals: { photo: @photo }
+
+    .pane-associations-box
+      %p.assoc-item
+        %strong portfolios:
+        %span.assoc-value —
+      %p.assoc-item
+        %strong galleries:
+        %span.assoc-value —
+
+    .pane-tags-box
+      %p [ TAGS PLACEHOLDER — Horizontal DL Block ]

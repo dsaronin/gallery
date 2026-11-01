@@ -489,3 +489,134 @@ table
   html
     font-size: 28px
 
+// ========================================================
+// PHASE 1 WIREFRAME: Photo Show Redesign (Portrait Mode)
+// Temporary dashed borders enabled for layout verification
+// ========================================================
+
+#photo-show-container
+  width: 100%
+  min-height: calc(100vh - 80px)
+  display: flex
+  box-sizing: border-box
+  border: 2px dashed colors.$colorPrimaryAccent400
+
+  &.portrait
+    flex-direction: row
+
+    #photo-stage
+      width: 50%
+      height: calc(100vh - 85px)
+      position: sticky
+      top: 0
+      display: flex
+      justify-content: center
+      align-items: flex-start
+      box-sizing: border-box
+      border: 2px dashed colors.$colorPrimaryAccent100
+      overflow: hidden
+
+      img.portrait
+        max-width: 100%
+        max-height: 100%
+        width: auto
+        height: auto
+        object-fit: contain
+
+    #photo-info-pane
+      width: 50%
+      height: calc(100vh - 85px)
+      overflow-y: auto
+      box-sizing: border-box
+      padding: 0.5em 1em
+      display: flex
+      flex-direction: column
+      gap: 0.6em
+      border: 2px dashed colors.$colorSecondary500
+
+      .pane-header
+        width: 100%
+        box-sizing: border-box
+        border: 2px dashed colors.$colorAccent800
+        padding: 0.2em 0
+
+        h3
+          margin: 0
+          padding: 0
+          font-weight: bold
+          color: colors.$BG_HEADER
+
+      .pane-meta-row
+        width: 100%
+        box-sizing: border-box
+        display: flex
+        flex-direction: row
+        border: 2px dashed colors.$colorDeepOrange500
+
+        .meta-details
+          width: 70%
+          box-sizing: border-box
+          padding-right: 0.5em
+          border: 1px dashed colors.$colorBGray400
+
+          p
+            margin: 0
+            padding: 0.1em 0
+            font-size: 0.75rem
+            line-height: 1.25
+            color: colors.$colorBGray600
+
+          p.filename
+            font-style: italic
+            color: colors.$colorBGray400
+
+          p.specs
+            font-family: monospace
+
+        .meta-actions
+          width: 30%
+          box-sizing: border-box
+          display: flex
+          justify-content: center
+          align-items: center
+          border: 1px dashed colors.$colorDeepOrange700
+
+          .star-bar
+            button, input[type="submit"]
+              font-size: 0.85rem !important
+
+      .pane-associations-box
+        width: 100%
+        box-sizing: border-box
+        padding: 0.25em 0.5em
+        border: 2px dashed colors.$colorSecondary600
+        display: flex
+        flex-direction: column
+        gap: 0.2em
+
+        .assoc-item
+          margin: 0
+          padding: 0
+          font-size: 0.75rem
+          line-height: 1.3
+          color: colors.$colorBGray700
+
+          strong
+            color: colors.$BG_HEADER
+            margin-right: 0.4em
+
+          .assoc-value
+            color: colors.$colorBGray500
+
+      .pane-tags-box
+        width: 100%
+        min-height: 80px
+        box-sizing: border-box
+        padding: 0.4em
+        border: 2px dashed colors.$colorSecondaryAccent400
+
+        p
+          margin: 0
+          font-size: 0.75rem
+          color: colors.$colorSecondaryAccent700
+          font-style: italic
