@@ -27,21 +27,22 @@ h1
   font-size: 2rem
 
 h2
-  font-size: 1.8rem
-
-h3
   font-size: 1.6rem
 
-h4
+h3
   font-size: 1.4rem
+
+h4
+  font-size: 1.3rem
 
 h5
   font-size: 1.2rem
 
 h6
   font-size: 1rem
+
 p, a
-  font-size: 1.1rem
+  font-size: 1rem
 i
   margin: 0 auto
   padding: 0.25em
@@ -55,8 +56,8 @@ i
     
 
 h1, h2, h3, h4, h5, h6
-  font-family: "Roboto", Tahoma, Arial,sans-serif
-  font-weight: bold
+  font-family: "Roboto", Tahoma, Arial, sans-serif
+  font-weight: 900
   color: colors.$BG_HEADER
 
 img.logo
@@ -164,7 +165,6 @@ fieldset > a
   padding: 0.35em
   h1, h2, h3, h4, h5, h6
     padding: 0.2em 0
-    font-weight: bold
   h6
     color: colors.$colorBGray300
   p
@@ -176,7 +176,7 @@ fieldset > a
  
 #actionbox
   width: 100%
-  min-height: 8vh
+  min-height: 3vh
   display: block
   border: 1px solid colors.$colorAccent100
   background-color: colors.$colorAccent050
@@ -436,7 +436,7 @@ a#right-next
   margin: 0 auto
   width: 80%
   p
-    line-height: 1.25
+    line-height: 1.2
     font-size: 60%
     padding: 0.2em 0
   i
@@ -467,24 +467,24 @@ table
 // PORTRAIT
 @media (min-width: 350px) and (max-width: 419px)
   html
-    font-size: 22px
+    font-size: 14px
 @media (min-width: 420px) and (max-width: 550px)
   html
-    font-size: 22px
+    font-size: 18px
 @media (min-width: 550px) and (max-width: 767px)
   html
-    font-size: 22px
+    font-size: 20px
 
 // LANDSCAPE
 @media (min-width: 768px) and (max-width: 991px)
   html
-    font-size: 24px
+    font-size: 18px
 @media (min-width: 992px) and (max-width: 1199px)
   html
-    font-size: 24px
+    font-size: 20px
 @media (min-width: 1200px) and (max-width: 1399px)
   html
-    font-size: 24px
+    font-size: 22px
 @media (min-width: 1400px)
   html
     font-size: 28px
@@ -499,7 +499,16 @@ table
   min-height: calc(100vh - 80px)
   display: flex
   box-sizing: border-box
-  border: 2px dashed colors.$colorPrimaryAccent400
+  // border: 2px dashed colors.$colorPrimaryAccent400
+  
+  // Hide the checkbox from sight and accessibility tree
+  #lightbox-toggle
+    position: absolute
+    opacity: 0
+    pointer-events: none
+    width: 0
+    height: 0
+    margin: 0
 
   &.portrait
     flex-direction: row
@@ -513,8 +522,16 @@ table
       justify-content: center
       align-items: flex-start
       box-sizing: border-box
-      border: 2px dashed colors.$colorPrimaryAccent100
+      // border: 2px dashed colors.$colorPrimaryAccent100
       overflow: hidden
+
+      .lightbox-trigger
+        display: flex
+        justify-content: center
+        align-items: flex-start
+        width: 100%
+        height: 100%
+        cursor: zoom-in
 
       img.portrait
         max-width: 100%
@@ -522,56 +539,94 @@ table
         width: auto
         height: auto
         object-fit: contain
+        user-select: none
+
+    // ----------------------------------------------------
+    // Pure CSS Lightbox Expanded State
+    // ----------------------------------------------------
+    #lightbox-toggle:checked ~ #photo-stage
+      position: fixed
+      inset: 0
+      width: 100vw
+      height: 100vh
+      z-index: 1000
+      background-color: rgba(0, 0, 0, 0.92)
+      display: flex
+      justify-content: center
+      align-items: center
+
+      .lightbox-trigger
+        width: 100%
+        height: 100%
+        display: flex
+        justify-content: center
+        align-items: center
+        cursor: zoom-out
+
+        img.portrait
+          max-width: 98vw
+          max-height: 98vh
+          width: auto
+          height: auto
+          object-fit: contain
 
     #photo-info-pane
       width: 50%
       height: calc(100vh - 85px)
       overflow-y: auto
       box-sizing: border-box
-      padding: 0.5em 1em
+      padding: 0.5em 0.5em
       display: flex
       flex-direction: column
-      gap: 0.6em
-      border: 2px dashed colors.$colorSecondary500
+      gap: 0.1em
+      // border: 2px dashed colors.$colorSecondary500
 
       .pane-header
         width: 100%
         box-sizing: border-box
-        border: 2px dashed colors.$colorAccent800
+        // border: 2px dashed colors.$colorAccent800
         padding: 0.2em 0
 
         h3
           margin: 0
           padding: 0
-          font-weight: bold
-          color: colors.$BG_HEADER
+          color: colors.$BASIC_BG
 
       .pane-meta-row
         width: 100%
         box-sizing: border-box
         display: flex
+        flex-wrap: wrap
         flex-direction: row
-        border: 2px dashed colors.$colorDeepOrange500
+        // border: 2px dashed colors.$colorDeepOrange500
+
+        .meta-filename
+          width: 100%
+          box-sizing: border-box
+          padding: 0.1em 0
+
+          p.filename
+            margin: 0
+            padding: 0
+            font-style: italic
+            font-size: 0.6rem
+            line-height: 1.2
+            color: colors.$colorBGray400
 
         .meta-details
           width: 70%
           box-sizing: border-box
           padding-right: 0.5em
-          border: 1px dashed colors.$colorBGray400
+          // border: 1px dashed colors.$colorBGray400
 
           p
             margin: 0
             padding: 0.1em 0
-            font-size: 0.75rem
-            line-height: 1.25
-            color: colors.$colorBGray600
-
-          p.filename
-            font-style: italic
-            color: colors.$colorBGray400
+            font-size: 0.6rem
+            color: colors.$colorBGray700
 
           p.specs
-            font-family: monospace
+            font-family: inherit
 
         .meta-actions
           width: 30%
@@ -579,17 +634,29 @@ table
           display: flex
           justify-content: center
           align-items: center
-          border: 1px dashed colors.$colorDeepOrange700
+          // border: 1px dashed colors.$colorDeepOrange700
 
           .star-bar
             button, input[type="submit"]
               font-size: 0.85rem !important
 
+        // Responsive mobile stack: drop 70/30 row split into stacked blocks
+        @media (max-width: 550px)
+          .meta-details
+            width: 100%
+            padding-right: 0
+            border-right: none
+
+          .meta-actions
+            width: 100%
+            padding: 0.3em 0
+            justify-content: flex-start
+
       .pane-associations-box
         width: 100%
         box-sizing: border-box
         padding: 0.25em 0.5em
-        border: 2px dashed colors.$colorSecondary600
+        // border: 2px dashed colors.$colorSecondary600
         display: flex
         flex-direction: column
         gap: 0.2em
@@ -598,7 +665,7 @@ table
           margin: 0
           padding: 0
           font-size: 0.75rem
-          line-height: 1.3
+          line-height: 1.2
           color: colors.$colorBGray700
 
           strong
@@ -613,7 +680,7 @@ table
         min-height: 80px
         box-sizing: border-box
         padding: 0.4em
-        border: 2px dashed colors.$colorSecondaryAccent400
+        // border: 2px dashed colors.$colorSecondaryAccent400
 
         p
           margin: 0

@@ -1,8 +1,12 @@
 - orient = (@photo.width.to_f / @photo.height.to_f >= 0.90 ? "landscape" : "portrait")
 
 #photo-show-container{ class: orient }
+
+  %input#lightbox-toggle{ type: "checkbox" }
+
   #photo-stage
-    %img{ src: public_fn(@photo.filename), class: orient, alt: @photo.photo_dsc }
+    %label.lightbox-trigger{ for: "lightbox-toggle" }
+      %img{ src: public_fn(@photo.filename), class: orient, alt: @photo.photo_dsc }
 
   #photo-info-pane
     .pane-header
@@ -10,27 +14,30 @@
 
     .pane-meta-row
       .meta-details
-        %p.filename= @photo.filename
         %p.specs
           = @photo.photodate&.strftime("%m/%d/%Y") || "~"
-          &emsp;
+          &ensp;
           = "#{@photo.width} × #{@photo.height}"
           - if @photo.latitude.present? && @photo.longitude.present?
-            &emsp;
-            = "#{@photo.latitude}, #{@photo.longitude}"
+            &ensp;
+            = "#{@photo.latitude} ⌖ #{@photo.longitude}"
         - if @photo.notes.present?
           %p.notes= @photo.notes
 
       .meta-actions
         = render partial: "photo/star_rating", locals: { photo: @photo }
 
+      .meta-filename
+        %p.filename= @photo.filename
+
     .pane-associations-box
       %p.assoc-item
         %strong portfolios:
-        %span.assoc-value —
+        %span.assoc-value ~
       %p.assoc-item
         %strong galleries:
-        %span.assoc-value —
+        %span.assoc-value ~
 
     .pane-tags-box
+      %strong tags:
       %p [ TAGS PLACEHOLDER — Horizontal DL Block ]
