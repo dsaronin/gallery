@@ -426,69 +426,6 @@ a#right-next
           background-color: colors.$colorBGray100
 
 // *****************************************************
-.portrait
-  max-width: 1500px
-
-.landscape
-  max-width: 2500px
-
-#photo-data
-  margin: 0 auto
-  width: 80%
-  p
-    line-height: 1.2
-    font-size: 60%
-    padding: 0.2em 0
-  i
-    font-size: 60%
-    width: 100%
-
-#flash-message
-  margin: 0 auto
-  padding: 0
-  width: 100%
-  p
-    font-size: 70%
-    text-align: center
-    color: colors.$FG_ERROR
-    font-weight: bold
-
-table
-  width: 100%
-  th
-    width: 25%
-  td
-    width: 25%
-
-    a
-      font-size: 70% !important
-
-
-// PORTRAIT
-@media (min-width: 350px) and (max-width: 419px)
-  html
-    font-size: 14px
-@media (min-width: 420px) and (max-width: 550px)
-  html
-    font-size: 18px
-@media (min-width: 550px) and (max-width: 767px)
-  html
-    font-size: 20px
-
-// LANDSCAPE
-@media (min-width: 768px) and (max-width: 991px)
-  html
-    font-size: 18px
-@media (min-width: 992px) and (max-width: 1199px)
-  html
-    font-size: 20px
-@media (min-width: 1200px) and (max-width: 1399px)
-  html
-    font-size: 22px
-@media (min-width: 1400px)
-  html
-    font-size: 28px
-
 // ========================================================
 // PHASE 1 WIREFRAME: Photo Show Redesign (Portrait Mode)
 // Temporary dashed borders enabled for layout verification
@@ -655,7 +592,7 @@ table
       .pane-associations-box
         width: 100%
         box-sizing: border-box
-        padding: 0.25em 0.5em
+        // padding: 0.25em 0.5em
         // border: 2px dashed colors.$colorSecondary600
         display: flex
         flex-direction: column
@@ -675,15 +612,71 @@ table
           .assoc-value
             color: colors.$colorBGray500
 
-      .pane-tags-box
-        width: 100%
-        min-height: 80px
-        box-sizing: border-box
-        padding: 0.4em
-        // border: 2px dashed colors.$colorSecondaryAccent400
+// *****************************************************
+.portrait
+  max-width: 1500px
 
-        p
-          margin: 0
-          font-size: 0.75rem
-          color: colors.$colorSecondaryAccent700
-          font-style: italic
+.landscape
+  max-width: 2500px
+
+#photo-data
+  margin: 0 auto
+  width: 80%
+  p
+    line-height: 1.2
+    font-size: 60%
+    padding: 0.2em 0
+  i
+    font-size: 60%
+    width: 100%
+
+#flash-message
+  margin: 0 auto
+  padding: 0
+  width: 100%
+  p
+    font-size: 70%
+    text-align: center
+    color: colors.$FG_ERROR
+    font-weight: bold
+
+table
+  width: 100%
+  th
+    width: 25%
+  td
+    width: 25%
+
+    a
+      font-size: 70% !important
+
+// *****************************************************
+
+// *****************************************************
+// PORTRAIT
+@media (min-width: 350px) and (max-width: 419px)
+  html
+    font-size: 14px
+@media (min-width: 420px) and (max-width: 550px)
+  html
+    font-size: 18px
+@media (min-width: 550px) and (max-width: 767px)
+  html
+    font-size: 20px
+
+// LANDSCAPE
+@media (min-width: 768px) and (max-width: 991px)
+  html
+    font-size: 18px
+@media (min-width: 992px) and (max-width: 1199px)
+  html
+    font-size: 20px
+@media (min-width: 1200px) and (max-width: 1399px)
+  html
+    font-size: 22px
+@media (min-width: 1400px)
+  html
+    font-size: 28px
+
+// *****************************************************
+

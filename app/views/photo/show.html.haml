@@ -29,6 +29,7 @@
 
       .meta-filename
         %p.filename= @photo.filename
+        %hr
 
     .pane-associations-box
       %p.assoc-item
@@ -37,7 +38,7 @@
       %p.assoc-item
         %strong galleries:
         %span.assoc-value ~
-
-    .pane-tags-box
-      %strong tags:
-      %p [ TAGS PLACEHOLDER — Horizontal DL Block ]
+      %p.assoc-item
+        %strong tags:
+        %span.assoc-value ~
+        %p [ TAGS PLACEHOLDER — Horizontal DL Block ]
