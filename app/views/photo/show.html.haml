@@ -9,36 +9,38 @@
       %img{ src: public_fn(@photo.filename), class: orient, alt: @photo.photo_dsc }
 
   #photo-info-pane
-    .pane-header
-      %h3= @photo.photo_dsc.presence || "???"
+    .pane-col-primary
+      .pane-header
+        %h3= @photo.photo_dsc.presence || "???"
 
-    .pane-meta-row
-      .meta-details
-        %p.specs
-          = @photo.photodate&.strftime("%m/%d/%Y") || "~"
-          &ensp;
-          = "#{@photo.width} × #{@photo.height}"
-          - if @photo.latitude.present? && @photo.longitude.present?
+      .pane-meta-row
+        .meta-details
+          %p.specs
+            = @photo.photodate&.strftime("%m/%d/%Y") || "~"
             &ensp;
-            = "#{@photo.latitude} ⌖ #{@photo.longitude}"
-        - if @photo.notes.present?
-          %p.notes= @photo.notes
+            = "#{@photo.width} × #{@photo.height}"
+            - if @photo.latitude.present? && @photo.longitude.present?
+              &ensp;
+              = "#{@photo.latitude} ⌖ #{@photo.longitude}"
+          - if @photo.notes.present?
+            %p.notes= @photo.notes
 
-      .meta-actions
-        = render partial: "photo/star_rating", locals: { photo: @photo }
+        .meta-actions
+          = render partial: "photo/star_rating", locals: { photo: @photo }
 
-      .meta-filename
-        %p.filename= @photo.filename
-        %hr
+        .meta-filename
+          %p.filename= @photo.filename
+          %hr
 
-    .pane-associations-box
-      %p.assoc-item
-        %strong portfolios:
-        %span.assoc-value ~
-      %p.assoc-item
-        %strong galleries:
-        %span.assoc-value ~
-      %p.assoc-item
-        %strong tags:
-        %span.assoc-value ~
-        %p [ TAGS PLACEHOLDER — Horizontal DL Block ]
+    .pane-col-secondary
+      .pane-associations-box
+        %p.assoc-item
+          %strong portfolios:
+          %span.assoc-value ~
+        %p.assoc-item
+          %strong galleries:
+          %span.assoc-value ~
+        %p.assoc-item
+          %strong tags:
+          %span.assoc-value ~
+          %p [ tags placeholder dl block ]
