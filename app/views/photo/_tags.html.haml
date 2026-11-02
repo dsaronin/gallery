@@ -1,15 +1,14 @@
 = turbo_frame_tag "photo_tags_#{photo.id}" do
-  .photo-tags-container
-    %strong Tags:
+  .tags-wrapper
     - if photo.tags.empty?
-      %span.no-tags-notice No tags yet…
+      %span.no-tags-notice None yet…
     - else
       .tag-badges
         - photo.tags.includes(:category).order("categories.name, tags.name").each do |tag|
           %span.tag-badge
             %span.tag-category= "#{tag.category.name}:"
             %span.tag-name= tag.name
-            = button_to "&times;".html_safe, remove_tag_photo_path(photo, tag_id: tag.id), method: :delete, class: "tag-remove-btn", title: "Remove tag #{tag.name}"
+            = button_to "&#10008;".html_safe, remove_tag_photo_path(photo, tag_id: tag.id), method: :delete, class: "tag-remove-btn", title: "Remove #{tag.name}"
 
     - available = Tag.includes(:category).where.not(id: photo.tag_ids).order("categories.name, tags.name")
     - if available.any?

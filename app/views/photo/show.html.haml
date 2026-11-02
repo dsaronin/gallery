@@ -34,13 +34,14 @@
 
     .pane-col-secondary
       .pane-associations-box
-        %p.assoc-item
-          %strong portfolios:
-          %span.assoc-value ~
-        %p.assoc-item
-          %strong galleries:
-          %span.assoc-value ~
-        %p.assoc-item
-          %strong tags:
-          %span.assoc-value ~
-          %p [ tags placeholder dl block ]
+        %dl.assoc-list
+          .assoc-row
+            %dt portfolios:
+            %dd ~
+          .assoc-row
+            %dt exhibitions:
+            %dd ~
+          .assoc-row.assoc-tags-row
+            %dt tags:
+            %dd
+              = render partial: "photo/tags", locals: { photo: @photo }
