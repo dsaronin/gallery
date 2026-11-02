@@ -10,8 +10,8 @@
             %span.tag-name= tag.name
             = button_to "&#10008;".html_safe, remove_tag_photo_path(photo, tag_id: tag.id), method: :delete, class: "tag-remove-btn", title: "Remove #{tag.name}"
 
-    - available = Tag.includes(:category).where.not(id: photo.tag_ids).order("categories.name, tags.name")
+    - available = available_tags_for(photo)
     - if available.any?
       = form_with url: assign_tag_photo_path(photo), method: :post, class: "inline-tag-form" do |f|
-        = f.grouped_collection_select :tag_id, Category.includes(:tags).order(:name), :tags, :name, :id, :name, { prompt: "Add a tag..." }, { class: "tag-select" }
+        = f.grouped_collection_select :tag_id, Category.includes(:tags).order(:name), :tags, :name, :id, :name, { prompt: "Add tag...", selected: default_tag_id_for(photo, available) }, { class: "tag-select" }
         = f.submit "+ Add", class: "btn-tag-add"

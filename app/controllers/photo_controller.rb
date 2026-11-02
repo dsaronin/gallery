@@ -30,7 +30,7 @@ class PhotoController < ApplicationController
   def assign_tag
     tag = Tag.find(params[:tag_id])
     @photo.tags << tag unless @photo.tags.include?(tag)
-    gallery_state.current_category_id = tag.category_id
+    gallery_state.set_active_tag!(tag)
 
     respond_to do |format|
       format.turbo_stream

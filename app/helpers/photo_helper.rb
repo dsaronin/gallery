@@ -31,6 +31,34 @@ module PhotoHelper
     end
   end
 
+  # Returns available tags for a photo, ordered by category and tag name
+  def available_tags_for(photo)
+    Tag.includes(:category)
+       .where.not(id: photo.tag_ids)
+       .order("categories.name, tags.name")
+  end
+
+  # Resolves the sticky tag ID based on session state and available tags
+  def default_tag_id_for(photo, available_tags)
+    return nil if available_tags.empty?
+
+    active_tag_id = gallery_state.current_tag_id
+    active_cat_id = gallery_state.current_category_id
+
+    # 1. Active sticky tag if still available on this photo
+    if active_tag_id && available_tags.any? { |t| t.id == active_tag_id }
+      return active_tag_id
+    end
+
+    # 2. First available tag in the active sticky category
+    if active_cat_id && (match = available_tags.find { |t| t.category_id == active_cat_id })
+      return match.id
+    end
+
+    # 3. Fallback to the first available tag overall
+    available_tags.first.id
+  end
+
   private
 
   def star_button(photo, target_val, glyph, css_class)

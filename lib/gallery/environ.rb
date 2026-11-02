@@ -27,7 +27,7 @@ class Environ
     class SessionState
       SESSION_KEY = :gallery_state
 
-      attr_accessor :current_folder_id, :current_category_id
+      attr_accessor :current_folder_id, :current_category_id, :current_tag_id
 
       def initialize(attrs = {})
         attrs = attrs.symbolize_keys if attrs.respond_to?(:symbolize_keys)
@@ -35,6 +35,7 @@ class Environ
 
         @current_folder_id = attrs[:current_folder_id]
         @current_category_id = attrs[:current_category_id]
+        @current_tag_id      = attrs[:current_tag_id]
       end
 
       # Hydrates state from the Rails session
@@ -51,7 +52,8 @@ class Environ
       def to_h
         {
           current_folder_id: @current_folder_id,
-          current_category_id: @current_category_id
+          current_category_id: @current_category_id,
+          current_tag_id: @current_tag_id
         }
       end
 
@@ -65,11 +67,26 @@ class Environ
         return nil unless @current_category_id
         Category.find_by(id: @current_category_id)
       end
-      
+
+      def current_tag
+        return nil unless @current_tag_id
+        Tag.find_by(id: @current_tag_id)
+      end      
+
+      # Atomically set active tag and synchronize its category
+      def set_active_tag!(tag_or_id)
+        tag = tag_or_id.is_a?(Tag) ? tag_or_id : Tag.find_by(id: tag_or_id)
+        return unless tag
+
+        @current_tag_id      = tag.id
+        @current_category_id = tag.category_id
+      end
+
       def clear!(session)
         session.delete(SESSION_KEY)
         @current_folder_id = nil
         @current_category_id = nil
+        @current_tag_id      = nil
       end
     end  # class SessionState
     
