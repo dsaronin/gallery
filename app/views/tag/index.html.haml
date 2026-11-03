@@ -1,48 +1,54 @@
-%h4 Tag & Category Management
+#tag-admin-container
+  %h4.admin-title Tag & Category
 
-.actionbox-section
-  %h5 Add New Category
-  = form_with model: @new_category, url: category_index_path do |f|
-    = f.text_field :name, placeholder: "Category name"
-    = f.submit "Add Category &raquo;".html_safe, class: "btn"
+  .tag-admin-creators
+    .creator-card
+      %h5.card-title Create Category
+      = form_with model: @new_category, url: category_index_path, class: "admin-form-stacked" do |f|
+        .form-row
+          = f.text_field :name, placeholder: "Enter Category name...", class: "admin-input"
+          = f.submit "+ Add", class: "btn-add"
 
-.actionbox-section
-  %h5 Add New Tag
-  - if @categories.empty?
-    %p Create a category before adding tags.
-  - else
-    = form_with model: @new_tag, url: tag_index_path do |f|
-      %label{ for: "tag_category_id" } Select category:
-      = f.collection_select :category_id, @categories, :id, :name, { selected: @selected_category_id }
-      = f.text_field :name, placeholder: "Tag name"
-      %label
-        = f.check_box :theme
-        Theme Tag
-      = f.submit "Add Tag &raquo;".html_safe, class: "btn"
+    .creator-card
+      %h5.card-title Create Tag
+      - if @categories.empty?
+        %p.empty-notice Create a category first.
+      - else
+        = form_with model: @new_tag, url: tag_index_path, class: "admin-form-stacked" do |f|
+          .form-row
+            = f.text_field :name, placeholder: "Enter Tag name...", class: "admin-input"
+            = f.submit "+ Add", class: "btn-add"
+          .form-subrow
+            %label{ for: "tag_category_id" } For category:
+            = f.collection_select :category_id, @categories, :id, :name, { selected: @selected_category_id }, { class: "admin-select", id: "tag_category_id" }
 
-%hr
+  %hr.section-divider
 
-%h5 Existing Categories & Tags
-.list
-  - if @categories.empty?
-    %p No categories or tags defined yet.
-  - else
-    - @categories.each do |cat|
-      .category-block
-        %strong= cat.name
-        &ensp;
-        = link_to "[delete]", category_path(cat), data: { turbo_method: :delete, turbo_confirm: "Delete category '#{cat.name}' and all its tags?" }, class: "delete-link"
-        
-        - if cat.tags.empty?
-          %p.empty-notice &emsp;(No tags in this category)
-        - else
-          %ul
-            - cat.tags.each do |tag|
-              %li
-                = tag.name
-                - if tag.theme?
-                  %span.theme-indicator [theme]
-                &ensp;
-                = link_to "&times;".html_safe, tag_path(tag), data: { turbo_method: :delete, turbo_confirm: "Delete tag '#{tag.name}'?" }, class: "delete-tag", title: "Delete tag"
-
-
+  .tag-admin-catalog
+    %h5.catalog-title Categories & Tags
+    - if @categories.empty?
+      %p.empty-notice No categories or tags defined.
+    - else
+      %dl.assoc-list
+        - @categories.each do |cat|
+          .assoc-row
+            %dt
+              %span.category-title= cat.name
+              = link_to "&#10008;".html_safe, category_path(cat), |
+                data: { turbo_method: :delete, turbo_confirm: "Delete category '#{cat.name}' and all its tags?" }, |
+                class: "item-delete-btn", |
+                title: "Delete category #{cat.name}" |
+            %dd
+              - if cat.tags.empty?
+                %span.empty-notice ~ none ~
+              - else
+                .tag-badges
+                  - cat.tags.order(:name).each do |tag|
+                    %span.tag-badge
+                      %span.tag-name= tag.name
+                      - if tag.theme?
+                        %span.theme-indicator (theme)
+                      = link_to "&#10008;".html_safe, tag_path(tag), |
+                        data: { turbo_method: :delete, turbo_confirm: "Delete tag '#{tag.name}'?" }, |
+                        class: "item-delete-btn", |
+                        title: "Delete tag #{tag.name}" |
