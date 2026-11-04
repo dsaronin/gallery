@@ -10,6 +10,7 @@
   require_relative 'ansi_color'
   require 'singleton'
   require_relative 'version'
+  require 'securerandom'
   
 #----------------------------------------------------------
 # +++++++++++++++++++++++++++++++++++++++++++++++++
@@ -91,14 +92,112 @@ class Environ
     end  # class SessionState
     
 # +++++++++++++++++++++++++++++++++++++++++++++++++
+# --- Domain Taxonomy & Licensing Containers ---
+# ******************************************************
+    class CcLicense
+      DICTIONARY = {
+        all_rights_reserved: 0,
+        cc_by:               1,
+        cc_by_sa:            2,
+        cc_by_nc:            3,
+        cc_by_nc_sa:         4,
+        cc_by_nd:            5,
+        cc_by_nc_nd:         6,
+        public_domain:       7
+      }.freeze
+
+      LABELS = {
+        all_rights_reserved: "All Rights Reserved",
+        cc_by:               "Creative Commons Attribution (CC BY 4.0)",
+        cc_by_sa:            "Creative Commons Attribution-ShareAlike (CC BY-SA 4.0)",
+        cc_by_nc:            "Creative Commons Attribution-NonCommercial (CC BY-NC 4.0)",
+        cc_by_nc_sa:         "Creative Commons Attribution-NonCommercial-ShareAlike (CC BY-NC-SA 4.0)",
+        cc_by_nd:            "Creative Commons Attribution-NoDerivatives (CC BY-ND 4.0)",
+        cc_by_nc_nd:         "Creative Commons Attribution-NonCommercial-NoDerivatives (CC BY-NC-ND 4.0)",
+        public_domain:       "Public Domain / CC0"
+      }.freeze
+
+      URLS = {
+        all_rights_reserved: nil,
+        cc_by:               "https://creativecommons.org/licenses/by/4.0/",
+        cc_by_sa:            "https://creativecommons.org/licenses/by-sa/4.0/",
+        cc_by_nc:            "https://creativecommons.org/licenses/by-nc/4.0/",
+        cc_by_nc_sa:         "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        cc_by_nd:            "https://creativecommons.org/licenses/by-nd/4.0/",
+        cc_by_nc_nd:         "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+        public_domain:       "https://creativecommons.org/publicdomain/zero/1.0/"
+      }.freeze
+
+      def self.label_for(key)
+        LABELS[key.to_s.to_sym] || "Unknown License"
+      end
+
+      def self.url_for(key)
+        URLS[key.to_s.to_sym]
+      end
+
+      def self.options_for_select
+        DICTIONARY.keys.map { |k| [label_for(k), k.to_s] }
+      end
+    end # class CcLicense
+# +++++++++++++++++++++++++++++++++++++++++++++++++
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++
+    # --- Domain Enumeration Dictionaries ---
+# +++++++++++++++++++++++++++++++++++++++++++++++++
+    VENUE_TYPES = {
+      commercial_gallery: 0,
+      museum:             1,
+      community_center:   2,
+      public_space:       3,
+      studio:             4,
+      pop_up:             5
+    }.freeze
+
+    PORTFOLIO_STATUSES = {
+      draft:    0,
+      active:   1,
+      archived: 2
+    }.freeze
+
+    EXHIBITION_STATUSES = {
+      draft:     0,
+      scheduled: 1,
+      active:    2,
+      completed: 3,
+      archived:  4
+    }.freeze
+
+    SALES_POLICIES = {
+      not_for_sale:     0,
+      direct_inquiry:   1,
+      venue_commission: 2,
+      fixed_price:      3
+    }.freeze
+
+    SHOWING_STATUSES = {
+      scheduled:   0,
+      in_progress: 1,
+      completed:   2,
+      canceled:    3
+    }.freeze
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++
 #module constants
+# +++++++++++++++++++++++++++++++++++++++++++++++++
 
   APP_NAME = "GALLERY"
   APP_NAME_HEAD = "#{APP_NAME}: "
 
-  attr_reader :photo_path, :photo_base, :photo_source, :target_pictures_path, :initialized_at, :app_name, :app_version
+# Application identity & attribution defaults
+  DEFAULT_ARTIST_NAME   = "David S. Anderson".freeze
+  DEFAULT_PREP_DAYS     = 1
+  DEFAULT_TEARDOWN_DAYS = 1
 
   #  ------------------------------------------------------------
+  attr_reader :photo_path, :photo_base, :photo_source, :target_pictures_path, :initialized_at, :app_name, :app_version
+  #  ------------------------------------------------------------
+
   #  ------------------------------------------------------------
   #  ------------------------------------------------------------
   def initialize
@@ -153,6 +252,13 @@ class Environ
     # Helper for inspect/status
     def to_s
       "#{APP_NAME} v#{Gallery::VERSION} [path: #{@target_pictures_path}]"
+    end
+
+    # --- System & Security Utilities ---
+
+    # returns a 22-char random string for sharing links
+    def self.generate_token(bytes = 16)
+      SecureRandom.urlsafe_base64(bytes)
     end
   #  ------------------------------------------------------------
 end  # Class Environ

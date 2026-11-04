@@ -1,5 +1,12 @@
 class PortfolioItem < ApplicationRecord
+  include Positionable
+  acts_as_positionable scope: :portfolio_id
+
   belongs_to :portfolio
-  has_one :photo
-  acts_as_list 
+  belongs_to :photo
+  belongs_to :placard, optional: true
+  has_many   :exhibition_items, dependent: :restrict_with_error
+
+  validates :photo_id, uniqueness: { scope: :portfolio_id, message: "is already included in this portfolio" }
+  validates :likes_count, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 end
