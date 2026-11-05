@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   get 'catalog/index'
   get 'catalog/selectcatalog'
+  get 'dashboard', to: 'dashboard#index'
   post 'catalog/loadphotos'
   resources :catalog, only: [:show, :destroy]
   resources :photo,  only: [:show, :edit, :update, :destroy] do
@@ -17,5 +18,5 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
-  root "catalog#index"
+  root "dashboard#index"
 end

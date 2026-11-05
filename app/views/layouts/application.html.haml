@@ -29,7 +29,12 @@
         #actionbox
           = yield @action_box
           = render 'layouts/flasher'
-
+      - if Rails.env.development?
+        #vw-gauge{style: "position:fixed;bottom:4px;left:4px;background:#222;color:#fff;font-family:monospace;font-size:11px;padding:2px 6px;border-radius:3px;z-index:9999;opacity:0.85;"}
+        :javascript
+          function updateVw() { document.getElementById('vw-gauge').innerText = window.innerWidth + 'px'; }
+          window.addEventListener('resize', updateVw);
+          document.addEventListener('DOMContentLoaded', updateVw);
         #content
           != yield
         

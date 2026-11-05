@@ -1,0 +1,141 @@
+// --------------------------------------------------------
+// GALLERY: Material Design Primitives & Mixins
+// File: app/assets/stylesheets/_materialdesign.sass
+// --------------------------------------------------------
+
+@use 'colors'
+
+// --------------------------------------------------------
+// Elevation Shadows (Material Design 1dp, 2dp, 4dp, 6dp)
+// --------------------------------------------------------
+$elevation_1dp: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)
+$elevation_2dp: 0 3px 6px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.20)
+$elevation_4dp: 0 10px 20px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.20)
+$elevation_6dp: 0 14px 28px rgba(0, 0, 0, 0.20), 0 5px 10px rgba(0, 0, 0, 0.22)
+
+// --------------------------------------------------------
+// Contour Mixin
+// --------------------------------------------------------
+=MD_CORNER($radius: 4px)
+  -moz-border-radius: $radius
+  -webkit-border-radius: $radius
+  border-radius: $radius
+
+// --------------------------------------------------------
+// Canonical Material Card Mixin
+// --------------------------------------------------------
+=MD_CARD($surface_color: colors.$colorBGray025, $border_color: colors.$colorBGray100)
+  display: flex
+  flex-direction: column
+  box-sizing: border-box
+  background-color: $surface_color
+  border: 1px solid $border_color
+  box-shadow: $elevation_1dp
+  +MD_CORNER(4px)
+  transition: box-shadow 0.2s ease, border-color 0.2s ease
+
+  &:hover
+    box-shadow: $elevation_2dp
+    border-color: colors.$colorBGray200
+
+  .card-header
+    display: flex
+    flex-direction: row
+    justify-content: space-between
+    align-items: center
+    padding: 0.5em 0.8em
+    border-bottom: 1px solid colors.$colorBGray100
+    background-color: colors.$colorBGray050
+
+    .card-title
+      margin: 0
+      padding: 0
+      font-size: 0.95rem
+      font-weight: bold
+      color: colors.$BG_HEADER
+
+    .header-badge
+      font-size: 0.65rem
+      font-style: italic
+      color: colors.$colorBGray400
+
+  .card-body
+    flex-grow: 1
+    padding: 0.6em 0.8em
+    display: flex
+    flex-direction: column
+    gap: 0.4em
+
+  .card-actions
+    display: flex
+    flex-direction: row
+    align-items: center
+    justify-content: flex-end
+    gap: 0.5em
+    padding: 0.4em 0.8em
+    // border-top: 1px solid colors.$colorBGray100
+    // background-color: colors.$colorBGray050
+
+// --------------------------------------------------------
+// Canonical Material Text / Outlined Button
+// --------------------------------------------------------
+=MD_BUTTON($bg: colors.$colorBGray100, $fg: colors.$BG_HEADER)
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  padding: 0.25em 0.65em
+  font-size: 0.60rem
+  font-weight: bold
+  text-decoration: none
+  color: $fg
+  background-color: $bg
+  border: 1px solid colors.$colorBGray200
+  cursor: pointer
+  +MD_CORNER(6px)
+  transition: background-color 0.15s ease, color 0.15s ease
+
+  &:hover
+    background-color: colors.$colorBGray200
+    color: colors.$BG_HEADER
+    text-decoration: none
+
+  &.primary
+    background-color: colors.$BASIC_BG
+    color: colors.$BASIC_FG
+    border-color: colors.$BASIC_BG
+
+    &:hover
+      background-color: colors.$colorPrimaryDark
+      color: colors.$colorSecondary050
+
+// --------------------------------------------------------
+// Canonical Material Mini FAB (Floating Action Button)
+// --------------------------------------------------------
+=MD_FAB($size: 24px, $bg: colors.$BASIC_BG, $fg: colors.$colorAccent300)
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  width: $size
+  height: $size
+  min-width: $size
+  min-height: $size
+  padding: 0
+  margin: 0
+  font-size: 1.15rem
+  font-weight: 900
+  line-height: 0
+  text-decoration: none
+  color: $fg
+  background-color: $bg
+  border: 1px solid rgba(0, 0, 0, 0.1)
+  box-shadow: $elevation_1dp
+  +MD_CORNER(50%)
+  cursor: pointer
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease
+
+  &:hover
+    background-color: colors.$colorPrimaryDark
+    color: colors.$colorAccent500
+    box-shadow: $elevation_2dp
+    transform: scale(1.08)
+    text-decoration: none
