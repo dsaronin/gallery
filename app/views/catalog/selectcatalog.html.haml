@@ -1,0 +1,4 @@
+%h5 Select a catalog to access
+= form_with url: catalog_loadphotos_path do |f|
+  = f.select(:catalog, @catalogs)
+  = f.submit "Access&raquo;".html_safe

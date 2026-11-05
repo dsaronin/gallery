@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
-  get 'folder/index'
-  get 'folder/selectfolder'
-  post 'folder/loadphotos'
-  resources :folder, only: [:show, :destroy]
+  get 'catalog/index'
+  get 'catalog/selectcatalog'
+  post 'catalog/loadphotos'
+  resources :catalog, only: [:show, :destroy]
   resources :photo,  only: [:show, :edit, :update, :destroy] do
     member do
       post 'assign_tag'
@@ -17,5 +17,5 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
-  root "folder#index"
+  root "catalog#index"
 end

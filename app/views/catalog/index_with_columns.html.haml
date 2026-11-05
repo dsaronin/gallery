@@ -1,8 +1,8 @@
-%h4 Available Folders
-%p click name to show all pics in folder
+%h4 Available Catalogs
+%p click name to show all pics in catalog
 .list
   - if @list.empty?
-    %p There are no folders to show; select something to load.
+    %p There are no catalogs to show; select something to load.
   - else
     - xleft = @list.length.div(2)
     = render partial: 'list_column', :locals => {:mylist => @list[0..xleft-1]}

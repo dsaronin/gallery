@@ -3,52 +3,52 @@
 # Copyright (c) 2024 David S Anderson, All Rights Reserved
 # ----------------------------------------------------------
 
-class FolderController < ApplicationController
-  include FolderHelper
-  before_action :validate_folder, :only => [:show]
+class CatalogController < ApplicationController
+  include CatalogHelper
+  before_action :validate_catalog, :only => [:show]
  
 # ----------------------------------------------------------
   # GALLERY_PATH, GALLERY_BASE, GALLERY_SOURCE
   # Rails.configuration.photo_path  -- string for basic path to photos: ex $HOME
-  # Rails.configuration.photo_base  -- string for photos folder: ex Pictures
+  # Rails.configuration.photo_base  -- string for photos catalog: ex Pictures
   # Rails.configuration.photo_source  -- string for subdirectories containing photos for sourcing: ex darktable_exported
 # ----------------------------------------------------------
-# index -- show all loaded folders; allow user to select one
+# index -- show all loaded catalogs; allow user to select one
 # ----------------------------------------------------------
   def index
-    @list = Folder.all
+    @list = Catalog.all
   end
 
 # ----------------------------------------------------------
-# show  -- show thumbnail pics of all photos in selected folder
+# show  -- show thumbnail pics of all photos in selected catalog
 # ----------------------------------------------------------
   def show
   end
 
 # ----------------------------------------------------------
-# selectfolder  -- show all non-loaded pic folders; all user to select one
+# selectcatalog  -- show all non-loaded pic catalogs; all user to select one
 # ----------------------------------------------------------
-  def selectfolder
-    folders = Folder.all
-    @folder_list = folders.map {|f| f.fname}
-    @folders = picture_source_folders - @folder_list
+  def selectcatalog
+    catalogs = Catalog.all
+    @catalog_list = catalogs.map {|f| f.fname}
+    @catalogs = picture_source_catalogs - @catalog_list
   end
 
 # ----------------------------------------------------------
-# loadphotos  -- loads into db all photos from the selected folder
+# loadphotos  -- loads into db all photos from the selected catalog
 # ----------------------------------------------------------
   def loadphotos
     
-    @my_folder = params[:folder]
-    dirpath = file_to_path( @my_folder )
-    folder = Folder.find_or_create_by!( fname: @my_folder ) do |f|
+    @my_catalog = params[:catalog]
+    dirpath = file_to_path( @my_catalog )
+    catalog = Catalog.find_or_create_by!( fname: @my_catalog ) do |f|
       f.fpath = dirpath
     end
 
     # Session state hook
-    gallery_state.current_folder_id = folder.id
+    gallery_state.current_catalog_id = catalog.id
 
-    # puts "LOADPHOTOS folder: #{@my_folder}, fpath: #{dirpath}"
+    # puts "LOADPHOTOS catalog: #{@my_catalog}, fpath: #{dirpath}"
 
     if Dir.exist?(dirpath)
       @photos = Dir.glob( File.join(dirpath, "*.jpg") )  # {jpg¸ JPEG}
@@ -67,9 +67,9 @@ class FolderController < ApplicationController
         puts "LOADPHOTOS: #{photofile}, #{dsc}, #{dtime}, #{width}, #{height}"
 
         target_fn = filepath_to_fn(photofile)
-        next if folder.photos.exists?(filename: target_fn)
+        next if catalog.photos.exists?(filename: target_fn)
 
-        @pic = folder.photos.create!(
+        @pic = catalog.photos.create!(
           photo_dsc: dsc,
           filename: target_fn,
           photodate: dtime.sub(/:/,"/").sub(/:/,"/").to_datetime,
@@ -84,21 +84,21 @@ class FolderController < ApplicationController
   end
 
 # ----------------------------------------------------------
-# update  -- rechecks a folder for any recent unload pics & loads them
+# update  -- rechecks a catalog for any recent unload pics & loads them
 # ----------------------------------------------------------
 # ----------------------------------------------------------
-# destroy  -- destorys a folder (from db) and all its related pics
+# destroy  -- destorys a catalog (from db) and all its related pics
 # ----------------------------------------------------------
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
-  def validate_folder()
-    @folder = Folder.find(params[:id])
-    gallery_state.current_folder_id = @folder.id
+  def validate_catalog()
+    @catalog = Catalog.find(params[:id])
+    gallery_state.current_catalog_id = @catalog.id
     true     # returning true continues controller action
     
   rescue ActiveRecord::RecordNotFound
     puts "SHOW: ERROR NOT FOUND"
-      flash[:notice] = "folder doesn't exist"
+      flash[:notice] = "catalog doesn't exist"
       flash[:show_flash] = true
       # redirect_back
       false

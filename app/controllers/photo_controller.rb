@@ -18,7 +18,7 @@ class PhotoController < ApplicationController
           if turbo_frame_request?
             render partial: "photo/star_rating", locals: { photo: @photo }
           else
-            redirect_back fallback_location: folder_path(@photo.folder)
+            redirect_back fallback_location: catalog_path(@photo.catalog)
           end
         end
       end

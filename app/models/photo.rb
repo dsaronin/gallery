@@ -5,7 +5,7 @@
 
 class Photo < ApplicationRecord
 
-  belongs_to :folder
+  belongs_to :catalog
   belongs_to :talent, optional: true
   
   has_and_belongs_to_many :tags
@@ -28,7 +28,7 @@ class Photo < ApplicationRecord
 #      t.integer  :width
 #      t.integer  :height
 #      t.string :notes
-#      t.references :folder, null: false, foreign_key: true
+#      t.references :catalog, null: false, foreign_key: true
 #      t.references :talent, null: true, foreign_key: true
 #      t.references :portfolio, null: true, foreign_key: true
 # ------------------------------------------------------------------------------

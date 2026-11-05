@@ -3,7 +3,7 @@
 # Copyright (c) 2023 David S Anderson, All Rights Reserved
 # ----------------------------------------------------------
 
-class Folder < ApplicationRecord
+class Catalog < ApplicationRecord
 
   has_many :photos, dependent: :destroy
 

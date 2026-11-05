@@ -11,6 +11,14 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
+  create_table "catalogs", force: :cascade do |t|
+    t.string "fname"
+    t.string "fpath"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["fname"], name: "index_catalogs_on_fname", unique: true
+  end
+
   create_table "categories", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -55,14 +63,6 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
     t.index ["venue_id"], name: "index_exhibitions_on_venue_id"
   end
 
-  create_table "folders", force: :cascade do |t|
-    t.string "fname"
-    t.string "fpath"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["fname"], name: "index_folders_on_fname", unique: true
-  end
-
   create_table "photos", force: :cascade do |t|
     t.string "photo_dsc"
     t.string "filename"
@@ -73,11 +73,11 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
     t.float "latitude"
     t.float "longitude"
     t.string "notes"
-    t.integer "folder_id", null: false
+    t.integer "catalog_id", null: false
     t.integer "talent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["folder_id"], name: "index_photos_on_folder_id"
+    t.index ["catalog_id"], name: "index_photos_on_catalog_id"
     t.index ["talent_id"], name: "index_photos_on_talent_id"
   end
 
@@ -206,7 +206,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
   add_foreign_key "exhibitions", "showings"
   add_foreign_key "exhibitions", "talent"
   add_foreign_key "exhibitions", "venues"
-  add_foreign_key "photos", "folders"
+  add_foreign_key "photos", "catalogs"
   add_foreign_key "photos", "talent"
   add_foreign_key "portfolio_items", "photos"
   add_foreign_key "portfolio_items", "placards"

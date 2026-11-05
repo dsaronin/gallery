@@ -1,7 +1,7 @@
-%h4= @folder.fname 
+%h4= @catalog.fname 
 %i click thumbnail to select
 .thumbnail-grid
-  - @folder.photos.each do |p|
+  - @catalog.photos.each do |p|
     .thumbnail
       %a{ href: url_for(p)}
         %img{ :src => public_fn(p.filename), :class => 'image', :alt => "#{p.photo_dsc}" }

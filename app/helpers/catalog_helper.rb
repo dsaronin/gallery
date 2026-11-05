@@ -1,4 +1,4 @@
-module FolderHelper
+module CatalogHelper
 
   def make_picpath()
     return File.join(
@@ -7,14 +7,14 @@ module FolderHelper
     ) 
   end
 
-  def picture_sub_folders
+  def picture_sub_catalogs
     picpath = make_picpath
     return Dir.children( picpath ).select { |f| 
       File.directory?( File.join(picpath, f) ) 
     }
   end
 
-  def picture_source_folders
+  def picture_source_catalogs
     picpath = make_picpath
     picglob = File.join(
       picpath,
@@ -29,11 +29,11 @@ module FolderHelper
     return selects
   end
 
-  def file_to_path( folder )
+  def file_to_path( catalog )
     return File.join(
         Rails.configuration.photo_path,
         Rails.configuration.photo_base,
-        folder,
+        catalog,
         Rails.configuration.photo_source
      )    
   end

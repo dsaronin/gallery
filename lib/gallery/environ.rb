@@ -28,15 +28,22 @@ class Environ
     class SessionState
       SESSION_KEY = :gallery_state
 
-      attr_accessor :current_folder_id, :current_category_id, :current_tag_id
+      attr_accessor :current_catalog_id, :current_category_id, 
+                    :current_portfolio_id,
+                    :current_exhibition_id,
+                    :current_showing_id,
+                    :current_tag_id
 
       def initialize(attrs = {})
         attrs = attrs.symbolize_keys if attrs.respond_to?(:symbolize_keys)
         attrs ||= {}
 
-        @current_folder_id = attrs[:current_folder_id]
+        @current_catalog_id = attrs[:current_catalog_id]
         @current_category_id = attrs[:current_category_id]
         @current_tag_id      = attrs[:current_tag_id]
+        @current_portfolio_id  = attrs[:current_portfolio_id]
+        @current_exhibition_id = attrs[:current_exhibition_id]
+        @current_showing_id    = attrs[:current_showing_id]
       end
 
       # Hydrates state from the Rails session
@@ -52,16 +59,19 @@ class Environ
 
       def to_h
         {
-          current_folder_id: @current_folder_id,
-          current_category_id: @current_category_id,
-          current_tag_id: @current_tag_id
+          current_catalog_id:    @current_catalog_id,
+          current_portfolio_id:  @current_portfolio_id,
+          current_exhibition_id: @current_exhibition_id,
+          current_showing_id:    @current_showing_id,
+          current_category_id:   @current_category_id,
+          current_tag_id:        @current_tag_id
         }
       end
 
       # Safe record finder
-      def current_folder
-        return nil unless @current_folder_id
-        Folder.find_by(id: @current_folder_id)
+      def current_catalog
+        return nil unless @current_catalog_id
+        Catalog.find_by(id: @current_catalog_id)
       end
       
       def current_category
@@ -73,6 +83,20 @@ class Environ
         return nil unless @current_tag_id
         Tag.find_by(id: @current_tag_id)
       end      
+      def current_portfolio
+        return nil unless @current_portfolio_id
+        @current_portfolio ||= Portfolio.find_by(id: @current_portfolio_id)
+      end
+
+      def current_exhibition
+        return nil unless @current_exhibition_id
+        @current_exhibition ||= Exhibition.find_by(id: @current_exhibition_id)
+      end
+
+      def current_showing
+        return nil unless @current_showing_id
+        @current_showing ||= Showing.find_by(id: @current_showing_id)
+      end
 
       # Atomically set active tag and synchronize its category
       def set_active_tag!(tag_or_id)
@@ -85,9 +109,12 @@ class Environ
 
       def clear!(session)
         session.delete(SESSION_KEY)
-        @current_folder_id = nil
+        @current_catalog_id = nil
         @current_category_id = nil
         @current_tag_id      = nil
+        @current_portfolio_id  = nil
+        @current_exhibition_id  = nil
+        @current_showing_id  = nil
       end
     end  # class SessionState
     
@@ -256,7 +283,7 @@ class Environ
 
     # --- System & Security Utilities ---
 
-    # returns a 22-char random string for sharing links
+    # returns a 22-char random string for sharing link
     def self.generate_token(bytes = 16)
       SecureRandom.urlsafe_base64(bytes)
     end
