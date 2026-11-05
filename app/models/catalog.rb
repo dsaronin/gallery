@@ -14,7 +14,22 @@ class Catalog < ApplicationRecord
 #      t.string :fname
 #      t.string :fpath
 # ------------------------------------------------------------------------------
+  def self.dashboard_metrics
+    available_disk_count = begin
+      # Uses CatalogHelper logic or inspects source directory
+      picpath = File.join(Rails.configuration.photo_path, Rails.configuration.photo_base)
+      picglob = File.join(picpath, "**", Rails.configuration.photo_source)
+      Dir[picglob].size
+    rescue
+      0
+    end
 
+    {
+      ingested_count: count,
+      available_disk_count: available_disk_count,
+      indexed_photos_count: Photo.active_candidates.count
+    }
+  end
 
 # ------------------------------------------------------------------------------
 #

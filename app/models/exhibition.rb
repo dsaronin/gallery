@@ -15,4 +15,14 @@ class Exhibition < ApplicationRecord
   validates :title, presence: true
   validates :budget, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
   validates :total_expenses, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
-end
+
+  def self.dashboard_metrics
+    {
+      staged_count: ( where(status: :staged).count rescue 0 ),
+      planning_count: ( where(status: :planning).count rescue 0 ),
+      active_count: ( where(status: :active).count rescue 0 )
+    }
+  end
+
+
+end  #class

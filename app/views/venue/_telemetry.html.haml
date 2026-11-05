@@ -1,0 +1,10 @@
+%dl.assoc-list
+  .assoc-row
+    %dt Venues:
+    %dd= "#{metrics[:venues_count]} (#{metrics[:total_wall_meters]}-m wall)"
+  .assoc-row
+    %dt Talents:
+    %dd= "#{metrics[:talents_count]} registered"
+  .assoc-row
+    %dt Tags:
+    %dd= "#{metrics[:tags_count]} in #{metrics[:categories_count]} categories"

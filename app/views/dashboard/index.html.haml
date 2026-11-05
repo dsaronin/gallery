@@ -10,25 +10,10 @@
         = link_to "+", catalog_selectcatalog_path, class: "card-fab", title: "New Catalog Ingestion"
       
       .card-body
-        %dl.assoc-list
-          .assoc-row
-            %dt Ingested:
-            %dd= "#{@metrics[:catalogs][:ingested_count]} of #{@metrics[:catalogs][:available_disk_count]} folders"
-          .assoc-row
-            %dt Indexed:
-            %dd= "#{@metrics[:catalogs][:indexed_photos_count]} photos"
-          .assoc-row
-            %dt Current:
-            %dd
-              - if gallery_state.current_catalog
-                = link_to catalog_path(gallery_state.current_catalog) do
-                  = truncate(gallery_state.current_catalog.fname, length: 34)
-                  &raquo;
-              - else
-                %span.subdued none selected
+        = render 'catalog/telemetry', metrics: @metrics[:catalogs]
 
       .card-actions
-        = link_to "All Catalogs", catalog_index_path, class: "btn-card"
+        = link_to "Catalogs »", catalog_index_path, class: "btn-card"
 
     -# ----------------------------------------------------
     -# 2. PORTFOLIOS CARD
@@ -39,21 +24,12 @@
         = link_to "+", new_portfolio_path, class: "card-fab", title: "New Portfolio"
 
       .card-body
-        %dl.assoc-list
-          .assoc-row
-            %dt Total:
-            %dd= "#{@metrics[:portfolios][:total_count]} collections"
-          .assoc-row
-            %dt Status:
-            %dd= "#{@metrics[:portfolios][:active_count]} active / #{@metrics[:portfolios][:draft_count]} draft"
-          .assoc-row
-            %dt Curated:
-            %dd= "#{@metrics[:portfolios][:curated_photos_count]} photo links"
+        = render 'portfolio/telemetry', metrics: @metrics[:portfolios]
 
       .card-actions
-        = link_to "All Portfolios", portfolio_index_path, class: "btn-card"
         - if gallery_state.current_portfolio
           = link_to "Open Current", portfolio_path(gallery_state.current_portfolio), class: "btn-card primary"
+        = link_to "Portfolios »", portfolio_index_path, class: "btn-card"
 
     -# ----------------------------------------------------
     -# 3. EXHIBITIONS CARD
@@ -64,18 +40,12 @@
         = link_to "+", "#", class: "card-fab", title: "Stage New Exhibition"
 
       .card-body
-        %dl.assoc-list
-          .assoc-row
-            %dt Staged:
-            %dd= "#{@metrics[:exhibitions][:staged_count]} exhibits"
-          .assoc-row
-            %dt Lifecycle:
-            %dd= "#{@metrics[:exhibitions][:planning_count]} planning / #{@metrics[:exhibitions][:active_count]} active"
+        = render 'exhibition/telemetry', metrics: @metrics[:exhibitions]
 
       .card-actions
-        = link_to "All Exhibitions", "#", class: "btn-card"
         - if gallery_state.current_exhibition
           = link_to "Open Current", "#", class: "btn-card primary"
+        = link_to "Exhibitions »", "#", class: "btn-card"
 
     -# ----------------------------------------------------
     -# 4. SHOWINGS CARD
@@ -86,21 +56,12 @@
         = link_to "+", "#", class: "card-fab", title: "Book Run"
 
       .card-body
-        %dl.assoc-list
-          .assoc-row
-            %dt Next Date:
-            %dd= "#{@metrics[:showings][:next_date]} (in #{@metrics[:showings][:days_remaining]} days)"
-          .assoc-row
-            %dt Next Venue:
-            %dd= @metrics[:showings][:next_venue]
-          .assoc-row
-            %dt Booked:
-            %dd= "#{@metrics[:showings][:booked_count]} scheduled runs"
+        = render 'showing/telemetry', metrics: @metrics[:showings]
 
       .card-actions
-        = link_to "All Showings", "#", class: "btn-card"
         - if gallery_state.current_showing
           = link_to "Open Current", "#", class: "btn-card primary"
+        = link_to "Showings »", "#", class: "btn-card"
 
     -# ----------------------------------------------------
     -# 5. ADMIN CARD
@@ -111,18 +72,9 @@
         %span.header-badge Infrastructure
 
       .card-body
-        %dl.assoc-list
-          .assoc-row
-            %dt Staging:
-            %dd= "#{@metrics[:admin][:venues_count]} venues (#{@metrics[:admin][:total_wall_meters]}m wall capacity)"
-          .assoc-row
-            %dt Talent:
-            %dd= "#{@metrics[:admin][:talents_count]} profiles registered"
-          .assoc-row
-            %dt Taxonomy:
-            %dd= "#{@metrics[:admin][:categories_count]} categories / #{@metrics[:admin][:tags_count]} tags"
+        = render 'venue/telemetry', metrics: @metrics[:admin]
 
       .card-actions.admin-actions
-        = link_to "Venues", "#", class: "btn-card"
-        = link_to "Talents", talent_index_path, class: "btn-card"
-        = link_to "Tags & Categories", tag_index_path, class: "btn-card"
+        = link_to "Venues »", "#", class: "btn-card"
+        = link_to "Talents »", talent_index_path, class: "btn-card"
+        = link_to "Tags »", tag_index_path, class: "btn-card"

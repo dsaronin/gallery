@@ -1,0 +1,16 @@
+%dl.assoc-list
+  .assoc-row
+    %dt Ingested:
+    %dd= "#{metrics[:ingested_count]} of #{metrics[:available_disk_count]} catalogs"
+  .assoc-row
+    %dt Indexed:
+    %dd= "#{metrics[:indexed_photos_count]} photos"
+  .assoc-row
+    %dt Current:
+    %dd
+      - if gallery_state.current_catalog
+        = link_to catalog_path(gallery_state.current_catalog) do
+          = truncate(gallery_state.current_catalog.fname, length: 34)
+          &raquo;
+      - else
+        %span.subdued none selected

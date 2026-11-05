@@ -1,0 +1,19 @@
+%dl.assoc-list
+  .assoc-row
+    %dt Staged:
+    %dd= "#{metrics[:staged_count]} complete"
+  .assoc-row
+    %dt Planning:
+    %dd= "#{metrics[:planning_count]} in progress"
+  .assoc-row
+    %dt Active:
+    %dd= "#{metrics[:active_count]} current runs"
+  .assoc-row
+    %dt Current:
+    %dd
+      - if gallery_state.current_exhibition
+        = link_to exhibition_path(gallery_state.current_exhibition) do
+          = truncate(gallery_state.current_exhibition.title, length: 34)
+          &raquo;
+      - else
+        %span.subdued none selected

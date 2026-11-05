@@ -1,0 +1,19 @@
+%dl.assoc-list
+  .assoc-row
+    %dt Total:
+    %dd= "#{metrics[:total_count]} collections"
+  .assoc-row
+    %dt Active:
+    %dd= "#{metrics[:active_count]} (#{metrics[:draft_count]} draft)"
+  .assoc-row
+    %dt Curated:
+    %dd= "#{metrics[:curated_photos_count]} photos"
+  .assoc-row
+    %dt Current:
+    %dd
+      - if gallery_state.current_portfolio
+        = link_to portfolio_path(gallery_state.current_portfolio) do
+          = truncate(gallery_state.current_portfolio.title, length: 34)
+          &raquo;
+      - else
+        %span.subdued none selected

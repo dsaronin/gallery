@@ -1,0 +1,14 @@
+%dl.assoc-list
+  .assoc-row
+    %dt Next:
+    %dd
+      - if metrics[:days_remaining] > 0
+        = "#{metrics[:next_date]} (in #{metrics[:days_remaining]}d)"
+      - else
+        = metrics[:next_date]
+  .assoc-row
+    %dt Venue:
+    %dd= metrics[:next_venue]
+  .assoc-row
+    %dt Booked:
+    %dd= "#{metrics[:booked_count]} upcoming"

@@ -13,6 +13,15 @@ class Portfolio < ApplicationRecord
 
   before_validation :assign_share_token, on: :create
 
+  def self.dashboard_metrics
+    {
+      total_count: count,
+      active_count: ( where(active: true).count rescue 0 ),
+      draft_count:  ( where(active: false).count rescue 0 ),
+      curated_photos_count: ( joins(:portfolio_items).count rescue 0 )
+    }
+  end
+
   private
 
   def assign_share_token
