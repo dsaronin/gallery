@@ -1,4 +1,78 @@
-%h5 Select a catalog to access
-= form_with url: catalog_loadphotos_path do |f|
-  = f.select(:catalog, @catalogs)
-  = f.submit "Access&raquo;".html_safe
+.view-container#catalog-select-view
+  .view-header
+    .view-title-group
+      %h3.view-title Ingest Catalog
+      = link_to "« Back to Catalogs", catalog_index_path, class: "header-back-link"
+
+  - if @grouped_catalogs.blank?
+    .empty-notice
+      %p All available photo export folders have already been ingested into the catalog.
+  - else
+    .catalog-groups-grid
+      - @grouped_catalogs.each do |group_name, paths|
+        .group-card
+          .group-header
+            %h4.group-title= group_name
+            %span.group-count= "#{paths.size} #{'folder'.pluralize(paths.size)}"
+          
+          %ul.folder-list
+            - paths.each do |full_path|
+              - sub_path = full_path.sub(/^#{Regexp.escape(group_name)}\//, '')
+              - default_name = File.basename(full_path)
+              %li.folder-item{ data: { fullpath: full_path, default_name: default_name } }
+                .folder-row
+                  .folder-indicator
+                  .folder-meta
+                    %span.folder-leaf= sub_path
+                    %span.folder-full-path= full_path
+
+                .folder-action-panel
+                  = form_with url: catalog_loadphotos_path, method: :post, local: true, class: "ingest-form" do |f|
+                    = f.hidden_field :catalog, value: full_path
+                    .inline-input-group
+                      = f.label :name, "Catalog Name:", class: "inline-label"
+                      = f.text_field :name, value: default_name, class: "catalog-name-input", autocomplete: "off"
+                    = f.submit "Ingest »", class: "btn-ingest"
+
+:javascript
+  document.addEventListener("DOMContentLoaded", () => {
+    const folderItems = document.querySelectorAll("#catalog-select-view .folder-item");
+
+    folderItems.forEach(item => {
+      const row = item.querySelector(".folder-row");
+      const input = item.querySelector(".catalog-name-input");
+      const defaultName = item.dataset.defaultName;
+
+      row.addEventListener("click", (e) => {
+        const isCurrentlyActive = item.classList.contains("is-active");
+
+        // Close any other open item
+        folderItems.forEach(other => {
+          if (other !== item) {
+            other.classList.remove("is-active");
+          }
+        });
+
+        // Toggle clicked item
+        if (!isCurrentlyActive) {
+          item.classList.add("is-active");
+          if (input) {
+            input.value = defaultName;
+            input.focus();
+            input.select();
+          }
+        } else {
+          item.classList.remove("is-active");
+        }
+      });
+
+      // Allow Escape key inside input to cancel/collapse
+      if (input) {
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") {
+            item.classList.remove("is-active");
+          }
+        });
+      }
+    });
+  });

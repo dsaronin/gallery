@@ -1267,6 +1267,37 @@ table
       +md.MD_CORNER(3px)
 
     .card-body
+      .card-content-layout
+        display: flex
+        flex-direction: row
+        justify-content: space-between
+        align-items: flex-start
+        gap: 0.75em
+        width: 100%
+
+      .card-thumbnail-preview
+        width: $thumbCellWidth
+        flex-shrink: 0
+        display: flex
+        justify-content: center
+        align-items: center
+        background-color: colors.$colorBGray050
+        padding: 3px
+        +BEVEL_CORNER(3px)
+        border: 1px solid colors.$colorBGray100
+
+        a
+          display: block
+          line-height: 0
+
+        img
+          width: $thumbImageWidth
+          height: auto
+          max-height: 80px
+          object-fit: cover
+          display: block
+          border-radius: 2px
+
       .assoc-list
         margin: 0
         padding: 0
@@ -1306,36 +1337,39 @@ table
             color: colors.$colorBGray400
 
       .assoc-path-row
-        align-items: flex-start
-        margin-top: 0.25em
+        align-items: center
 
         dd
           display: flex
           align-items: center
-          gap: 0.5em
-
-          .path-text
-            font-size: 0.5rem
-            line-height: 1.1
-            word-break: break-all
-            color: colors.$colorBGray400
 
           .btn-copy
             background: none
             border: none
             cursor: pointer
-            padding: 2px
+            padding: 0
+            margin: 0
             display: inline-flex
             align-items: center
-            justify-content: center
-            color: colors.$colorBGray500
-            flex-shrink: 0
-            border-radius: 3px
-            transition: color 0.15s ease, background-color 0.15s ease
+            gap: 0.35em
+            color: colors.$colorSecondary900
+            font-size: 0.75rem
+            line-height: 1
+            text-decoration: none
+            transition: color 0.15s ease
+
+            svg
+              display: block
+              flex-shrink: 0
+
+            .btn-copy-label
+              font-family: inherit
+              font-size: inherit
+              font-weight: bold
 
             &:hover
               color: colors.$BG_HEADER
-              background-color: colors.$colorBGray200
+              text-decoration: underline
 
     .btn-card
       +md.MD_BUTTON
@@ -1348,7 +1382,176 @@ table
       .card-body .assoc-row
         font-size: 0.85rem
 
-  // *****************************************************
+// ----------------------------------------------------
+// Catalog Ingestion & Selection View
+// ----------------------------------------------------
+#catalog-select-view
+  width: 100%
+  box-sizing: border-box
+  padding: 0.8em 0.5em
+  max-width: 1440px
+  margin: 0 auto
+
+  .view-header
+    display: flex
+    align-items: center
+    margin-bottom: 1.5em
+    padding: 0 0.2em
+
+    .view-title-group
+      display: inline-flex
+      align-items: baseline
+      gap: 1.75em
+
+    .view-title
+      margin: 0
+      font-size: 1.4rem
+      font-weight: 900
+      color: colors.$BG_HEADER
+
+    .header-back-link
+      font-size: 0.8rem
+      font-weight: bold
+      color: colors.$colorSecondary900
+      text-decoration: none
+      &:hover
+        text-decoration: underline
+
+  .empty-notice
+    padding: 2em
+    text-align: center
+    color: colors.$colorBGray600
+    font-size: 0.95rem
+
+  .catalog-groups-grid
+    display: flex
+    flex-direction: column
+    gap: 1.5em
+
+  .group-card
+    +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
+    padding: 1.2em
+    box-sizing: border-box
+
+    .group-header
+      display: flex
+      justify-content: space-between
+      align-items: baseline
+      border-bottom: 2px solid colors.$colorBGray200
+      padding-bottom: 0.4em
+      margin-bottom: 0.8em
+
+      .group-title
+        margin: 0
+        font-size: 1.1rem
+        font-weight: 900
+        color: colors.$BG_HEADER
+
+      .group-count
+        font-size: 0.75rem
+        font-weight: bold
+        color: colors.$colorBGray600
+
+    .folder-list
+      list-style: none
+      margin: 0
+      padding: 0
+      display: flex
+      flex-direction: column
+      gap: 0.3em
+
+    .folder-item
+      border: 1px solid transparent
+      +BEVEL_CORNER(4px)
+      transition: background-color 0.15s ease, border-color 0.15s ease
+
+      &:hover
+        background-color: colors.$colorBGray050
+
+      &.is-active
+        background-color: colors.$colorBGray050
+        border-color: colors.$colorSecondary500
+
+        .folder-row .folder-indicator
+          background-color: colors.$colorSecondary500
+
+        .folder-action-panel
+          display: block
+
+    .folder-row
+      display: flex
+      align-items: center
+      gap: 0.8em
+      padding: 0.6em 0.8em
+      cursor: pointer
+
+      .folder-indicator
+        width: 8px
+        height: 8px
+        border-radius: 50%
+        background-color: colors.$colorBGray300
+        flex-shrink: 0
+
+      .folder-meta
+        display: flex
+        flex-direction: column
+        gap: 0.1em
+
+        .folder-leaf
+          font-size: 0.9rem
+          font-weight: bold
+          color: colors.$BG_HEADER
+
+        .folder-full-path
+          font-size: 0.60rem
+          font-family: monospace
+          color: colors.$colorBGray500
+
+    .folder-action-panel
+      display: none
+      padding: 0.6em 0.8em 0.8em 2em
+      border-top: 1px dashed colors.$colorBGray200
+
+      .ingest-form
+        display: flex
+        justify-content: flex-start
+        align-items: center
+        gap: 1em
+        width: 100%
+
+      .inline-input-group
+        display: inline-flex
+        align-items: center
+        gap: 0.6em
+        flex-grow: 0
+
+        .inline-label
+          font-size: 0.8rem
+          font-weight: bold
+          color: colors.$BG_HEADER
+          white-space: nowrap
+          margin: 0
+
+        .catalog-name-input
+          width: 320px
+          padding: 0.4em 0.6em
+          font-size: 0.85rem
+          background-color: colors.$colorBGray100
+          border: 1px solid colors.$colorBGray200
+          +BEVEL_CORNER(3px)
+
+          &:focus
+            outline: none
+            border: 2px solid colors.$colorSecondary200
+
+      .btn-ingest
+        +md.MD_BUTTON
+        width: auto !important
+        margin: 0 !important
+        cursor: pointer
+        font-size: 0.8rem
+
+// *****************************************************
 
 // *****************************************************
 // RESONSIVE @media queries

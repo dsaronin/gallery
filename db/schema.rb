@@ -12,6 +12,7 @@
 
 ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
   create_table "catalogs", force: :cascade do |t|
+    t.string "name"
     t.string "fname"
     t.string "fpath"
     t.datetime "created_at", null: false

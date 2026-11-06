@@ -7,12 +7,12 @@ class Catalog < ApplicationRecord
 
   has_many :photos, dependent: :destroy
 
-  validates_presence_of  :fname
+  validates :name, presence: true
+  validates :fname, presence: true, uniqueness: true
   validates_presence_of  :fpath
 
-# ------------------------------------------------------------------------------
-#      t.string :fname
-#      t.string :fpath
+  before_validation :set_default_name
+
 # ------------------------------------------------------------------------------
   def self.dashboard_metrics
     available_disk_count = begin
@@ -31,6 +31,12 @@ class Catalog < ApplicationRecord
     }
   end
 
+# ------------------------------------------------------------------------------
+  private
+
+  def set_default_name
+    self.name = File.basename(fname.to_s) if name.blank? && fname.present?
+  end
 # ------------------------------------------------------------------------------
 #
 end  # class
