@@ -1178,6 +1178,7 @@ table
 
   // *****************************************************
   // Mobile (Pixel 8a & small screens): boost readability ~20%
+  // *****************************************************
   @media (max-width: 500px)
     .dashboard-grid
       grid-template-columns: 1fr
@@ -1206,6 +1207,149 @@ table
 
         dt
           min-width: 6.2em
+// ----------------------------------------------------
+// Catalog Index & Grid Styling
+// ----------------------------------------------------
+#catalogs-index
+  width: 100%
+  box-sizing: border-box
+  padding: 0.8em 0.5em
+  max-width: 1440px
+  margin: 0 auto
+
+  .view-header
+    display: flex
+    align-items: center
+    margin-bottom: 1.2em
+    padding: 0 0.2em
+
+    .view-title-group
+      display: inline-flex
+      align-items: center
+      gap: 1.75em
+
+    .view-title
+      margin: 0
+      font-size: 1.4rem
+      font-weight: 900
+      color: colors.$BG_HEADER
+
+    .header-fab
+      +md.MD_FAB
+
+  .empty-state
+    +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
+    padding: 2em
+    text-align: center
+    display: flex
+    flex-direction: column
+    align-items: center
+    gap: 1em
+
+  .catalog-grid
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(320px, 620px))
+    gap: 1em
+    width: 100%
+    box-sizing: border-box
+
+  .catalog-card
+    +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
+    min-height: auto
+
+    .badge-current
+      font-size: 0.65rem
+      font-weight: bold
+      text-transform: uppercase
+      background-color: colors.$colorBGray200
+      color: colors.$colorBGray700
+      padding: 0.2em 0.5em
+      +md.MD_CORNER(3px)
+
+    .card-body
+      .assoc-list
+        margin: 0
+        padding: 0
+        display: flex
+        flex-direction: column
+        gap: 0.35em
+
+      .assoc-row
+        display: flex
+        flex-direction: row
+        align-items: baseline
+        font-size: 0.80rem
+        line-height: 1.35
+
+        dt
+          min-width: 8.5em
+          flex-shrink: 0
+          font-weight: 900
+          text-transform: lowercase
+          color: colors.$BG_HEADER
+          margin: 0
+          padding: 0
+
+        dd
+          margin: 0
+          padding: 0
+          flex-grow: 1
+          min-width: 0
+          color: colors.$colorBGray700
+
+          .highlight-unrated
+            color: colors.$colorAccent700
+            font-weight: bold
+
+          .subdued
+            font-style: italic
+            color: colors.$colorBGray400
+
+      .assoc-path-row
+        align-items: flex-start
+        margin-top: 0.25em
+
+        dd
+          display: flex
+          align-items: center
+          gap: 0.5em
+
+          .path-text
+            font-size: 0.5rem
+            line-height: 1.1
+            word-break: break-all
+            color: colors.$colorBGray400
+
+          .btn-copy
+            background: none
+            border: none
+            cursor: pointer
+            padding: 2px
+            display: inline-flex
+            align-items: center
+            justify-content: center
+            color: colors.$colorBGray500
+            flex-shrink: 0
+            border-radius: 3px
+            transition: color 0.15s ease, background-color 0.15s ease
+
+            &:hover
+              color: colors.$BG_HEADER
+              background-color: colors.$colorBGray200
+
+    .btn-card
+      +md.MD_BUTTON
+
+  @media (max-width: 500px)
+    .catalog-grid
+      grid-template-columns: 1fr
+
+    .catalog-card
+      .card-body .assoc-row
+        font-size: 0.85rem
+
+  // *****************************************************
+
 // *****************************************************
 // RESONSIVE @media queries
 // *****************************************************

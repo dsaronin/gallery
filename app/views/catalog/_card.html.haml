@@ -1,0 +1,30 @@
+- active_photos = catalog.photos.active_candidates
+- unrated_count = catalog.photos.unrated.count
+
+.catalog-card
+  .card-header
+    %h4.card-title= truncate(catalog.fname, length: 28)
+    - if gallery_state.current_catalog_id == catalog.id
+      %span.badge-current Current
+
+  .card-body
+    %dl.assoc-list
+      .assoc-row
+        %dt Total photos:
+        %dd= catalog.photos.count
+      .assoc-row
+        %dt Active photos:
+        %dd= active_photos.count
+      .assoc-row
+        %dt Unrated photos:
+        %dd= unrated_count
+      .assoc-row.assoc-path-row
+        %dt Path:
+        %dd
+          %span.path-text= catalog.fpath.to_s
+          %button.btn-copy{ type: "button", title: "Copy shell-escaped path", onclick: "navigator.clipboard.writeText('#{j(shell_escaped_path(catalog.fpath))}')" }
+            %svg{ viewBox: "0 0 24 24", width: "13", height: "13", fill: "currentColor" }
+              %path{ d: "M16 1H4C2.9 1 2 1.9 2 3v14h2V3h12V1zm3 4H8C6.9 5 6 5.9 6 7v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" }
+
+  .card-actions
+    = link_to "View Catalog Photos »", catalog_path(catalog), class: "btn-card"

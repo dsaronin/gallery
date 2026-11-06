@@ -1,3 +1,5 @@
+  require "shellwords"
+
 module CatalogHelper
 
   def make_picpath()
@@ -51,6 +53,10 @@ module CatalogHelper
 
   def public_fn(fn)
     return File.join( '..', 'photos', fn )
+  end
+
+  def shell_escaped_path(path)
+    Shellwords.escape(path.to_s)
   end
 
 end  # module

@@ -1,12 +1,13 @@
-%h4 Available Catalogs
-%p
-  = link_to "Select Catalogs to Ingest", catalog_selectcatalog_path, class: "btn"
-%i click name to show all pics in catalog
-.list
+.view-container#catalogs-index
+  .view-header
+    %h3.view-title Catalogs &emsp;
+    = link_to "+", catalog_selectcatalog_path, class: "header-fab", title: "Ingest New Catalog"
+
   - if @list.empty?
-    %p There are no catalogs to show; select something to load.
+    .empty-state
+      %p No catalogs have been started.
+      = link_to "Select Catalogs to Ingest »", catalog_selectcatalog_path, class: "btn-card primary"
   - else
-    .column
-      %ul
-        - @list.each do |f|
-          %li= link_to f.fname, f
+    .catalog-grid
+      - @list.each do |catalog|
+        = render partial: "catalog/card", locals: { catalog: catalog }
