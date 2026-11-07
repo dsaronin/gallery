@@ -818,28 +818,31 @@ a#right-next
           width: auto
           height: auto
           object-fit: contain
-
+  
     #photo-info-pane
-      width: 50%
+      +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
+      width: calc(50% - 0.4em)
       height: calc(100vh - 85px)
+      margin: 0 0.2em 0 0.2em
+      padding: 0.5em 0.8em
       overflow-y: auto
       box-sizing: border-box
-      padding: 0.2em 0.2em
       display: flex
       flex-direction: column
-      gap: 0.1em
-      // border: 2px dashed colors.$colorSecondary500
+      gap: 0.5em
 
       .pane-header
         width: 100%
         box-sizing: border-box
-        // border: 2px dashed colors.$colorAccent800
-        padding: 0.2em 0
+        padding-bottom: 0.4em
+        border-bottom: 2px solid colors.$colorBGray200
 
         h3
           margin: 0
           padding: 0
-          color: colors.$BASIC_BG
+          font-size: 1.15rem
+          font-weight: 900
+          color: colors.$BG_HEADER
 
       .pane-meta-row
         width: 100%
@@ -847,35 +850,39 @@ a#right-next
         display: flex
         flex-wrap: wrap
         flex-direction: row
-        // border: 2px dashed colors.$colorDeepOrange500
 
         .meta-filename
           width: 100%
           box-sizing: border-box
-          padding: 0.1em 0
+          padding: 0.2em 0
 
           p.filename
             margin: 0
             padding: 0
             font-style: italic
-            font-size: 0.6rem
+            font-size: 0.65rem
             line-height: 1.2
             color: colors.$colorBGray400
+
+          hr
+            border: none
+            border-top: 1px solid colors.$colorBGray100
+            margin: 0.5em 0
 
         .meta-details
           width: 70%
           box-sizing: border-box
           padding-right: 0.5em
-          // border: 1px dashed colors.$colorBGray400
 
           p
             margin: 0
             padding: 0.1em 0
-            font-size: 0.6rem
+            font-size: 0.65rem
             color: colors.$colorBGray700
 
           p.specs
             font-family: inherit
+            font-weight: bold
 
         .meta-actions
           width: 30%
@@ -883,13 +890,11 @@ a#right-next
           display: flex
           justify-content: flex-end
           align-items: center
-          // border: 1px dashed colors.$colorDeepOrange700
 
           .star-bar
             button, input[type="submit"]
               font-size: 0.85rem !important
 
-        // Responsive mobile stack: drop 70/30 row split into stacked blocks
         @media (max-width: 550px)
           .meta-details
             width: 100%
@@ -904,8 +909,6 @@ a#right-next
       .pane-associations-box
         width: 100%
         box-sizing: border-box
-        // padding: 0.25em 0.5em
-        // border: 2px dashed colors.$colorSecondary600
         display: flex
         flex-direction: column
         gap: 0.2em
@@ -967,32 +970,37 @@ a#right-next
           object-fit: contain
 
     #photo-info-pane
-      width: 100%
-      height: calc(50vh - 85px)
+      +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
+      width: calc(100% - 0.4em)
+      height: calc(50vh - 30px)
+      margin: 0.1em auto 0.2em auto
+      padding: 0.5em 0.8em
       overflow-y: auto
       box-sizing: border-box
-      padding: 0.2em 0.5em
       display: flex
       flex-direction: row
-      gap: 1.5em
+      gap: 1em
 
       .pane-col-primary
         width: 35%
         box-sizing: border-box
         display: flex
         flex-direction: column
-        gap: 0.1em
+        gap: 0.2em
         padding-right: 1.5em
-        border-right: 1px solid colors.$colorBGray100
+        border-right: 1px solid colors.$colorBGray200
 
         .pane-header
           width: 100%
-          padding: 0.1em 0
+          padding-bottom: 0.3em
+          border-bottom: 2px solid colors.$colorBGray200
 
           h3
             margin: 0
             padding: 0
-            color: colors.$BASIC_BG
+            font-size: 1.15rem
+            font-weight: 900
+            color: colors.$BG_HEADER
 
         .pane-meta-row
           width: 100%
@@ -1007,8 +1015,12 @@ a#right-next
             p
               margin: 0
               padding: 0.1em 0
-              font-size: 0.6rem
+              font-size: 0.65rem
               color: colors.$colorBGray700
+
+            p.specs
+              font-family: inherit
+              font-weight: bold
 
           .meta-actions
             width: 30%
@@ -1022,15 +1034,20 @@ a#right-next
 
           .meta-filename
             width: 100%
-            padding: 0.1em 0
+            padding: 0.2em 0
 
             p.filename
               margin: 0
               padding: 0
               font-style: italic
-              font-size: 0.6rem
+              font-size: 0.65rem
               line-height: 1.2
               color: colors.$colorBGray400
+
+            hr
+              border: none
+              border-top: 1px solid colors.$colorBGray100
+              margin: 0.5em 0
 
       .pane-col-secondary
         width: 65%
@@ -1047,18 +1064,17 @@ a#right-next
       @media (max-width: 768px)
         flex-direction: column
         height: auto
-        gap: 0.5em
+        gap: 0.8em
 
         .pane-col-primary
           width: 100%
           padding-right: 0
           border-right: none
-          border-bottom: 1px solid colors.$colorBGray100
+          border-bottom: 1px solid colors.$colorBGray200
           padding-bottom: 0.5em
 
         .pane-col-secondary
           width: 100%
-
 // *****************************************************
 .portrait
   // max-width: 1500px
