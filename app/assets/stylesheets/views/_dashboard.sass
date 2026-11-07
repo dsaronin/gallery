@@ -1,0 +1,115 @@
+@use "../colors"
+@use "../materialdesign" as md
+
+
+// ----------------------------------------------------
+// Dashboard Hub & Domain Cards
+// ----------------------------------------------------
+#dashboard-container
+  width: 100%
+  box-sizing: border-box
+  padding: 0.8em 0.5em
+  max-width: 1440px
+  margin: 0 auto
+
+  .dashboard-grid
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr))
+    gap: 1em
+    width: 100%
+    box-sizing: border-box
+
+  .dashboard-card
+    +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
+    min-height: auto
+
+    .card-fab
+      +md.MD_FAB
+
+    .btn-card
+      +md.MD_BUTTON
+
+    .card-body
+      .assoc-list
+        margin: 0
+        padding: 0
+        display: flex
+        flex-direction: column
+        gap: 0.35em
+
+      .assoc-row
+        display: flex
+        flex-direction: row
+        align-items: baseline
+        font-size: 0.80rem
+        line-height: 1.35
+
+        dt
+          min-width: 6.0em
+          flex-shrink: 0
+          font-weight: 900
+          text-transform: lowercase
+          color: colors.$BG_HEADER
+          margin: 0
+          padding: 0
+
+        dd
+          margin: 0
+          padding: 0
+          flex-grow: 1
+          min-width: 0
+          color: colors.$colorBGray700
+
+          a
+            display: inline-block
+            max-width: 100%
+            overflow: hidden
+            text-overflow: ellipsis
+            white-space: nowrap
+            vertical-align: bottom
+            color: colors.$colorSecondary900
+            font-weight: bold
+            text-decoration: none
+            &:hover
+              text-decoration: underline
+
+          .subdued
+            font-style: italic
+            color: colors.$colorBGray400
+
+    .admin-actions
+      flex-wrap: wrap
+      gap: 0.35em
+
+  // *****************************************************
+  // Mobile (Pixel 8a & small screens): boost readability ~20%
+  // *****************************************************
+  @media (max-width: 500px)
+    .dashboard-grid
+      grid-template-columns: 1fr
+
+    .dashboard-card
+      .card-header .card-title
+        font-size: 1.05rem
+
+      .card-body .assoc-row
+        font-size: 0.90rem
+
+        dt
+          min-width: 5.5em
+
+      .btn-card
+        font-size: 0.70rem
+
+  // Very Wide Desktop (> 1390px): scale down telemetry ~20% and tighten cards
+  @media (min-width: 1390px)
+    .dashboard-grid
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr))
+
+    .dashboard-card
+      .card-body .assoc-row
+        font-size: 0.75rem
+
+        dt
+          min-width: 6.2em
+

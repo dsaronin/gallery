@@ -1,0 +1,465 @@
+@use "../colors"
+@use "../materialdesign" as md
+
+// ----------------------------------------------------
+
+#photo-show-container
+  width: 100%
+  min-height: calc(100vh - 80px)
+  display: flex
+  box-sizing: border-box
+  // border: 2px dashed colors.$colorPrimaryAccent400
+  
+  // Hide the checkbox from sight and accessibility tree
+  #lightbox-toggle
+    position: absolute
+    opacity: 0
+    pointer-events: none
+    width: 0
+    height: 0
+    margin: 0
+  // ----------------------------------------------------
+  // Shared Associations & Tag DL Layout
+  // ----------------------------------------------------
+  .pane-associations-box
+    width: 100%
+    box-sizing: border-box
+
+    .assoc-list
+      margin: 0
+      padding: 0
+      display: flex
+      flex-direction: column
+      gap: 0.35em
+
+    .assoc-row
+      display: flex
+      flex-direction: row
+      align-items: baseline
+      font-size: 0.75rem
+      line-height: 1.3
+
+      dt
+        width: 95px
+        flex-shrink: 0
+        font-weight: 900
+        text-transform: lowercase
+        color: colors.$BG_HEADER
+        margin: 0
+        padding: 0
+
+      dd
+        margin: 0
+        padding: 0
+        flex-grow: 1
+        color: colors.$colorBGray500
+
+    .assoc-tags-row
+      align-items: flex-start
+
+      dd
+        turbo-frame
+          display: block
+
+        .tags-wrapper
+          display: flex
+          flex-wrap: wrap
+          align-items: center
+          gap: 0.3em
+
+        .no-tags-notice
+          font-style: italic
+          color: colors.$colorBGray400
+
+        .tag-badges
+          display: inline-flex
+          flex-wrap: wrap
+          align-items: center
+          gap: 0.25em
+
+        .tag-badge
+          display: inline-flex
+          align-items: center
+          padding: 0.1em 0.35em
+          color: colors.$colorSecondary900
+          line-height: 1.1
+          border-radius: 2px
+
+          .tag-category
+            font-size: 85%
+            font-weight: bold
+            margin-right: 0.25em
+            color: colors.$BASIC_BG
+
+          .tag-name
+            color: colors.$BG_HEADER
+
+          .tag-remove-btn
+            background: none !important
+            border: none !important
+            outline: none !important
+            cursor: pointer
+            font-size: 90% !important
+            padding: 0 0 0 0.25em !important
+            margin: 0 !important
+            color: colors.$TURKIYE_RED
+            line-height: 1
+            width: auto !important
+
+            &:hover
+              color: colors.$TURKIYE_RED
+              opacity: 0.75
+
+        .inline-tag-form
+          display: inline-flex
+          align-items: center
+          gap: 0.2em
+          margin: 0
+
+          select.tag-select
+            width: auto
+            margin: 0
+            padding: 0.1em 0.25em
+            font-size: 0.7rem
+            background-color: colors.$colorBGray050
+            border: 1px solid colors.$colorBGray200
+
+          .btn-tag-add
+            width: auto !important
+            padding: 0.1em 0.4em !important
+            margin: 0 !important
+            font-size: 0.7rem !important
+            font-weight: bold
+            background-color: colors.$FG_HEADER
+            color: colors.$BG_HEADER
+            border: 1px solid colors.$colorBGray200
+            cursor: pointer
+            +md.BEVEL_CORNER(3px)
+
+            &:hover
+              background-color: colors.$colorBGray100
+
+  &.portrait
+    flex-direction: row
+
+    .pane-col-primary, .pane-col-secondary
+        width: 100%
+        display: flex
+        flex-direction: column
+        gap: 0.1em
+
+    #photo-stage
+      width: 50%
+      height: calc(100vh - 85px)
+      position: sticky
+      top: 0
+      display: flex
+      justify-content: center
+      align-items: flex-start
+      box-sizing: border-box
+      // border: 2px dashed colors.$colorPrimaryAccent100
+      overflow: hidden
+
+      .lightbox-trigger
+        display: flex
+        justify-content: center
+        align-items: flex-start
+        width: 100%
+        height: 100%
+        cursor: zoom-in
+
+      img.portrait
+        max-width: 100%
+        max-height: 100%
+        width: auto
+        height: auto
+        object-fit: contain
+        user-select: none
+
+    // ----------------------------------------------------
+    // Pure CSS Lightbox Expanded State
+    // ----------------------------------------------------
+    #lightbox-toggle:checked ~ #photo-stage
+      position: fixed
+      inset: 0
+      width: 100vw
+      height: 100vh
+      z-index: 1000
+      background-color: rgba(0, 0, 0, 0.92)
+      display: flex
+      justify-content: center
+      align-items: center
+
+      .lightbox-trigger
+        width: 100%
+        height: 100%
+        display: flex
+        justify-content: center
+        align-items: center
+        cursor: zoom-out
+
+        img.portrait
+          max-width: 98vw
+          max-height: 98vh
+          width: auto
+          height: auto
+          object-fit: contain
+  
+    #photo-info-pane
+      +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
+      width: calc(50% - 0.4em)
+      height: calc(100vh - 85px)
+      margin: 0 0.2em 0 0.2em
+      padding: 0.5em 0.8em
+      overflow-y: auto
+      box-sizing: border-box
+      display: flex
+      flex-direction: column
+      gap: 0.5em
+
+      .pane-header
+        width: 100%
+        box-sizing: border-box
+        padding-bottom: 0.4em
+        border-bottom: 2px solid colors.$colorBGray200
+
+        h3
+          margin: 0
+          padding: 0
+          font-size: 1.15rem
+          font-weight: 900
+          color: colors.$BG_HEADER
+
+      .pane-meta-row
+        width: 100%
+        box-sizing: border-box
+        display: flex
+        flex-wrap: wrap
+        flex-direction: row
+
+        .meta-filename
+          width: 100%
+          box-sizing: border-box
+          padding: 0.2em 0
+
+          p.filename
+            margin: 0
+            padding: 0
+            font-style: italic
+            font-size: 0.65rem
+            line-height: 1.2
+            color: colors.$colorBGray400
+
+          hr
+            border: none
+            border-top: 1px solid colors.$colorBGray100
+            margin: 0.5em 0
+
+        .meta-details
+          width: 70%
+          box-sizing: border-box
+          padding-right: 0.5em
+
+          p
+            margin: 0
+            padding: 0.1em 0
+            font-size: 0.65rem
+            color: colors.$colorBGray700
+
+          p.specs
+            font-family: inherit
+            font-weight: bold
+
+        .meta-actions
+          width: 30%
+          box-sizing: border-box
+          display: flex
+          justify-content: flex-end
+          align-items: center
+
+          .star-bar
+            button, input[type="submit"]
+              font-size: 0.85rem !important
+
+        @media (max-width: 550px)
+          .meta-details
+            width: 100%
+            padding-right: 0
+            border-right: none
+
+          .meta-actions
+            width: 100%
+            padding: 0.3em 0
+            justify-content: flex-start
+
+      .pane-associations-box
+        width: 100%
+        box-sizing: border-box
+        display: flex
+        flex-direction: column
+        gap: 0.2em
+
+  &.landscape
+    flex-direction: column
+
+    #photo-stage
+      width: 100%
+      height: 50vh
+      position: sticky
+      top: 0
+      display: flex
+      justify-content: flex-start
+      align-items: center
+      box-sizing: border-box
+      overflow: hidden
+
+      .lightbox-trigger
+        display: flex
+        justify-content: flex-start
+        align-items: center
+        width: 100%
+        height: 100%
+        cursor: zoom-in
+
+        img.landscape
+          max-width: 100%
+          max-height: 100%
+          width: auto
+          height: auto
+          object-fit: contain
+          user-select: none
+
+    #lightbox-toggle:checked ~ #photo-stage
+      position: fixed
+      inset: 0
+      width: 100vw
+      height: 100vh
+      z-index: 1000
+      background-color: rgba(0, 0, 0, 0.92)
+      display: flex
+      justify-content: center
+      align-items: center
+
+      .lightbox-trigger
+        width: 100%
+        height: 100%
+        display: flex
+        justify-content: center
+        align-items: center
+        cursor: zoom-out
+
+        img.landscape
+          max-width: 98vw
+          max-height: 98vh
+          width: auto
+          height: auto
+          object-fit: contain
+
+    #photo-info-pane
+      +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
+      width: calc(100% - 0.4em)
+      height: calc(50vh - 30px)
+      margin: 0.1em auto 0.2em auto
+      padding: 0.5em 0.8em
+      overflow-y: auto
+      box-sizing: border-box
+      display: flex
+      flex-direction: row
+      gap: 1em
+
+      .pane-col-primary
+        width: 35%
+        box-sizing: border-box
+        display: flex
+        flex-direction: column
+        gap: 0.2em
+        padding-right: 1.5em
+        border-right: 1px solid colors.$colorBGray200
+
+        .pane-header
+          width: 100%
+          padding-bottom: 0.3em
+          border-bottom: 2px solid colors.$colorBGray200
+
+          h3
+            margin: 0
+            padding: 0
+            font-size: 1.15rem
+            font-weight: 900
+            color: colors.$BG_HEADER
+
+        .pane-meta-row
+          width: 100%
+          display: flex
+          flex-wrap: wrap
+          flex-direction: row
+
+          .meta-details
+            width: 70%
+            padding-right: 0.5em
+
+            p
+              margin: 0
+              padding: 0.1em 0
+              font-size: 0.65rem
+              color: colors.$colorBGray700
+
+            p.specs
+              font-family: inherit
+              font-weight: bold
+
+          .meta-actions
+            width: 30%
+            display: flex
+            justify-content: flex-end
+            align-items: center
+
+            .star-bar
+              button, input[type="submit"]
+                font-size: 0.85rem !important
+
+          .meta-filename
+            width: 100%
+            padding: 0.2em 0
+
+            p.filename
+              margin: 0
+              padding: 0
+              font-style: italic
+              font-size: 0.65rem
+              line-height: 1.2
+              color: colors.$colorBGray400
+
+            hr
+              border: none
+              border-top: 1px solid colors.$colorBGray100
+              margin: 0.5em 0
+
+      .pane-col-secondary
+        width: 65%
+        box-sizing: border-box
+        display: flex
+        flex-direction: column
+
+        .pane-associations-box
+          width: 100%
+          display: flex
+          flex-direction: column
+          gap: 0.2em
+
+      @media (max-width: 768px)
+        flex-direction: column
+        height: auto
+        gap: 0.8em
+
+        .pane-col-primary
+          width: 100%
+          padding-right: 0
+          border-right: none
+          border-bottom: 1px solid colors.$colorBGray200
+          padding-bottom: 0.5em
+
+        .pane-col-secondary
+          width: 100%
+// *****************************************************
+

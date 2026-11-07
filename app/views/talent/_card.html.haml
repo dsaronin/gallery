@@ -1,0 +1,35 @@
+.talent-card
+  - if talent.cover.present?
+    .card-cover
+      = link_to talent_path(talent) do
+        %img{ src: public_fn(talent.cover.filename), alt: talent.talent_name, class: "cover-img" }
+  - else
+    .card-cover.no-cover
+      %span.cover-placeholder= talent.talent_name.first(2).upcase
+
+  .card-body
+    .card-title-row
+      %h4.talent-name= link_to talent.talent_name, talent
+      %span.talent-code= talent.talent_code
+
+    .talent-real-name
+      = "#{talent.first_name} #{talent.last_name}".strip.presence || "—"
+
+    .talent-meta-bar
+      %span.meta-item
+        %strong Photos:
+        = talent.photos.size
+      - if talent.talent_dob.present?
+        %span.meta-item
+          %strong Age:
+          = "#{time_ago_in_words(talent.talent_dob)}"
+      - if talent.talent_release.present?
+        %span.meta-item.release-signed
+          %strong Release:
+          = talent.talent_release.strftime("%m/%d/%Y")
+
+  .card-footer
+    .footer-actions
+      = link_to "View »", talent, class: "action-link"
+      = link_to "Edit »", edit_talent_path(talent), class: "action-link"
+      = button_to "Delete »", talent, method: :delete, form: { data: { turbo_confirm: "Delete talent '#{talent.talent_name}'?" } }, class: "action-link-delete"

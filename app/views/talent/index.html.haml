@@ -1,18 +1,16 @@
-%h4 Talent
-%hr
+.view-container#talent-index-view
+  .view-header
+    .view-title-group
+      %h3.view-title Talent
+      %span.view-count= "#{@talents.size} #{'model'.pluralize(@talents.size)}"
 
-%table
-  %thead
-    %tr
+    .view-actions
+      = link_to "+ New Talent »", new_talent_path, class: "btn-primary-action"
 
-  %tbody
-    - @talents.each do |talent|
-      %tr
-        %td= talent.talent_name
-        %td= link_to 'view &raquo;'.html_safe, talent
-        %td= link_to 'edit &raquo;'.html_safe, edit_talent_path(talent)
-        %td= link_to 'delete &raquo;'.html_safe, talent, method: :delete, data: { confirm: 'Are you sure?' }
-
-%br
-
-= link_to '+NEW &raquo;'.html_safe, new_talent_path
+  - if @talents.blank?
+    .empty-notice
+      %p No talent records found. Click "+ New Talent »" to add one.
+  - else
+    .talent-card-grid
+      - @talents.each do |talent|
+        = render partial: "talent/card", locals: { talent: talent }
