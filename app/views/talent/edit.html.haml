@@ -1,7 +1,7 @@
-%h1 Editing talent
+.view-container#talent-form-view
+  .form-card
+    .card-header-bar
+      %h3.form-title= "Edit: #{@talent.talent_name}"
+      = link_to "« Back to Talent", talent_path(@talent), class: "header-back-link"
 
-= render 'form'
-%br
-= link_to 'view &raquo;'.html_safe, @talent
-\|
-= link_to 'talent list &raquo;'.html_safe, talent_index_path
+    = render "form"

@@ -1,12 +1,61 @@
-%h4= @talent.talent_name
-%i#notice= notice
-%i= @talent.talent_code
-%p= "#{@talent.first_name} #{@talent.last_name}"
-%p= number_to_phone(@talent.talent_nbr)
-%p= time_ago_in_words(@talent.talent_dob) + " old"
-%p= "model release: " + @talent.talent_release.to_s
+.view-container#talent-show-view
+  .view-header
+    .view-title-group
+      %h3.view-title= @talent.talent_name
+      %span.talent-code= @talent.talent_code
 
-%br
-= link_to 'edit &raquo;'.html_safe, edit_talent_path(@talent)
-\&emsp;
-= link_to 'talent list &raquo;'.html_safe, talent_index_path
+    .view-actions
+      = link_to "« Talent List", talent_index_path, class: "btn-secondary-action"
+      = link_to "Edit Talent »", edit_talent_path(@talent), class: "btn-primary-action"
+
+  .talent-inspector-card
+    .inspector-body
+      - if @talent.cover.present?
+        .inspector-cover
+          %img{ src: public_fn(@talent.cover.filename), alt: @talent.talent_name, class: "cover-img" }
+      - else
+        .inspector-cover.no-cover
+          %span.cover-placeholder= @talent.talent_name.first(2).upcase
+
+      .inspector-details
+        %dl.assoc-list
+          .assoc-row
+            %dt Legal Name:
+            %dd= "#{@talent.first_name} #{@talent.last_name}".strip.presence || "—"
+          .assoc-row
+            %dt Phone:
+            %dd= @talent.talent_nbr.present? ? number_to_phone(@talent.talent_nbr) : "—"
+          .assoc-row
+            %dt Age / DOB:
+            %dd
+              - if @talent.talent_dob.present?
+                = "#{time_ago_in_words(@talent.talent_dob)} old (#{@talent.talent_dob.strftime('%m/%d/%Y')})"
+              - else
+                —
+          .assoc-row
+            %dt Model Release:
+            %dd
+              - if @talent.talent_release.present?
+                %span.release-signed= @talent.talent_release.strftime("%m/%d/%Y")
+              - else
+                %span.subdued Pending / Unsigned
+          .assoc-row
+            %dt Total Photos:
+            %dd= @talent.photos.size
+
+  .talent-photos-section
+    .section-header
+      %h4 Associated Photos
+      %span.photo-count= "#{@talent.photos.size} #{'photo'.pluralize(@talent.photos.size)}"
+
+    - if @talent.photos.blank?
+      .empty-notice
+        %p No photos currently assigned to this talent.
+    - else
+      .thumbnail-grid
+        - @talent.photos.each do |photo|
+          .thumbnail
+            = link_to photo_path(photo) do
+              %img{ src: public_fn(photo.filename), alt: photo.photo_dsc.presence || "Photo #{photo.id}" }
+              = render partial: "photo/star_rating", locals: { photo: photo }
+              %span.photo-desc= photo.photo_dsc.presence || "~"
