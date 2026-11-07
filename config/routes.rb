@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get 'dashboard', to: 'dashboard#index'
   post 'catalog/loadphotos'
   resources :catalog, only: [:show, :destroy]
-  resources :photo,  only: [:show, :edit, :update, :destroy] do
+  resources :photo,  only: [:show, :update] do
     member do
       post 'assign_tag'
       delete 'remove_tag/:tag_id', action: :remove_tag, as: :remove_tag

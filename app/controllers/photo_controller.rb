@@ -1,9 +1,6 @@
 class PhotoController < ApplicationController
     before_action :validate_photo, :only => [:show, :update, :assign_tag, :remove_tag]
  
-  def index
-  end
-
   def show
     @assigned_tags = @photo.tags.includes(:category).order("categories.name, tags.name")
     @categories    = Category.includes(:tags).order(:name)
