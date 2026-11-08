@@ -18,8 +18,12 @@
           %dt Active photos:
           %dd= active_photos.count
         .assoc-row
-          %dt Unrated photos:
-          %dd= unrated_count
+          %dt talent:
+          %dd
+            - if catalog.talent.present?
+              = link_to catalog.talent.talent_name, talent_path(catalog.talent), class: "talent-pill"
+            - else
+              %span.subdued —
         .assoc-row.assoc-path-row
           %dt Path:
           %dd
@@ -33,4 +37,5 @@
             %img{ src: public_fn(preview_photo.filename), class: "image", alt: preview_photo.photo_dsc }
 
   .card-actions
-    = link_to "View Catalog Photos »", catalog_path(catalog), class: "btn-card"
+    = link_to "+ Talent", talent_index_path(assign_to_catalog_id: catalog.id), class: "btn-card"
+    = link_to "Show Photos »", catalog_path(catalog), class: "btn-card"

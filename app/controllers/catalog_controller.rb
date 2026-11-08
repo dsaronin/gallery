@@ -116,6 +116,25 @@ class CatalogController < ApplicationController
 # ----------------------------------------------------------
 # update  -- rechecks a catalog for any recent unload pics & loads them
 # ----------------------------------------------------------
+
+def update
+    @catalog = Catalog.find(params[:id])
+
+    if @catalog.update(catalog_params)
+      flash[:notice] = if @catalog.talent_id.present?
+                         "Assigned talent '#{@catalog.talent.talent_name}' to catalog '#{@catalog.name}'."
+                       else
+                         "Removed talent assignment from catalog '#{@catalog.name}'."
+                       end
+      flash[:show_flash] = true
+      redirect_to catalog_index_path
+    else
+      flash[:alert] = "Failed to update catalog: #{@catalog.errors.full_messages.join(', ')}"
+      flash[:show_flash] = true
+      redirect_to catalog_index_path
+    end
+  end
+
 # ----------------------------------------------------------
 # destroy  -- destorys a catalog (from db) and all its related pics
 # ----------------------------------------------------------
@@ -135,6 +154,12 @@ class CatalogController < ApplicationController
   end
 
 # ------------------------------------------------------------------------------
+
+  private
+
+  def catalog_params
+    params.require(:catalog).permit(:name, :talent_id)
+  end
 
 
 # ----------------------------------------------------------

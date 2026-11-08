@@ -3,14 +3,18 @@ Rails.application.routes.draw do
   get 'catalog/selectcatalog'
   get 'dashboard', to: 'dashboard#index'
   post 'catalog/loadphotos'
-  resources :catalog, only: [:show, :destroy]
+  resources :catalog, only: [:show, :update, :destroy]
   resources :photo,  only: [:show, :update] do
     member do
       post 'assign_tag'
       delete 'remove_tag/:tag_id', action: :remove_tag, as: :remove_tag
     end
   end
-  resources :talent
+  resources :talent do
+    member do
+      patch :set_cover
+    end
+  end
   resources :portfolio
   resources :category, only: [:create, :update, :destroy]
   resources :tag,      only: [:index, :create, :update, :destroy]

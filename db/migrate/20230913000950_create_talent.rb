@@ -8,10 +8,11 @@ class CreateTalent < ActiveRecord::Migration[7.0]
       t.string :last_name
       t.date :talent_dob
       t.date :talent_release
-      t.references :cover, null: true, foreign_key: { to_table: :photos }
+      t.integer :cover_id
 
       t.timestamps
     end
     add_index :talent, :talent_code, unique: true
+    add_index :talent, :cover_id
   end
 end

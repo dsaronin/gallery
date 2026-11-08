@@ -11,9 +11,11 @@ class CreatePhotos < ActiveRecord::Migration[7.0]
       t.float :longitude
       t.string :notes
       t.references :catalog, null: false, foreign_key: true
-      t.references :talent, null: true, foreign_key: true
 
       t.timestamps
     end
+
+    # Establish the delayed foreign key for talent cover photo
+    add_foreign_key :talent, :photos, column: :cover_id
   end
 end

@@ -30,6 +30,9 @@
 
   .card-footer
     .footer-actions
-      = link_to "View »", talent, class: "action-link"
-      = link_to "Edit »", edit_talent_path(talent), class: "action-link"
-      = button_to "Delete »", talent, method: :delete, form: { data: { turbo_confirm: "Delete talent '#{talent.talent_name}'?" } }, class: "action-link-delete"
+      - if local_assigns[:target_catalog].present?
+        = button_to "Select This Talent »", catalog_path(target_catalog, catalog: { talent_id: talent.id }), method: :patch, class: "btn-select-talent"
+      - else
+        = link_to "View »", talent, class: "action-link"
+        = link_to "Edit »", edit_talent_path(talent), class: "action-link"
+        = button_to "Delete »", talent, method: :delete, form: { data: { turbo_confirm: "Delete talent '#{talent.talent_name}'?" } }, class: "action-link-delete"

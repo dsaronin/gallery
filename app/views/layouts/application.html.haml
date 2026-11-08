@@ -23,7 +23,7 @@
 
       #header
         -# = link_to( image_tag( "/images/flash-icon-2.png", {:class => 'logo',:alt => 'DrillTutor logo'} ) , '/', { :title => "main page" } )
-        %h3 Gallery
+        %h3= link_to "Gallery", root_path
       
       #wrapper
         #actionbox
@@ -41,5 +41,5 @@
       #footer
         %p
           &copy;&nbsp;
-          =link_to("Copyright 2023 David S. Anderson, All rights reserved ","/about")
+          =link_to("Copyright 2026 David S. Anderson, All rights reserved ","/about")
           &emsp;&bull;&emsp;v 1.01 &ensp;

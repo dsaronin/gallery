@@ -1,14 +1,12 @@
 class Talent < ApplicationRecord
-  has_many :photos
+# -----------------------------
+  has_many :catalogs, dependent: :nullify
+  has_many :photos, through: :catalogs
   belongs_to :cover, class_name: "Photo", optional: true
+
+  validates :talent_code, presence: true, uniqueness: true
+  validates :talent_name, presence: true
+  validates :first_name,  presence: true
+# -----------------------------
 end
 
-# -----------------------------
-#      t.string :talent_code
-#      t.string :talent_nbr
-#      t.string :talent_name
-#      t.string :first_name
-#      t.string :last_name
-#      t.date :talent_dob
-#      t.date :talent_release
-# -----------------------------

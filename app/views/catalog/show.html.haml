@@ -12,7 +12,10 @@
     .thumbnail-grid-wrapper
       .thumbnail-grid
         - @catalog.photos.each do |p|
-          .thumbnail
+          - is_cover = @catalog.talent.present? && @catalog.talent.cover_id == p.id
+          .thumbnail{ class: ("is-talent-cover" if is_cover) }
+            - if @catalog.talent.present?
+              = button_to "", set_cover_talent_path(@catalog.talent, photo_id: p.id), method: :patch, class: "btn-cover-hit-area", title: (is_cover ? "Current talent cover" : "Click background to set as talent cover")
             %a{ href: url_for(p) }
               %img{ src: public_fn(p.filename), class: "image", alt: p.photo_dsc }
             = render partial: "photo/star_rating", locals: { photo: p }

@@ -8,7 +8,11 @@ class TalentController < ApplicationController
 
   # GET /talent or /talent.json
   def index
-    @talents = Talent.all
+    @talents = Talent.order(:talent_name)
+
+    if params[:assign_to_catalog_id].present?
+      @target_catalog = Catalog.find_by(id: params[:assign_to_catalog_id])
+    end
   end
 
   # GET /talent/1 or /talent/1.json
@@ -50,6 +54,21 @@ class TalentController < ApplicationController
         format.json { render json: @talent.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def set_cover
+    @talent = Talent.find(params[:id])
+    photo = Photo.find(params[:photo_id])
+
+    if @talent.update(cover: photo)
+      flash[:notice] = "Cover photo set for #{@talent.talent_name}."
+      flash[:show_flash] = true
+    else
+      flash[:alert] = "Failed to update cover photo."
+      flash[:show_flash] = true
+    end
+
+    redirect_back fallback_location: catalog_path(photo.catalog)
   end
 
   # DELETE /talent/1 or /talent/1.json

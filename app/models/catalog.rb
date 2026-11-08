@@ -5,6 +5,7 @@
 
 class Catalog < ApplicationRecord
 
+  belongs_to :talent, optional: true
   has_many :photos, dependent: :destroy
 
   validates :name, presence: true

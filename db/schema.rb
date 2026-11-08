@@ -15,9 +15,11 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
     t.string "name"
     t.string "fname"
     t.string "fpath"
+    t.integer "talent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["fname"], name: "index_catalogs_on_fname", unique: true
+    t.index ["talent_id"], name: "index_catalogs_on_talent_id"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -75,11 +77,9 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
     t.float "longitude"
     t.string "notes"
     t.integer "catalog_id", null: false
-    t.integer "talent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["catalog_id"], name: "index_photos_on_catalog_id"
-    t.index ["talent_id"], name: "index_photos_on_talent_id"
   end
 
   create_table "photos_tags", id: false, force: :cascade do |t|
@@ -199,6 +199,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "catalogs", "talent"
   add_foreign_key "exhibition_items", "exhibitions"
   add_foreign_key "exhibition_items", "placards"
   add_foreign_key "exhibition_items", "portfolio_items"
@@ -208,7 +209,6 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
   add_foreign_key "exhibitions", "talent"
   add_foreign_key "exhibitions", "venues"
   add_foreign_key "photos", "catalogs"
-  add_foreign_key "photos", "talent"
   add_foreign_key "portfolio_items", "photos"
   add_foreign_key "portfolio_items", "placards"
   add_foreign_key "portfolio_items", "portfolios"

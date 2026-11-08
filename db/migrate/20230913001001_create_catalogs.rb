@@ -4,6 +4,7 @@ class CreateCatalogs < ActiveRecord::Migration[7.0]
       t.string :name
       t.string :fname
       t.string :fpath
+      t.references :talent, foreign_key: { to_table: :talent }, null: true
 
       t.timestamps
     end

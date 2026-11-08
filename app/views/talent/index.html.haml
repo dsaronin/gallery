@@ -1,16 +1,28 @@
 .view-container#talent-index-view
+  - if @target_catalog.present?
+    .assignment-context-bar
+      .context-message
+        Assigning Talent to Catalog:
+        %strong= @target_catalog.name
+      .context-actions
+        - if @target_catalog.talent_id.present?
+          = button_to "Remove Assigned Talent", catalog_path(@target_catalog, catalog: { talent_id: nil }), method: :patch, class: "btn-remove-talent"
+        = link_to "Cancel", catalog_index_path, class: "btn-cancel-assignment"
+
   .view-header
     .view-title-group
-      %h3.view-title Talent
+      %h3.view-title= @target_catalog.present? ? "Select Talent" : "Talents"
       %span.view-count= "#{@talents.size} #{'model'.pluralize(@talents.size)}"
 
     .view-actions
-      = link_to "+ New Talent »", new_talent_path, class: "btn-primary-action"
+      - unless @target_catalog.present?
+        = link_to "+ New Talent »", new_talent_path, class: "btn-primary-action"
 
   - if @talents.blank?
     .empty-notice
-      %p No talent records found. Click "+ New Talent »" to add one.
+      %p No talents registered.
   - else
     .talent-card-grid
       - @talents.each do |talent|
-        = render partial: "talent/card", locals: { talent: talent }
+        = render partial: "talent/card", locals: { talent: talent, target_catalog: @target_catalog }
+
