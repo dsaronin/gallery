@@ -12,7 +12,7 @@
       = f.text_field :talent_code, required: true, class: "form-input", placeholder: "e.g. TL-01"
 
     .form-field
-      = f.label :talent_name, "Professional Name *"
+      = f.label :talent_name, "Model Name *"
       = f.text_field :talent_name, required: true, class: "form-input", placeholder: "Stage / Portfolio name"
 
     .form-field
@@ -24,8 +24,16 @@
       = f.text_field :last_name, class: "form-input"
 
     .form-field
-      = f.label :talent_nbr, "Contact Phone"
+      = f.label :talent_phone, "Contact Phone"
       = f.telephone_field :talent_nbr, class: "form-input", placeholder: "(555) 000-0000"
+
+    .form-field
+      = f.label :talent_email, "Email Address"
+      = f.email_field :talent_email, class: "form-input", placeholder: "talent@example.com"
+
+    .form-field.full-width
+      = f.label :talent_address, "Mailing Address"
+      = f.text_field :talent_address, class: "form-input", placeholder: "Street, City, State, ZIP"
 
     .form-field
       = f.label :talent_dob, "Date of Birth"

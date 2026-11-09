@@ -1,0 +1,11 @@
+# db/seeds/categories.yml
+# Top-level categorization taxonomy
+- name: "Portraits"
+- name: "Naturescapes"
+- name: "Objects"
+- name: "Urban"
+- name: "People"
+- name: "Flowers"
+- name: "Animate"
+- name: "Travel"
+- name: "Chromatic"

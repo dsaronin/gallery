@@ -169,11 +169,13 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
 
   create_table "talent", force: :cascade do |t|
     t.string "talent_code"
-    t.string "talent_nbr"
     t.string "talent_name"
-    t.string "first_name"
     t.string "last_name"
+    t.string "first_name"
     t.date "talent_dob"
+    t.string "talent_address"
+    t.string "talent_email"
+    t.string "talent_phone"
     t.date "talent_release"
     t.integer "cover_id"
     t.datetime "created_at", null: false

@@ -1,0 +1,111 @@
+# db/seeds/tags.yml
+# Descriptive tags mapped to categories
+
+# Portraits
+- name: "Headshots"
+  category: "Portraits"
+  theme: false
+
+# Naturescapes
+- name: "Yosemite"
+  category: "Naturescapes"
+  theme: false
+
+- name: "Mountains"
+  category: "Naturescapes"
+  theme: false
+
+- name: "Coastal"
+  category: "Naturescapes"
+  theme: false
+
+- name: "Desert"
+  category: "Naturescapes"
+  theme: false
+
+- name: "Forests"
+  category: "Naturescapes"
+  theme: false
+
+# Objects
+- name: "Machinery"
+  category: "Objects"
+  theme: false
+
+- name: "Ruins"
+  category: "Objects"
+  theme: false
+
+- name: "Rust"
+  category: "Objects"
+  theme: false
+
+- name: "Food"
+  category: "Objects"
+  theme: false
+
+# Urban
+- name: "Graffiti"
+  category: "Urban"
+  theme: false
+
+- name: "Oakland"
+  category: "Urban"
+  theme: false
+
+- name: "Buildings"
+  category: "Urban"
+  theme: false
+
+# People
+- name: "Street"
+  category: "People"
+  theme: false
+
+# Flowers
+- name: "Flowers"
+  category: "Flowers"
+  theme: false
+
+# Animate
+- name: "Birds"
+  category: "Animate"
+  theme: false
+
+- name: "Bugs"
+  category: "Animate"
+  theme: false
+
+- name: "Animals"
+  category: "Animate"
+  theme: false
+
+# Travel
+- name: "Tanzania"
+  category: "Travel"
+  theme: false
+
+- name: "Barbados"
+  category: "Travel"
+  theme: false
+
+- name: "Japan"
+  category: "Travel"
+  theme: false
+
+- name: "Istanbul"
+  category: "Travel"
+  theme: false
+
+- name: "London"
+  category: "Travel"
+  theme: false
+
+# Chromatic
+- name: "Monochrome"
+  category: "Chromatic"
+  theme: false
+
+- name: "Bichromatic"
+  category: "Chromatic"
+  theme: false

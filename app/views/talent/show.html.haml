@@ -20,16 +20,22 @@
       .inspector-details
         %dl.assoc-list
           .assoc-row
-            %dt Legal Name:
+            %dt Full Name:
             %dd= "#{@talent.first_name} #{@talent.last_name}".strip.presence || "—"
           .assoc-row
             %dt Phone:
-            %dd= @talent.talent_nbr.present? ? number_to_phone(@talent.talent_nbr) : "—"
+            %dd= @talent.talent_phone.present? ? number_to_phone(@talent.talent_phone) : "—"
+          .assoc-row
+            %dt Email:
+            %dd= @talent.talent_email.presence || "—"
+          .assoc-row
+            %dt Address:
+            %dd= @talent.talent_address.presence || "—"
           .assoc-row
             %dt Age / DOB:
             %dd
               - if @talent.talent_dob.present?
-                = "#{time_ago_in_words(@talent.talent_dob)} old (#{@talent.talent_dob.strftime('%m/%d/%Y')})"
+                = "#{exact_age(@talent.talent_dob)} (#{@talent.talent_dob.strftime('%m/%d/%Y')})"
               - else
                 —
           .assoc-row

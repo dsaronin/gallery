@@ -90,9 +90,16 @@ class TalentController < ApplicationController
     # Only allow a list of trusted parameters through.
     def talent_params
       params.require(:talent).permit(
-        :talent_code, :talent_name, :talent_nbr, 
-        :first_name, :last_name, 
-        :talent_dob, :talent_release 
+        :talent_code,
+        :talent_name,
+        :first_name,
+        :last_name,
+        :talent_dob,
+        :talent_address,
+        :talent_email,
+        :talent_phone,
+        :talent_release,
+        :cover_id 
       )
     end
 end

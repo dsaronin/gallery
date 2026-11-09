@@ -22,7 +22,7 @@
       - if talent.talent_dob.present?
         %span.meta-item
           %strong Age:
-          = "#{time_ago_in_words(talent.talent_dob)}"
+          = exact_age(talent.talent_dob)
       - if talent.talent_release.present?
         %span.meta-item.release-signed
           %strong Release:
