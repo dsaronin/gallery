@@ -10,12 +10,23 @@ Rails.application.routes.draw do
       delete 'remove_tag/:tag_id', action: :remove_tag, as: :remove_tag
     end
   end
+
   resources :talent do
     member do
       patch :set_cover
     end
   end
-  resources :portfolio
+
+  concern :curatable do
+    resource :curation, only: [:show] do
+      post :preview
+      post :commit
+      delete :clear
+    end
+  end
+
+  resources :portfolios, concerns: :curatable
+  resources :exhibitions, concerns: :curatable
   resources :category, only: [:create, :update, :destroy]
   resources :tag,      only: [:index, :create, :update, :destroy]
 

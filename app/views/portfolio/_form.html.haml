@@ -1,19 +1,29 @@
-= form_for @portfolio do |f|
+= form_for @portfolio, url: (@portfolio.persisted? ? portfolio_path(@portfolio) : portfolio_index_path), html: { class: "material-form" } do |f|
   - if @portfolio.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@portfolio.errors.count, "error")} prohibited this portfolio from being saved:"
+    .form-error-panel
+      %h5= "#{pluralize(@portfolio.errors.count, 'error')} prevented saving:"
       %ul
         - @portfolio.errors.full_messages.each do |message|
           %li= message
 
-  = f.label( :portfolio_name, 'portfolio name*', {:title => "portfolio name"} ) 
-  = f.text_field :portfolio_name
-  %br
-  = f.label( :portfolio_title, 'portfolio_title*', {:title => "portfolio title"} ) 
-  = f.text_field :portfolio_title
-  %br
-  .actions
-    = f.submit "&emsp;Save&emsp;".html_safe
-  = f.label( :portfolio_xxx, "&emsp;".html_safe, {:title => "blank for submit button"} ) 
+  .form-grid
+    .form-field.full-width
+      = f.label :name, "Portfolio Name *"
+      = f.text_field :name, required: true, class: "form-input", placeholder: "e.g. sierras_autumn_2026"
 
+    .form-field.full-width
+      = f.label :title, "Portfolio Description *"
+      = f.text_field :title, required: true, class: "form-input", placeholder: "e.g. Autumn in the High Sierras"
 
+    - if @portfolio.persisted?
+      .form-field.full-width
+        = f.label :status, "Portfolio Status *"
+        = f.select :status, Portfolio.statuses.keys.map { |s| [s.humanize, s] }, {}, { class: "form-input form-select" }
+
+      .form-field.full-width
+        = f.label :placard_id, "Portfolio Placard"
+        = f.collection_select :placard_id, Placard.order(:title), :id, :title, { include_blank: "Default" }, { class: "form-input form-select" }
+
+  .form-actions-bar
+    = link_to "Cancel", (@portfolio.persisted? ? portfolio_path(@portfolio) : portfolio_index_path), class: "btn-cancel"
+    = f.submit (@portfolio.persisted? ? "Update Portfolio »" : "Create Portfolio »"), class: "btn-submit"

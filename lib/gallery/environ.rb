@@ -11,6 +11,7 @@
   require 'singleton'
   require_relative 'version'
   require 'securerandom'
+  require_relative "curation_criteria"
   
 #----------------------------------------------------------
 # +++++++++++++++++++++++++++++++++++++++++++++++++
@@ -221,6 +222,9 @@ class Environ
   DEFAULT_PREP_DAYS     = 1
   DEFAULT_TEARDOWN_DAYS = 1
 
+# Operational curation capacity bounds
+    MAX_PORTFOLIO_SIZE  = 60
+    MAX_EXHIBITION_SIZE = 40
   #  ------------------------------------------------------------
   attr_reader :photo_path, :photo_base, :photo_source, :target_pictures_path, :initialized_at, :app_name, :app_version
   #  ------------------------------------------------------------

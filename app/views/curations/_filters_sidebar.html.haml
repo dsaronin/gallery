@@ -1,0 +1,52 @@
+.curation-sidebar
+  %h3 Curation Filters
+  = form_with url: polymorphic_path([@curatable, :curation, :preview]), method: :post, data: { turbo_frame: "curation_preview" }, class: "curation-form" do |f|
+    .filter-group
+      %h4 Star Rating
+      .field
+        = label_tag "curation_criteria_min_stars", "Minimum Stars"
+        = select_tag "curation_criteria[min_stars]", options_for_select([["Any", ""], ["1 Star", 1], ["2 Stars", 2], ["3 Stars", 3], ["4 Stars", 4], ["5 Stars", 5]], @criteria.min_stars), class: "form-control"
+
+    .filter-group
+      %h4 Date Window
+      .field
+        = label_tag "curation_criteria_date_range_start_date", "From"
+        = date_field_tag "curation_criteria[date_range][start_date]", @criteria.start_date&.strftime("%Y-%m-%d"), class: "form-control"
+      .field
+        = label_tag "curation_criteria_date_range_end_date", "To"
+        = date_field_tag "curation_criteria[date_range][end_date]", @criteria.end_date&.strftime("%Y-%m-%d"), class: "form-control"
+
+    - if @talents.any?
+      .filter-group
+        %h4 Talent
+        .checkbox-list
+          - @talents.each do |talent|
+            %label.checkbox-label
+              = check_box_tag "curation_criteria[talent_ids][]", talent.id, @criteria.talent_ids.include?(talent.id)
+              = talent.name
+
+    - if @categories.any?
+      .filter-group
+        %h4 Tags
+        - @categories.each do |category|
+          - if category.tags.any?
+            .category-section
+              %strong= category.name
+              .checkbox-list
+                - category.tags.each do |tag|
+                  %label.checkbox-label
+                    = check_box_tag "curation_criteria[tag_ids][]", tag.id, @criteria.tag_ids.include?(tag.id)
+                    = tag.name
+
+    - if @catalogs.any?
+      .filter-group
+        %h4 Catalogs
+        .checkbox-list
+          - @catalogs.each do |cat|
+            %label.checkbox-label
+              = check_box_tag "curation_criteria[sources][catalog_ids][]", cat.id, @criteria.catalog_ids.include?(cat.id)
+              = cat.folder
+
+    .form-actions
+      = f.submit "Update Preview", class: "btn btn-secondary"
+      = link_to "Reset Filters", polymorphic_path([@curatable, :curation, :clear]), data: { turbo_method: :delete }, class: "btn btn-outline"

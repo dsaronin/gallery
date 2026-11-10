@@ -1,7 +1,8 @@
-%h1 Editing portfolio
+-# app/views/portfolio/edit.html.haml
+.view-container#portfolio-form-view
+  .form-card
+    .card-header-bar
+      %h3.form-title= "Edit: #{@portfolio.title}"
+      = link_to "« Back to Portfolio", portfolio_path(@portfolio), class: "header-back-link"
 
-= render 'form'
-%br
-= link_to 'view &raquo;'.html_safe, @portfolio
-\|
-= link_to 'portfolio list &raquo;'.html_safe, portfolio_index_path
+    = render "form"

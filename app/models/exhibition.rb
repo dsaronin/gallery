@@ -1,4 +1,6 @@
 class Exhibition < ApplicationRecord
+  include Curatable
+
   enum :status, Gallery::Environ::EXHIBITION_STATUSES, default: :draft
   enum :sales_policy, Gallery::Environ::SALES_POLICIES, default: :not_for_sale
 
@@ -16,6 +18,7 @@ class Exhibition < ApplicationRecord
   validates :budget, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
   validates :total_expenses, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
 
+# *******************************************************
   def self.dashboard_metrics
     {
       staged_count: ( where(status: :staged).count rescue 0 ),
@@ -23,6 +26,15 @@ class Exhibition < ApplicationRecord
       active_count: ( where(status: :active).count rescue 0 )
     }
   end
+# *******************************************************
 
+  def max_curation_size
+    Gallery::Environ::MAX_EXHIBITION_SIZE
+  end
+
+  def items_association
+    exhibition_items
+  end
+# *******************************************************
 
 end  #class

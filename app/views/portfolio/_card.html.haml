@@ -1,0 +1,43 @@
+-# app/views/portfolio/_card.html.haml
+- items_count = portfolio.portfolio_items.size
+- preview_photo = portfolio.photos.first
+
+.portfolio-card
+  .card-header
+    %h4.card-title= truncate(portfolio.title, length: 28)
+    - if gallery_state.current_portfolio_id == portfolio.id
+      %span.badge-current Current
+
+  .card-body
+    .card-content-layout
+      %dl.assoc-list
+        .assoc-row
+          %dt Name:
+          %dd= portfolio.name
+        .assoc-row
+          %dt Status:
+          %dd
+            %span{ class: "status-pill status-#{portfolio.status}" }= portfolio.status.humanize
+        .assoc-row
+          %dt Curated photos:
+          %dd= "#{items_count} #{'photo'.pluralize(items_count)}"
+        .assoc-row
+          %dt Likes:
+          %dd= portfolio.likes_count
+        .assoc-row
+          %dt Placard:
+          %dd
+            - if portfolio.placard.present?
+              %span.placard-pill= portfolio.placard.title
+            - else
+              %span.subdued —
+
+      - if preview_photo
+        .card-thumbnail-preview
+          %a{ href: portfolio_path(portfolio), title: "Open #{portfolio.title}" }
+            %img{ src: public_fn(preview_photo.filename), class: "image", alt: preview_photo.photo_dsc }
+
+  .card-actions
+    = button_to "Delete", portfolio_path(portfolio), method: :delete, form: { data: { turbo_confirm: "Are you sure you want to delete portfolio \"#{portfolio.name}\"?" } }, onclick: "return confirm('Are you sure you want to delete portfolio \"#{j(portfolio.name)}\"?')", class: "btn-card btn-card-delete"
+    = link_to "Edit", edit_portfolio_path(portfolio), class: "btn-card"
+    = link_to "View »", portfolio_path(portfolio), class: "btn-card"

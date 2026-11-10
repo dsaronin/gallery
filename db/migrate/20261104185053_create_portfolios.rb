@@ -7,6 +7,7 @@ class CreatePortfolios < ActiveRecord::Migration[7.1]
       t.integer    :likes_count, null: false, default: 0
       t.references :placard, foreign_key: true, index: true
       t.string     :share_token
+      t.text       :curation_criteria
 
       t.timestamps
     end

@@ -1,0 +1,25 @@
+= turbo_frame_tag "curation_preview" do
+  .curation-workspace-header
+    .metrics
+      %span.badge{ class: @exceeds_capacity ? "badge-danger" : "badge-info" }
+        = "#{@count} Photos Matched"
+      - if @exceeds_capacity
+        %span.warning-text
+          = "Exceeds maximum limit of #{@curatable.max_curation_size}. Please refine filters before curating."
+
+    .actions
+      - if @candidates.any? && !@exceeds_capacity
+        = button_to "Curate Matched Photos", polymorphic_path([@curatable, :curation, :commit]), method: :post, params: { curation_criteria: @criteria.to_h }, class: "btn btn-primary"
+
+  - if @candidates.empty?
+    .empty-state
+      %p No candidate photos match the active criteria. Adjust the filters on the left to begin discovery.
+  - else
+    .thumbnail-grid
+      - @candidates.each do |photo|
+        .thumbnail-card
+          .thumbnail-image
+            = image_tag photo_thumbnail_path(photo), alt: photo.title || photo.basefile, loading: "lazy"
+          .thumbnail-meta
+            %span.stars= "★" * (photo.stars.to_i > 0 ? photo.stars.to_i : 0)
+            %span.date= photo.photodate&.strftime("%Y-%m-%d")

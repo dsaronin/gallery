@@ -1,97 +1,66 @@
 # ----------------------------------------------------------
 # Gallery: A Photographer's gallery/portfolio tool
-# Copyright (c) 2024 David S Anderson, All Rights Reserved
+# Copyright (c) 2026 David S Anderson, All Rights Reserved
 # ----------------------------------------------------------
 
+# app/controllers/portfolio_controller.rb
 class PortfolioController < ApplicationController
-      before_action :set_portfolio, only: %i[ show edit update destroy ]
- 
-# ----------------------------------------------------------
-# index -- show all portfolios; allow user to select one
-# ----------------------------------------------------------
+  before_action :set_portfolio, only: %i[show edit update destroy]
 
-  # GET /portfolio or /portfolio.json
   def index
-    @portfolios = Portfolio.all
+    @portfolios = Portfolio.order(created_at: :desc)
   end
 
-  # POST /portfolio or /portfolio.json
+  def show
+    gallery_state.current_portfolio_id = @portfolio.id
+    @portfolio_items = @portfolio.portfolio_items.includes(:photo, :placard).order(:position)
+  end
+
+  def new
+    @portfolio = Portfolio.new(status: :draft)
+  end
+
   def create
     @portfolio = Portfolio.new(portfolio_params)
 
-    respond_to do |format|
-      if @portfolio.save
-        format.html { redirect_to portfolio_url(@portfolio), notice: "Portfolio was successfully created." }
-        format.json { render :show, status: :created, location: @portfolio }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @portfolio.errors, status: :unprocessable_entity }
-      end
+    if @portfolio.save
+      gallery_state.current_portfolio_id = @portfolio.id
+      redirect_to portfolio_path(@portfolio), notice: "Portfolio \"#{@portfolio.name}\" created successfully."
+    else
+      render :new, status: :unprocessable_entity
     end
-
   end
 
-      # GET /portfolio/new
-  def new
-     @portfolio = Portfolio.new
-  end
- 
-  # GET /portfolio/1 or /portfolio/1.json
-  def show
-  end
-
-  # PATCH/PUT /portfolio/1 or /portfolio/1.json
-  def update
-    respond_to do |format|
-      if @portfolio.update(portfolio_params)
-        format.html { redirect_to portfolio_url(@portfolio), notice: "Portfolio was successfully updated." }
-        format.json { render :show, status: :ok, location: @portfolio }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @portfolio.errors, status: :unprocessable_entity }
-      end
-    end
-
-  end
-  
-  # GET /portfolio/1/edit
   def edit
   end
-  
-  # DELETE /portfolio/1 or /portfolio/1.json
-  def destroy
-    @portfolio.destroy
 
-    respond_to do |format|
-      format.html { redirect_to portfolio_url, notice: "Portfolio was successfully destroyed." }
-      format.json { head :no_content }
+  def update
+    if @portfolio.update(portfolio_params)
+      redirect_to portfolio_path(@portfolio), notice: "Portfolio \"#{@portfolio.name}\" updated successfully."
+    else
+      render :edit, status: :unprocessable_entity
     end
-
   end
-# ------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------
+
+  def destroy
+    portfolio_name = @portfolio.name
+    if @portfolio.destroy
+      gallery_state.current_portfolio_id = nil if gallery_state.current_portfolio_id == @portfolio.id
+      redirect_to portfolio_index_path, notice: "Portfolio \"#{portfolio_name}\" was removed."
+    else
+      redirect_to portfolio_path(@portfolio), alert: @portfolio.errors.full_messages.to_sentence
+    end
+  end
+
   private
 
-  def set_portfolio()
+  def set_portfolio
     @portfolio = Portfolio.find(params[:id])
-    true     # returning true continues controller action
-    
   rescue ActiveRecord::RecordNotFound
-    puts "SHOW: ERROR NOT FOUND"
-      flash[:notice] = "portfolio doesn't exist"
-      flash[:show_flash] = true
-      # redirect_back
-      false
+    redirect_to portfolio_index_path, alert: "Portfolio not found."
   end
 
-  # Only allow a list of trusted parameters through.
   def portfolio_params
-    params.require(:portfolio).permit(
-      :portfolio_title, :portfolio_name
-    )
+    params.require(:portfolio).permit(:name, :title, :status, :placard_id)
   end
-
-# ------------------------------------------------------------------------------
-
-
 end

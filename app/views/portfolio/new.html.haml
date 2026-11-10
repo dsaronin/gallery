@@ -1,5 +1,8 @@
-%h1 New portfolio
+-# app/views/portfolio/new.html.haml
+.view-container#portfolio-form-view
+  .form-card
+    .card-header-bar
+      %h3.form-title New Portfolio
+      = link_to "« Cancel", portfolio_index_path, class: "header-back-link"
 
-= render 'form'
-%br
-= link_to 'portfolio list &raquo;'.html_safe, portfolio_index_path
+    = render "form"

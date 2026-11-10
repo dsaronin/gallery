@@ -1,2 +1,27 @@
-%h1 Portfolio#show
-%p Find me in app/views/portfolio/show.html.haml
+-# app/views/portfolio/show.html.haml
+.view-container#portfolio-show-view
+  .portfolio-card
+    .card-header-bar
+      .header-left
+        %h3.portfolio-title= @portfolio.title
+        = link_to "« back", portfolio_index_path, class: "header-back-link"
+        = link_to "edit", edit_portfolio_path(@portfolio), class: "header-action-link"
+
+      .header-right
+        %span.portfolio-status-pill{ class: "status-#{@portfolio.status}" }= @portfolio.status.humanize
+        %span.photo-count= "#{@portfolio_items.size} #{'photo'.pluralize(@portfolio_items.size)}"
+        %span.portfolio-name= @portfolio.name
+
+    - if @portfolio_items.empty?
+      .empty-items-state
+        %p This portfolio does not contain any curated photos yet.
+    - else
+      .thumbnail-grid-wrapper
+        .thumbnail-grid
+          - @portfolio_items.each do |item|
+            - p = item.photo
+            .thumbnail{ id: dom_id(item) }
+              %a{ href: url_for(p) }
+                %img{ src: public_fn(p.filename), class: "image", alt: p.photo_dsc }
+              = render partial: "photo/star_rating", locals: { photo: p }
+              = link_to p.photo_dsc, p, class: "photo-desc-link"

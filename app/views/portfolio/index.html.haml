@@ -1,2 +1,14 @@
-%h1 Portfolio#index
-%p Find me in app/views/portfolio/index.html.haml
+-# app/views/portfolio/index.html.haml
+.view-container#portfolios-index
+  .view-header
+    %h3.view-title Portfolios &emsp;
+    = link_to "+", new_portfolio_path, class: "header-fab", title: "Create New Portfolio"
+
+  - if @portfolios.empty?
+    .empty-state
+      %p No portfolios have been created.
+      = link_to "Create Portfolio »", new_portfolio_path, class: "btn-card primary"
+  - else
+    .portfolio-grid
+      - @portfolios.each do |portfolio|
+        = render partial: "portfolio/card", locals: { portfolio: portfolio }

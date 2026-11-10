@@ -1,0 +1,11 @@
+.curation-page
+  .page-header
+    %h2= "Curating: #{@curatable.title}"
+    .page-nav
+      = link_to "Back to #{@curatable.class.model_name.human}", @curatable, class: "btn btn-outline"
+
+  .curation-layout
+    .curation-sidebar-pane
+      = render "filters_sidebar"
+    .curation-workspace-pane
+      = render "candidate_grid"

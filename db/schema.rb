@@ -57,6 +57,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
     t.integer "venue_id", null: false
     t.integer "placard_id"
     t.integer "talent_id"
+    t.text "curation_criteria"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["placard_id"], name: "index_exhibitions_on_placard_id"
@@ -130,6 +131,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
     t.integer "likes_count", default: 0, null: false
     t.integer "placard_id"
     t.string "share_token"
+    t.text "curation_criteria"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_portfolios_on_name", unique: true
