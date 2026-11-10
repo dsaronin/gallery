@@ -34,14 +34,14 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
     t.integer "likes_count", default: 0, null: false
     t.integer "placard_id"
     t.integer "exhibition_id", null: false
-    t.integer "portfolio_item_id", null: false
+    t.integer "photo_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["exhibition_id", "portfolio_item_id"], name: "index_exhibition_items_on_exhibition_id_and_portfolio_item_id", unique: true
+    t.index ["exhibition_id", "photo_id"], name: "index_exhibition_items_on_exhibition_id_and_photo_id", unique: true
     t.index ["exhibition_id", "position"], name: "index_exhibition_items_on_exhibition_id_and_position", unique: true
     t.index ["exhibition_id"], name: "index_exhibition_items_on_exhibition_id"
+    t.index ["photo_id"], name: "index_exhibition_items_on_photo_id"
     t.index ["placard_id"], name: "index_exhibition_items_on_placard_id"
-    t.index ["portfolio_item_id"], name: "index_exhibition_items_on_portfolio_item_id"
   end
 
   create_table "exhibitions", force: :cascade do |t|
@@ -53,8 +53,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
     t.date "approved_by_artist_at"
     t.date "approved_by_venue_at"
     t.bigint "showing_id"
-    t.integer "portfolio_id", null: false
-    t.integer "venue_id", null: false
+    t.integer "portfolio_id"
+    t.integer "venue_id"
     t.integer "placard_id"
     t.integer "talent_id"
     t.text "curation_criteria"
@@ -205,8 +205,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
 
   add_foreign_key "catalogs", "talent"
   add_foreign_key "exhibition_items", "exhibitions"
+  add_foreign_key "exhibition_items", "photos"
   add_foreign_key "exhibition_items", "placards"
-  add_foreign_key "exhibition_items", "portfolio_items"
   add_foreign_key "exhibitions", "placards"
   add_foreign_key "exhibitions", "portfolios"
   add_foreign_key "exhibitions", "showings"

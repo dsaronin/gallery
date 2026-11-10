@@ -50,7 +50,7 @@ ActiveRecord::Base.transaction do
   )
   puts "6. Exhibition staged: ID #{exhibition.id} [policy: #{exhibition.sales_policy}]"
 
-  ex_item = exhibition.exhibition_items.create!(portfolio_item: item1)
+  ex_item = exhibition.exhibition_items.create!(photo: photo)
   raise "Positionable on ExhibitionItem failed" unless ex_item.position == 1
   puts "7. ExhibitionItem created: ID #{ex_item.id} [auto-position: #{ex_item.position}]"
 

@@ -33,13 +33,14 @@ module Curatable
 
     current_max_pos = items_association.maximum(:position) || 0
     now = Time.current
-    foreign_key_col = items_association.klass.reflections[self.class.model_name.singular]&.foreign_key || "#{self.class.model_name.singular}_id"
+    foreign_key_col = "#{self.class.model_name.singular}_id"
 
     records = new_ids.map.with_index(1) do |pid, idx|
       {
         foreign_key_col => id,
         photo_id: pid,
         position: current_max_pos + idx,
+        likes_count: 0,
         created_at: now,
         updated_at: now
       }
