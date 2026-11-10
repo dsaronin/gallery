@@ -29,8 +29,10 @@ raise "Assertion failed: Exhibition criteria not set" unless exhibition.curation
 puts "  [PASS] Criteria assignment works uniformly across both models."
 
 # 4. Safe resolution under empty criteria (guardrail check)
-raise "Assertion failed: Portfolio candidate_photos on empty criteria must be none" unless portfolio.candidate_photos.empty?
-raise "Assertion failed: Exhibition candidate_photos on empty criteria must be none" unless exhibition.candidate_photos.empty?
+empty_portfolio = Portfolio.new
+empty_exhibition = Exhibition.new
+raise "Assertion failed: Portfolio candidate_photos on empty criteria must be none" unless empty_portfolio.candidate_photos.empty?
+raise "Assertion failed: Exhibition candidate_photos on empty criteria must be none" unless empty_exhibition.candidate_photos.empty?
 puts "  [PASS] Empty criteria guards resolve safely to empty sets for both models."
 
 puts "==> All Curatable concern checks passed successfully!"

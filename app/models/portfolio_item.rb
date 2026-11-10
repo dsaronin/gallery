@@ -5,7 +5,6 @@ class PortfolioItem < ApplicationRecord
   belongs_to :portfolio
   belongs_to :photo
   belongs_to :placard, optional: true
-  has_many   :exhibition_items, dependent: :restrict_with_error
 
   validates :photo_id, uniqueness: { scope: :portfolio_id, message: "is already included in this portfolio" }
   validates :likes_count, numericality: { only_integer: true, greater_than_or_equal_to: 0 }

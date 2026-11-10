@@ -26,7 +26,7 @@ class CurationsController < ApplicationController
   # POST /portfolios/:portfolio_id/curation/preview
   # Responds to Turbo Frame updates as the user adjusts filters
   def preview
-    @criteria = Gallery::CurationCriteria.new(curation_params)
+    @criteria = ::Gallery::CurationCriteria.new(curation_params)
     @query = PhotoQuery.new(@criteria, limit: @curatable.max_curation_size)
     @candidates = @query.resolve
     @count = @candidates.size
@@ -41,7 +41,7 @@ class CurationsController < ApplicationController
   # POST /portfolios/:portfolio_id/curation/commit
   # Persists criteria recipe and batch-inserts candidates into join table
   def commit
-    @criteria = Gallery::CurationCriteria.new(curation_params)
+    @criteria = ::Gallery::CurationCriteria.new(curation_params)
     @curatable.curation_criteria = @criteria
 
     if @curatable.save
@@ -60,7 +60,7 @@ class CurationsController < ApplicationController
   # DELETE /portfolios/:portfolio_id/curation/clear
   # Resets the criteria recipe on the curatable object
   def clear
-    @curatable.curation_criteria = Gallery::CurationCriteria.new
+    @curatable.curation_criteria = ::Gallery::CurationCriteria.new
     @curatable.save!
     redirect_to polymorphic_path([@curatable, :curation]), notice: "Curation criteria cleared."
   end

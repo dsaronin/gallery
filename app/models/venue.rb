@@ -1,5 +1,5 @@
 class Venue < ApplicationRecord
-  enum :venue_type, Gallery::Environ::VENUE_TYPES, default: :commercial_gallery
+  enum :venue_type, ::Gallery::Environ::VENUE_TYPES, default: :commercial_gallery
 
   has_many :exhibitions, dependent: :restrict_with_error
   has_many :showings, dependent: :restrict_with_error

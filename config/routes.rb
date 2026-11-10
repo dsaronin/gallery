@@ -27,9 +27,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :portfolio, controller: :portfolios, concerns: :curatable
-  resources :portfolios, controller: :portfolios, only: [:index, :show], concerns: :curatable
-  resources :exhibitions, concerns: :curatable
+  resources :portfolio, controller: :portfolio, concerns: :curatable
+  resources :exhibition, controller: :exhibition, concerns: :curatable
   resources :category, only: [:create, :update, :destroy]
   resources :tag,      only: [:index, :create, :update, :destroy]
 

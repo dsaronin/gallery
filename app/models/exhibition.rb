@@ -1,8 +1,8 @@
 class Exhibition < ApplicationRecord
   include Curatable
 
-  enum :status, Gallery::Environ::EXHIBITION_STATUSES, default: :draft
-  enum :sales_policy, Gallery::Environ::SALES_POLICIES, default: :not_for_sale
+  enum :status, ::Gallery::Environ::EXHIBITION_STATUSES, default: :draft
+  enum :sales_policy, ::Gallery::Environ::SALES_POLICIES, default: :not_for_sale
 
   belongs_to :portfolio, optional: true
   belongs_to :venue, optional: true
@@ -29,7 +29,7 @@ class Exhibition < ApplicationRecord
 # *******************************************************
 
   def max_curation_size
-    Gallery::Environ::MAX_EXHIBITION_SIZE
+    ::Gallery::Environ::MAX_EXHIBITION_SIZE
   end
 
   def items_association

@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   private
 
   def load_gallery_state
-    @gallery_state = Gallery::Environ::SessionState.load(session)
+    @gallery_state = ::Gallery::Environ::SessionState.load(session)
   end
 
   def save_gallery_state

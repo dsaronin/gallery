@@ -6,12 +6,12 @@
 #
 # PURPOSE:
 # Composable ActiveRecord query builder that executes candidate photo discovery
-# driven by a Gallery::CurationCriteria value object.
+# driven by a ::Gallery::CurationCriteria value object.
 #
 # GUARDRAILS:
 # 1. Empty criteria resolves to Photo.none (WHERE 1=0) to prevent unconstrained
 #    scans across the entire photo archive.
-# 2. Provides count and capacity validation against Gallery::Environ limits.
+# 2. Provides count and capacity validation against ::Gallery::Environ limits.
 # -----------------------------------------------------------------------------
 
 class PhotoQuery
@@ -19,9 +19,9 @@ class PhotoQuery
 
   attr_reader :criteria, :relation, :limit
 
-  def initialize(criteria = {}, base_relation = Photo.all, limit: Gallery::Environ::MAX_PORTFOLIO_SIZE, **kwargs)
+  def initialize(criteria = {}, base_relation = Photo.all, limit: ::Gallery::Environ::MAX_PORTFOLIO_SIZE, **kwargs)
     raw_criteria = criteria.is_a?(Hash) && criteria.empty? && kwargs.any? ? kwargs : criteria
-    @criteria    = raw_criteria.is_a?(Gallery::CurationCriteria) ? raw_criteria : Gallery::CurationCriteria.new(raw_criteria)
+    @criteria    = raw_criteria.is_a?(::Gallery::CurationCriteria) ? raw_criteria : ::Gallery::CurationCriteria.new(raw_criteria)
     @relation    = base_relation
     @limit       = limit
   end

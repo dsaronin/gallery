@@ -12,14 +12,14 @@ rand_suffix = SecureRandom.hex(4)
 
 # 1. Verify route generation helpers
 port_path = Rails.application.routes.url_helpers.portfolio_curation_path(portfolio_id: 1)
-raise "Assertion failed: Portfolio curation path mismatch" unless port_path == "/portfolios/1/curation"
+raise "Assertion failed: Portfolio curation path mismatch" unless port_path == "/portfolio/1/curation"
 puts "  [PASS] Portfolio curation route matches: #{port_path}"
 
 exhib_path = Rails.application.routes.url_helpers.exhibition_curation_path(exhibition_id: 2)
-raise "Assertion failed: Exhibition curation path mismatch" unless exhib_path == "/exhibitions/2/curation"
+raise "Assertion failed: Exhibition curation path mismatch" unless exhib_path == "/exhibition/2/curation"
 puts "  [PASS] Exhibition curation route matches: #{exhib_path}"
 
-# 2. Integration check: GET /portfolios/:id/curation
+# 2. Integration check: GET /portfolio/:id/curation
 portfolio = Portfolio.create!(
   name: "ctrl_port_#{rand_suffix}",
   title: "Controller Test Portfolio #{rand_suffix}"
@@ -49,7 +49,7 @@ end
 raise "Assertion failed: GET #{curation_url} expected 200 OK" unless app.response.successful?
 puts "  [PASS] Portfolio curation interface rendered (HTTP 200)."
 
-# 3. Integration check: GET /exhibitions/:id/curation
+# 3. Integration check: GET /exhibition/:id/curation
 venue = Venue.create!(name: "Test Venue #{rand_suffix}")
 exhibition = Exhibition.create!(
   title: "Controller Test Exhibition #{rand_suffix}",

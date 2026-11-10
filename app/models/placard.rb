@@ -1,5 +1,5 @@
 class Placard < ApplicationRecord
-  enum :cc_license, Gallery::Environ::CcLicense::DICTIONARY, default: :all_rights_reserved
+  enum :cc_license, ::Gallery::Environ::CcLicense::DICTIONARY, default: :all_rights_reserved
 
   has_many :portfolios, dependent: :nullify
   has_many :portfolio_items, dependent: :nullify

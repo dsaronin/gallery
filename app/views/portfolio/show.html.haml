@@ -15,6 +15,7 @@
     - if @portfolio_items.empty?
       .empty-items-state
         %p This portfolio does not contain any curated photos yet.
+        = link_to "curate", portfolio_curation_path(@portfolio), class: "header-action-link"
     - else
       .thumbnail-grid-wrapper
         .thumbnail-grid

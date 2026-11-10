@@ -2,7 +2,7 @@ class Showing < ApplicationRecord
   include DateRangeValidatable
   validates_date_range start_attr: :start_date, end_attr: :end_date
 
-  enum :status, Gallery::Environ::SHOWING_STATUSES, default: :scheduled
+  enum :status, ::Gallery::Environ::SHOWING_STATUSES, default: :scheduled
 
   belongs_to :exhibition
   belongs_to :venue
