@@ -19,9 +19,11 @@ Rails.application.routes.draw do
 
   concern :curatable do
     resource :curation, only: [:show] do
-      post :preview
-      post :commit
-      delete :clear
+      collection do
+        post :preview
+        post :commit
+        delete :clear
+      end
     end
   end
 

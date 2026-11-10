@@ -30,21 +30,32 @@ app.get curation_url, headers: { "Accept" => "text/html" }
 
 unless app.response.successful?
   puts "  [FAIL DEBUG] Portfolio dispatch status: #{app.response.status}"
-  error_headline = app.response.body.match(/<h1[^>]*>(.*?)<\/h1>/m)&.[](1)&.strip
-  error_detail   = app.response.body.match(/<pre[^>]*class="message"[^>]*>(.*?)<\/pre>/m)&.[](1)&.strip ||
-                   app.response.body.match(/class="exception">([^<]+)/)&.[](1)&.strip
-  trace_line     = app.response.body.match(/<pre class="trace[^>]*>(.*?)<\/pre>/m)&.[](1)&.strip
+  # Action View error headline:
+  if (h1 = app.response.body.match(/<h1[^>]*>(.*?)<\/h1>/m))
+    puts "  [FAIL DEBUG] Headline: #{h1[1].gsub(/<[^>]+>/, '').strip}"
+  end
 
-  puts "  [FAIL DEBUG] Headline: #{error_headline}" if error_headline
-  puts "  [FAIL DEBUG] Detail: #{error_detail}" if error_detail
-  puts "  [FAIL DEBUG] Trace snippet: #{trace_line[0..200]}" if trace_line
+  # Extract "undefined method `xyz' for ..."
+  if (err = app.response.body.match(/(undefined method [`']?[^<\n\r]+)/i))
+    puts "  [FAIL DEBUG] Method Error: #{err[1]}"
+  end
+
+  # Extract exact template and line number where failure occurred
+  app.response.body.scan(/([a-zA-Z0-9_\/-]+\.html\.haml:\d+)/).flatten.uniq.each do |loc|
+    puts "  [FAIL DEBUG] Template Line: #{loc}"
+  end
 end
 
 raise "Assertion failed: GET #{curation_url} expected 200 OK" unless app.response.successful?
 puts "  [PASS] Portfolio curation interface rendered (HTTP 200)."
 
 # 3. Integration check: GET /exhibitions/:id/curation
-exhibition = Exhibition.create!(title: "Controller Test Exhibition #{rand_suffix}")
+venue = Venue.create!(name: "Test Venue #{rand_suffix}")
+exhibition = Exhibition.create!(
+  title: "Controller Test Exhibition #{rand_suffix}",
+  portfolio: portfolio,
+  venue: venue
+)
 
 exhib_url = Rails.application.routes.url_helpers.exhibition_curation_path(exhibition_id: exhibition.id)
 app.get exhib_url, headers: { "Accept" => "text/html" }
@@ -59,8 +70,9 @@ raise "Assertion failed: GET #{exhib_url} expected 200 OK" unless app.response.s
 puts "  [PASS] Exhibition curation interface rendered (HTTP 200)."
 
 # 4. Cleanup
-portfolio.destroy!
 exhibition.destroy!
+venue.destroy!
+portfolio.destroy!
 puts "  [PASS] Temporary records cleaned up."
 
 puts "==> All CurationsController routing and dispatch checks passed successfully!"

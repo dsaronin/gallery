@@ -1,6 +1,6 @@
 .curation-sidebar
   %h3 Curation Filters
-  = form_with url: polymorphic_path([@curatable, :curation, :preview]), method: :post, data: { turbo_frame: "curation_preview" }, class: "curation-form" do |f|
+  = form_with url: url_for([:preview, @curatable, :curation]), method: :post, data: { turbo_frame: "curation_preview" }, class: "curation-form" do |f|
     .filter-group
       %h4 Star Rating
       .field
@@ -23,7 +23,7 @@
           - @talents.each do |talent|
             %label.checkbox-label
               = check_box_tag "curation_criteria[talent_ids][]", talent.id, @criteria.talent_ids.include?(talent.id)
-              = talent.name
+              = talent.talent_name
 
     - if @categories.any?
       .filter-group
@@ -45,8 +45,8 @@
           - @catalogs.each do |cat|
             %label.checkbox-label
               = check_box_tag "curation_criteria[sources][catalog_ids][]", cat.id, @criteria.catalog_ids.include?(cat.id)
-              = cat.folder
+              = cat.name.presence || cat.fname
 
     .form-actions
       = f.submit "Update Preview", class: "btn btn-secondary"
-      = link_to "Reset Filters", polymorphic_path([@curatable, :curation, :clear]), data: { turbo_method: :delete }, class: "btn btn-outline"
+      = link_to "Reset Filters", url_for([:clear, @curatable, :curation]), data: { turbo_method: :delete }, class: "btn btn-outline"

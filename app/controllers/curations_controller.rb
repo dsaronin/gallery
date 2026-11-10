@@ -78,11 +78,11 @@ class CurationsController < ApplicationController
   end
 
   def load_filter_options
-    @catalogs    = Catalog.order(:folder)
+    @catalogs    = Catalog.order(:name)
     @portfolios  = Portfolio.where.not(id: (@curatable.id if @curatable.is_a?(Portfolio))).order(:title)
     @exhibitions = Exhibition.where.not(id: (@curatable.id if @curatable.is_a?(Exhibition))).order(:title)
     @categories  = Category.includes(:tags).order(:name)
-    @talents     = Talent.order(:name)
+    @talents     = Talent.order(:talent_name)
   end
 
   def curation_params
