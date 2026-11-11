@@ -4,7 +4,7 @@ require_relative '../config/environment'
 
 puts "\n=== RUNNING CURATABLE AUDIT & INGESTION TESTS ==="
 
-portfolio = Portfolio.create!(title: "Audit Test Portfolio", status: :draft)
+portfolio = Portfolio.create!(name: "Audit Test Portfolio", title: "Audit Test Portfolio", status: :draft)
 
 # 1. Ingest batch 1
 criteria_1 = Gallery::CurationCriteria.new(min_stars: 3)

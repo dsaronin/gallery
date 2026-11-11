@@ -31,6 +31,9 @@ class CurationsController < ApplicationController
     session_state.stage_criteria!(@curatable, criteria)
     session_state.persist!(session)
 
+    Rails.logger.debug { ">>> [PREVIEW] Staged criteria hash: #{criteria.to_h.inspect}" }
+    Rails.logger.debug { ">>> [PREVIEW] Staged criteria active?: #{criteria.active?}" }
+
     build_curation_workspace(criteria)
 
     respond_to do |format|
@@ -42,22 +45,25 @@ class CurationsController < ApplicationController
   # POST /portfolios/:portfolio_id/curation/commit
   # Persists criteria recipe and batch-inserts candidates into join table
   def commit
-    query = PhotoQuery.new(@curatable.curation_criteria, limit: @curatable.max_curation_size)
+    session_state = ::Gallery::Environ::SessionState.load(session)
+    staged_criteria = session_state.staged_criteria_for(@curatable)
 
-    if query.ingestible?
-      # Read existing history array, ensuring backwards compatibility if previously a single hash/object
-      existing_history = Array.wrap(@curatable.read_attribute(:curation_criteria)).compact
-      existing_history << @criteria.as_json
+    Rails.logger.debug { ">>> [COMMIT] Session raw: #{session[:gallery_state].inspect}" }
+    Rails.logger.debug { ">>> [COMMIT] Retrieved staged criteria: #{staged_criteria.inspect}" }
+    Rails.logger.debug { ">>> [COMMIT] Staged criteria active?: #{staged_criteria.active?}" }
 
-      @curatable.curation_criteria = existing_history
-      @curatable.save!
-
-      added = @curatable.curate_photos!(limit: @curatable.max_curation_size)
-      redirect_to @curatable, notice: "Curation complete: #{added} #{'photo'.pluralize(added)} added to #{@curatable.class.model_name.human}."
-    else
-      flash[:alert] = "Cannot ingest: criteria matches #{query.count} photos (limit: #{@curatable.max_curation_size})."
-      redirect_to polymorphic_path([@curatable, :curation])
+    if staged_criteria.blank? || !staged_criteria.active?
+      redirect_to polymorphic_path([@curatable, :curation]), alert: "No active filter criteria staged to ingest."
+      return
     end
+
+    added_count = @curatable.curate_photos!(staged_criteria)
+
+    session_state.clear_staged_criteria!(@curatable)
+    session_state.persist!(session)
+
+    notice_msg = "Ingested #{added_count} #{'photo'.pluralize(added_count)} into #{@curatable.class.model_name.human.downcase}."
+    redirect_to @curatable, notice: notice_msg
   end
 
   # DELETE /portfolios/:portfolio_id/curation/clear
