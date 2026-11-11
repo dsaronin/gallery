@@ -1,2 +1,8 @@
-= turbo_stream.replace "curation_preview" do
-  = render "candidate_grid"
+= turbo_stream.update "curation_status" do
+  = render partial: "curations/curation_status"
+
+= turbo_stream.update "curation_actions" do
+  = render partial: "curations/curation_actions"
+
+= turbo_stream.update "curation_preview" do
+  = render partial: "curations/candidate_grid"

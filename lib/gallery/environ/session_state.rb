@@ -14,7 +14,8 @@ module Gallery
                     :current_portfolio_id,
                     :current_exhibition_id,
                     :current_showing_id,
-                    :current_tag_id
+                    :current_tag_id,
+                    :staged_curations
 
       def initialize(attrs = {})
         attrs = attrs.symbolize_keys if attrs.respond_to?(:symbolize_keys)
@@ -26,6 +27,7 @@ module Gallery
         @current_portfolio_id  = attrs[:current_portfolio_id]
         @current_exhibition_id = attrs[:current_exhibition_id]
         @current_showing_id    = attrs[:current_showing_id]
+        @staged_curations      = (attrs[:staged_curations] || {}).transform_keys(&:to_s)
       end
 
       # Hydrates state from the Rails session
@@ -46,11 +48,37 @@ module Gallery
           current_exhibition_id: @current_exhibition_id,
           current_showing_id:    @current_showing_id,
           current_category_id:   @current_category_id,
-          current_tag_id:        @current_tag_id
+          current_tag_id:        @current_tag_id,
+          staged_curations:      @staged_curations
         }
       end
 
+      # -----------------------------------------------------------------------
+      # Curation Workspace Staging
+      # -----------------------------------------------------------------------
+
+      def staged_criteria_for(curatable)
+        key = curatable_staging_key(curatable)
+        raw = @staged_curations[key]
+        return Gallery::CurationCriteria.new if raw.blank?
+
+        Gallery::CurationCriteria.new(raw)
+      end
+
+      def stage_criteria!(curatable, criteria)
+        key = curatable_staging_key(curatable)
+        hash = criteria.respond_to?(:to_h) ? criteria.to_h : criteria
+        @staged_curations[key] = hash
+      end
+
+      def clear_staged_criteria!(curatable)
+        key = curatable_staging_key(curatable)
+        @staged_curations.delete(key)
+      end
+
+      # -----------------------------------------------------------------------
       # Safe record finders
+      # -----------------------------------------------------------------------
       def current_catalog
         return nil unless @current_catalog_id
         Catalog.find_by(id: @current_catalog_id)
@@ -98,7 +126,19 @@ module Gallery
         @current_portfolio_id  = nil
         @current_exhibition_id = nil
         @current_showing_id    = nil
+        @staged_curations      = {}
       end
+
+      # -----------------------------------------------------------------------
+      private
+      # -----------------------------------------------------------------------
+
+      def curatable_staging_key(curatable)
+        "#{curatable.class.model_name.singular}_#{curatable.id}"
+      end
+      # -----------------------------------------------------------------------
+
+
     end  # CLASS
   end  # CLASS
 end  # MODULE

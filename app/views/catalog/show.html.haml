@@ -3,7 +3,7 @@
     .card-header-bar
       .header-left
         %h3.catalog-title= @catalog.name
-        = link_to "« back", catalog_index_path, class: "header-back-link"
+        = link_to "« Catalogs", catalog_index_path, class: "header-back-link"
 
       .header-right
         %span.photo-count= "#{@catalog.photos.size} #{'photo'.pluralize(@catalog.photos.size)}"

@@ -16,18 +16,29 @@ module Curatable
     serialize :curation_criteria, coder: Gallery::CurationCriteria
   end
 
-  # Returns an ActiveRecord::Relation matching the target's saved criteria
+  # If candidate_photos is kept for backwards compatibility:
   def candidate_photos
-    PhotoQuery.new(curation_criteria, limit: max_curation_size).resolve
+    last_criteria = curation_criteria.is_a?(Array) ? curation_criteria.last : curation_criteria
+    return Photo.none if last_criteria.blank?
+
+    PhotoQuery.new(last_criteria, limit: max_curation_size).resolve
   end
 
   # Batch creates join records for matching photos not already present in the target
-  def curate_photos!(limit: max_curation_size)
-    query = PhotoQuery.new(curation_criteria, limit: limit)
+  def curate_photos!(criteria, limit: max_curation_size)
+    criteria_obj = criteria.is_a?(Gallery::CurationCriteria) ? criteria : Gallery::CurationCriteria.new(criteria)
+
+    query = PhotoQuery.new(criteria_obj, limit: limit)
     matches = query.resolve_safe!(limit)
 
     existing_ids = items_association.pluck(:photo_id)
     new_ids = matches.pluck(:id) - existing_ids
+
+    # Append criteria to the audit history
+    history = Array.wrap(curation_criteria).compact
+    history << criteria_obj
+    self.curation_criteria = history
+    save!
 
     return 0 if new_ids.empty?
 

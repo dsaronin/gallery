@@ -114,17 +114,25 @@ module Gallery
     def self.dump(obj)
       return nil if obj.nil?
 
-      criteria = obj.is_a?(CurationCriteria) ? obj : new(obj)
-      criteria.to_json
+      if obj.is_a?(Array)
+        obj.map { |item| item.is_a?(CurationCriteria) ? item.to_h : new(item).to_h }.to_json
+      else
+        criteria = obj.is_a?(CurationCriteria) ? obj : new(obj)
+        criteria.to_json
+      end
     end
 
     def self.load(raw)
-      return new({}) if raw.blank?
+      return [] if raw.blank?
 
       parsed = raw.is_a?(String) ? JSON.parse(raw) : raw
-      new(parsed)
+      if parsed.is_a?(Array)
+        parsed.map { |item| new(item) }
+      else
+        new(parsed)
+      end
     rescue JSON::ParserError
-      new({})
+      []
     end
 
     private

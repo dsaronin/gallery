@@ -1,0 +1,3 @@
+.metrics
+  %span.badge{ class: @exceeds_capacity ? "badge-danger" : "badge-info" }
+    = "#{@count} #{'Photo'.pluralize(@count)} Matched"

@@ -16,21 +16,22 @@ class CurationsController < ApplicationController
   # GET /portfolios/:portfolio_id/curation
   # GET /exhibitions/:exhibition_id/curation
   def show
-    @criteria = @curatable.curation_criteria
-    @query = PhotoQuery.new(@criteria, limit: @curatable.max_curation_size)
-    @candidates = @query.resolve
-    @count = @candidates.size
-    @exceeds_capacity = @query.exceeds_capacity?
+    session_state = ::Gallery::Environ::SessionState.load(session)
+    criteria = session_state.staged_criteria_for(@curatable)
+
+    build_curation_workspace(criteria)
   end
 
   # POST /portfolios/:portfolio_id/curation/preview
   # Responds to Turbo Frame updates as the user adjusts filters
   def preview
-    @criteria = ::Gallery::CurationCriteria.new(curation_params)
-    @query = PhotoQuery.new(@criteria, limit: @curatable.max_curation_size)
-    @candidates = @query.resolve
-    @count = @candidates.size
-    @exceeds_capacity = @query.exceeds_capacity?
+    criteria = ::Gallery::CurationCriteria.new(curation_params)
+
+    session_state = ::Gallery::Environ::SessionState.load(session)
+    session_state.stage_criteria!(@curatable, criteria)
+    session_state.persist!(session)
+
+    build_curation_workspace(criteria)
 
     respond_to do |format|
       format.turbo_stream
@@ -41,31 +42,44 @@ class CurationsController < ApplicationController
   # POST /portfolios/:portfolio_id/curation/commit
   # Persists criteria recipe and batch-inserts candidates into join table
   def commit
-    @criteria = ::Gallery::CurationCriteria.new(curation_params)
-    @curatable.curation_criteria = @criteria
+    query = PhotoQuery.new(@curatable.curation_criteria, limit: @curatable.max_curation_size)
 
-    if @curatable.save
+    if query.ingestible?
+      # Read existing history array, ensuring backwards compatibility if previously a single hash/object
+      existing_history = Array.wrap(@curatable.read_attribute(:curation_criteria)).compact
+      existing_history << @criteria.as_json
+
+      @curatable.curation_criteria = existing_history
+      @curatable.save!
+
       added = @curatable.curate_photos!(limit: @curatable.max_curation_size)
-      redirect_to @curatable, notice: "Curation recipe applied: #{added} photos added to #{@curatable.class.model_name.human}."
+      redirect_to @curatable, notice: "Curation complete: #{added} #{'photo'.pluralize(added)} added to #{@curatable.class.model_name.human}."
     else
-      flash.now[:alert] = "Failed to save curation criteria: #{@curatable.errors.full_messages.to_sentence}"
-      @query = PhotoQuery.new(@criteria, limit: @curatable.max_curation_size)
-      @candidates = @query.resolve
-      @count = @candidates.size
-      @exceeds_capacity = @query.exceeds_capacity?
-      render :show, status: :unprocessable_entity
+      flash[:alert] = "Cannot ingest: criteria matches #{query.count} photos (limit: #{@curatable.max_curation_size})."
+      redirect_to polymorphic_path([@curatable, :curation])
     end
   end
 
   # DELETE /portfolios/:portfolio_id/curation/clear
   # Resets the criteria recipe on the curatable object
   def clear
-    @curatable.curation_criteria = ::Gallery::CurationCriteria.new
-    @curatable.save!
-    redirect_to polymorphic_path([@curatable, :curation]), notice: "Curation criteria cleared."
+    session_state = ::Gallery::Environ::SessionState.load(session)
+    session_state.clear_staged_criteria!(@curatable)
+    session_state.persist!(session)
+
+    redirect_to polymorphic_path([@curatable, :curation]), notice: "Staged curation criteria cleared."
   end
 
   private
+
+  def build_curation_workspace(criteria)
+    @criteria = criteria
+    @query = PhotoQuery.new(@criteria, limit: @curatable.max_curation_size)
+    @count = @query.count
+    @exceeds_capacity = @query.exceeds_capacity?
+    @candidates = @exceeds_capacity ? Photo.none : @query.resolve
+    @ingestible = @query.ingestible?
+  end
 
   def set_curatable
     if params[:portfolio_id]
@@ -95,4 +109,5 @@ class CurationsController < ApplicationController
       date_range: [:start_date, :end_date]
     )
   end
-end
+
+end   # class

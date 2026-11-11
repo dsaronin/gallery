@@ -52,7 +52,7 @@ module CatalogHelper
   end 
 
   def public_fn(fn)
-    return File.join( '..', 'photos', fn )
+    return File.join( '/', 'photos', fn )
   end
 
   def shell_escaped_path(path)

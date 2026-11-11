@@ -52,6 +52,15 @@ class PortfolioController < ApplicationController
     end
   end
 
+  # DELETE /portfolio/:id/clear_items
+  def clear_items
+    @portfolio = Portfolio.find(params[:id])
+    @portfolio.portfolio_items.destroy_all
+    @portfolio.update!(curation_criteria: nil)
+
+    redirect_to @portfolio, notice: "Portfolio cleared: all photos removed and curation criteria reset."
+  end
+
   private
 
   def set_portfolio

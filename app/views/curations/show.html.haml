@@ -1,8 +1,16 @@
 .curation-page
-  .page-header
-    %h2= "Curating: #{@curatable.title}"
-    .page-nav
-      = link_to "Back to #{@curatable.class.model_name.human}", @curatable, class: "btn btn-outline"
+  .page-header.curation-header-card
+    .header-left
+      %h2= "Curate: #{@curatable.title}"
+    .header-center
+      = turbo_frame_tag "curation_status" do
+        = render "curation_status"
+    .header-right
+      = button_to "« Portfolios", @curatable, method: :get, class: "btn btn-outline"
+      = button_to "Clear", url_for([:clear, @curatable, :curation]), method: :delete, class: "btn btn-outline"
+      = button_tag "Preview", type: "submit", form: "curation-filter-form", class: "btn btn-secondary"
+      = turbo_frame_tag "curation_actions" do
+        = render "curation_actions"
 
   .curation-layout
     .curation-sidebar-pane

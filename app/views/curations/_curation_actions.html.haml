@@ -1,0 +1,2 @@
+= button_to "Ingest Photos »", url_for([:commit, @curatable, :curation]), method: :post, disabled: !@ingestible, data: { turbo: false }, class: "btn btn-primary btn-ingest #{'btn-disabled' unless @ingestible}"
+

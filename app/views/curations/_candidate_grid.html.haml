@@ -1,19 +1,10 @@
 = turbo_frame_tag "curation_preview" do
-  .curation-workspace-header
-    .metrics
-      %span.badge{ class: @exceeds_capacity ? "badge-danger" : "badge-info" }
-        = "#{@count} #{'Photo'.pluralize(@count)} Matched"
-      - if @exceeds_capacity
-        %span.warning-text
-          = "Exceeds maximum limit of #{@curatable.max_curation_size}. Please refine filters before curating."
-
-    .actions
-      - if @candidates.any? && !@exceeds_capacity
-        = button_to "Curate Matched Photos", url_for([:commit, @curatable, :curation]), method: :post, params: { curation_criteria: @criteria.to_h }, class: "btn btn-primary"
-
-  - if @candidates.empty?
+  - if @exceeds_capacity
+    .empty-state.warning-state
+      %p= "Criteria matched #{@count} photos, exceeding the ingest limit: #{@curatable.max_curation_size}."
+  - elsif @candidates.empty?
     .empty-state
-      %p No candidate photos match the active criteria. Adjust the filters on the left to begin discovery.
+      %p Criteria did not match any photos.
   - else
     .thumbnail-grid-wrapper
       .thumbnail-grid

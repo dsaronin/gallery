@@ -63,6 +63,10 @@ class PhotoQuery
     resolve
   end
 
+  def ingestible?
+    !exceeds_capacity? && count.positive?
+  end
+
   private
 
   def apply_sources(scope)

@@ -1,0 +1,294 @@
+@use "../colors"
+@use "../materialdesign" as md
+
+.curation-page
+  width: 100%
+  box-sizing: border-box
+  padding: 0.8em 0.5em
+  max-width: 1560px
+  margin: 0 auto
+
+  .page-header
+    +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
+    padding: 0.6em 1em
+    display: flex
+    flex-direction: row
+    justify-content: space-between
+    align-items: center
+    margin-bottom: 1em
+    box-sizing: border-box
+
+    .header-left
+      flex-shrink: 0
+
+      h2
+        margin: 0
+        font-size: 1.3rem
+        font-weight: 900
+        white-space: nowrap
+        color: colors.$BG_HEADER
+
+    .header-center
+      flex-grow: 1
+      display: flex
+      justify-content: center
+      align-items: center
+      padding: 0 1em
+      min-width: 0
+
+      .metrics
+        display: inline-flex
+        align-items: center
+        gap: 0.75em
+
+        .badge
+          font-size: 0.75rem
+          font-weight: bold
+          text-transform: uppercase
+          padding: 0.35em 0.7em
+          +md.MD_CORNER(3px)
+
+        .badge-info
+          color: colors.$colorBGray700
+
+        .badge-danger
+          background-color: rgba(colors.$TURKIYE_RED, 0.12)
+          color: colors.$TURKIYE_RED
+          border: 1px solid colors.$TURKIYE_RED
+
+        .warning-text
+          font-size: 0.8rem
+          font-weight: bold
+          color: colors.$TURKIYE_RED
+          white-space: nowrap
+
+    .header-right
+      flex-shrink: 0
+      display: flex
+      align-items: center
+      gap: 0.6em
+
+      form
+        margin: 0
+        padding: 0
+        display: inline-flex
+
+      .btn
+        +md.MD_BUTTON
+        font-size: 0.8rem
+        line-height: 1.2
+        white-space: nowrap
+        display: inline-flex
+        align-items: center
+        justify-content: center
+        box-sizing: border-box
+        padding: 0.4em 0.8em
+        text-decoration: none
+
+        &.btn-ingest
+        &[disabled], &.btn-disabled
+          background-color: colors.$colorBGray200 !important
+          color: colors.$colorBGray500 !important
+          border-color: colors.$colorBGray300 !important
+          cursor: not-allowed !important
+          box-shadow: none !important
+          pointer-events: none
+
+  .curation-layout
+    display: flex
+    flex-direction: row
+    align-items: flex-start
+    gap: 0.75em
+    width: 100%
+    box-sizing: border-box
+
+  // --------------------------------------------------
+  // Left Sidebar: Filters Card
+  // --------------------------------------------------
+  .curation-sidebar-pane
+    width: calc(320px + 0em)
+    flex-shrink: 0
+
+    .curation-sidebar
+      +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
+      padding: 1.2em
+      box-sizing: border-box
+
+      .filter-group
+        margin-bottom: 1em
+        // padding-bottom: 0.5em
+        // border-bottom: 1px solid colors.$colorBGray100
+        width: 100%
+
+        &:last-of-type
+          border-bottom: none
+          margin-bottom: 0.8em
+          padding-bottom: 0
+
+        h4
+          // margin: 0 0 0.5em 0
+          font-size: 0.75rem
+          font-weight: 800
+          text-transform: uppercase
+          color: colors.$colorBGray700
+
+        .field
+          display: flex
+          flex-direction: row
+          align-items: center
+          justify-content: space-between
+          gap: 0.5em
+          margin-bottom: 0.4em
+
+          &:last-child
+            margin-bottom: 0
+
+          &.star-filter-field
+          .filter-star-bar
+            display: inline-flex
+            align-items: center
+            gap: 2px
+
+            .filter-star-btn
+              background: none
+              border: none
+              outline: none
+              cursor: pointer
+              padding: 0 2px
+              margin: 0
+              line-height: 1
+              font-size: 1rem
+              color: colors.$colorBGray300
+              transition: color 0.15s ease
+
+              &:first-child
+                font-size: 0.8rem
+                font-weight: bold
+                color: colors.$colorBGray400
+                margin-right: 4px
+
+                &:hover
+                  color: colors.$TURKIYE_RED
+
+              &:hover
+                color: colors.$colorPrimaryAccent700
+
+              &.active
+                color: colors.$colorPrimaryAccent700
+
+          label
+            font-size: 0.75rem
+            font-weight: bold
+            color: colors.$colorBGray600
+            min-width: 3.5em
+            flex-shrink: 0
+
+          .form-control
+            box-sizing: border-box
+            padding: 0.25em 0.4em
+            font-size: 0.65rem
+            border: 1px solid colors.$colorBGray300
+            +md.MD_CORNER(3px)
+            background-color: #fff
+            color: colors.$colorBGray800
+
+          input[type="date"].form-control
+            width: 65%
+            max-width: 170px
+
+        .scroll-pane
+          height: 180px
+          overflow-y: auto
+          box-sizing: border-box
+          border: 1px solid colors.$colorBGray200
+          background-color: #fff
+          +md.MD_CORNER(3px)
+          padding: 0.4em 0.5em
+
+          &.scroll-pane-left
+            direction: rtl
+
+            .scroll-pane-inner
+              direction: ltr
+
+          &.scroll-pane-right
+            direction: ltr
+
+            .scroll-pane-inner
+              direction: ltr
+
+        .checkbox-list
+          display: flex
+          flex-direction: column
+          gap: 0.35em
+          padding: 0.2em 0
+
+          .checkbox-label
+            display: flex
+            align-items: center
+            gap: 0.5em
+            font-size: 0.8rem
+            color: colors.$colorBGray800
+            cursor: pointer
+
+            input[type="checkbox"]
+              margin: 0
+
+        .category-section
+          margin-top: 0.5em
+
+          strong
+            display: block
+            font-size: 0.75rem
+            color: colors.$colorBGray600
+            margin-bottom: 0.25em
+
+  // --------------------------------------------------
+  // Right Workspace: Candidates & Preview Card
+  // --------------------------------------------------
+  .curation-workspace-pane
+    flex-grow: 1
+    min-width: 0
+
+    .empty-state
+      +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
+      padding: 3em 1.5em
+      text-align: center
+
+      p
+        margin: 0
+        font-size: 0.95rem
+        color: colors.$colorBGray600
+
+      &.warning-state
+        border: 1px solid rgba(colors.$TURKIYE_RED, 0.4)
+        background-color: rgba(colors.$TURKIYE_RED, 0.04)
+
+        p
+          color: colors.$TURKIYE_RED
+          font-weight: 600
+
+    .thumbnail-grid-wrapper
+      +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
+      padding: 1em
+      box-sizing: border-box
+      width: 100%
+      overflow-x: auto
+
+      .photo-desc
+        display: block
+        margin-top: 0.3em
+        font-size: 0.70rem
+        color: colors.$colorBGray600
+        text-align: center
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
+        max-width: md.$thumbCellWidth
+
+  @media (max-width: 900px)
+    .curation-layout
+      flex-direction: column
+
+    .curation-sidebar-pane
+      width: 100%

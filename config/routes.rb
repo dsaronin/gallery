@@ -27,8 +27,18 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :portfolio, controller: :portfolio, concerns: :curatable
-  resources :exhibition, controller: :exhibition, concerns: :curatable
+  resources :portfolio, controller: :portfolio, concerns: :curatable do
+    member do
+      delete :clear_items
+    end
+  end
+
+  resources :exhibition, controller: :exhibition, concerns: :curatable do
+    member do
+      delete :clear_items
+    end
+  end
+
   resources :category, only: [:create, :update, :destroy]
   resources :tag,      only: [:index, :create, :update, :destroy]
 

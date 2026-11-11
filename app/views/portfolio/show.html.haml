@@ -6,6 +6,10 @@
         %h3.portfolio-title= @portfolio.title
         = link_to "« back", portfolio_index_path, class: "header-back-link"
         = link_to "edit", edit_portfolio_path(@portfolio), class: "header-action-link"
+        - if @portfolio_items.any?
+          = button_to "clear portfolio", clear_items_portfolio_path(@portfolio), method: :delete, data: { turbo_confirm: "Are you sure you want to remove all photos and reset curation criteria for this portfolio?" }, class: "header-action-link btn-link-action"
+        = link_to "curate »", portfolio_curation_path(@portfolio), class: "header-action-link"
+
 
       .header-right
         %span.portfolio-status-pill{ class: "status-#{@portfolio.status}" }= @portfolio.status.humanize
