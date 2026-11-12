@@ -1,12 +1,16 @@
 - active_photos = catalog.photos.active_candidates
 - unrated_count = catalog.photos.unrated.count
 - preview_photo = catalog.photos.first
+- is_curated    = catalog.curated?
 
 .catalog-card
   .card-header
     %h4.card-title= truncate(catalog.name, length: 28)
-    - if gallery_state.current_catalog_id == catalog.id
-      %span.badge-current Current
+    .header-badges
+      - if gallery_state.current_catalog_id == catalog.id
+        %span.badge-current Current
+      - if is_curated
+        %span.badge-curated Curated
 
   .card-body
     .card-content-layout
@@ -37,5 +41,8 @@
             %img{ src: public_fn(preview_photo.filename), class: "image", alt: preview_photo.photo_dsc }
 
   .card-actions
+    = button_to catalog_path(catalog), method: :delete, disabled: is_curated, title: (is_curated ? "Cannot delete: catalog photos are referenced in a portfolio or exhibition" : "Delete catalog"), form: { data: { turbo_confirm: "Are you sure you want to delete catalog \"#{catalog.name}\"?" } }, onclick: (is_curated ? nil : "return confirm('Are you sure you want to delete catalog \"#{j(catalog.name)}\"?')"), class: "btn-card btn-card-delete #{'btn-disabled' if is_curated}" do
+      Delete
+      %span.clear-glyph ✘
     = link_to "+ Talent", talent_index_path(assign_to_catalog_id: catalog.id), class: "btn-card"
     = link_to "Show Photos »", catalog_path(catalog), class: "btn-card"

@@ -49,13 +49,18 @@
     +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
     min-height: auto
 
-    .badge-current
+    .header-badges
+      display: inline-flex
+      align-items: center
+      gap: 0.4em
+
+    .badge-current, .badge-curated
       font-size: 0.65rem
       font-weight: bold
       text-transform: uppercase
+      padding: 0.2em 0.5em
       background-color: colors.$colorBGray200
       color: colors.$colorBGray700
-      padding: 0.2em 0.5em
       +md.MD_CORNER(3px)
 
     .card-body
@@ -166,6 +171,25 @@
     .btn-card
       +md.MD_BUTTON
 
+    .btn-card-delete
+      display: inline-flex
+      align-items: baseline
+      gap: 0.3em
+
+      .clear-glyph
+        color: colors.$TURKIYE_RED
+
+      &[disabled], &.btn-disabled
+        background-color: colors.$colorBGray200 !important
+        color: colors.$colorBGray500 !important
+        border-color: colors.$colorBGray300 !important
+        cursor: not-allowed !important
+        box-shadow: none !important
+        pointer-events: none
+
+        .clear-glyph
+          color: colors.$colorBGray400
+
   @media (max-width: 500px)
     .catalog-grid
       grid-template-columns: 1fr
@@ -198,7 +222,7 @@
     .card-header-bar
       display: flex
       justify-content: space-between
-      align-items: baseline
+      align-items: flex-start
       border-bottom: 2px solid colors.$colorBGray200
       padding-bottom: 0.6em
       margin-bottom: 1.2em
@@ -207,6 +231,7 @@
         display: inline-flex
         align-items: baseline
         gap: 1.5em
+        padding-top: 0.4em
 
         .catalog-title
           margin: 0
@@ -226,7 +251,16 @@
         display: inline-flex
         flex-direction: column
         align-items: flex-end
-        gap: 0.15em
+        gap: 0.2em
+
+        .badge-curated
+          font-size: 0.65rem
+          font-weight: bold
+          text-transform: uppercase
+          background-color: colors.$colorBGray200
+          color: colors.$colorBGray700
+          padding: 0.2em 0.5em
+          +md.MD_CORNER(3px)
 
         .photo-count
           font-size: 0.8rem
@@ -253,5 +287,46 @@
       white-space: nowrap
       &:hover
         text-decoration: underline
+
+    .curated-usage-section
+      margin-top: 1.5em
+      padding-top: 0.9em
+      border-top: 1px solid colors.$colorBGray200
+      display: flex
+      flex-direction: column
+      gap: 0.4em
+
+      .usage-heading
+        margin: 0 0 0.2em 0
+        font-size: 0.75rem
+        font-weight: 900
+        text-transform: uppercase
+        color: colors.$BG_HEADER
+
+      .usage-group
+        display: flex
+        flex-direction: row
+        align-items: baseline
+        gap: 0.6em
+        font-size: 0.8rem
+
+        .usage-label
+          font-weight: bold
+          color: colors.$colorBGray700
+          min-width: 6.5em
+          flex-shrink: 0
+
+        .usage-links
+          display: flex
+          flex-wrap: wrap
+          gap: 0.4em 0.8em
+
+          .usage-link
+            color: colors.$colorSecondary900
+            font-weight: bold
+            text-decoration: none
+            &:hover
+              text-decoration: underline
+// *****************************************************
 // *****************************************************
 

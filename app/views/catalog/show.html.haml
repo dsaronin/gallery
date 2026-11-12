@@ -1,3 +1,5 @@
+- is_curated = @catalog.curated?
+
 .view-container#catalog-show-view
   .catalog-card
     .card-header-bar
@@ -6,6 +8,8 @@
         = link_to "« Catalogs", catalog_index_path, class: "header-back-link"
 
       .header-right
+        - if is_curated
+          %span.badge-curated Curated
         %span.photo-count= "#{@catalog.photos.size} #{'photo'.pluralize(@catalog.photos.size)}"
         %span.catalog-fpath= @catalog.fname
 
@@ -20,3 +24,23 @@
               %img{ src: public_fn(p.filename), class: "image", alt: p.photo_dsc }
             = render partial: "photo/star_rating", locals: { photo: p }
             = link_to p.photo_dsc, p, class: "photo-desc-link"
+
+    - if is_curated
+      - portfolios  = @catalog.curated_portfolios
+      - exhibitions = @catalog.curated_exhibitions
+      .curated-usage-section
+        %h5.usage-heading Curated References
+        - if portfolios.any?
+          .usage-group
+            %span.usage-label Portfolios:
+            .usage-links
+              - portfolios.each do |portfolio|
+                = link_to portfolio.title, portfolio_path(portfolio), class: "usage-link"
+        - if exhibitions.any?
+          .usage-group
+            %span.usage-label Exhibitions:
+            .usage-links
+              - exhibitions.each do |exhibition|
+                = link_to exhibition.title, exhibition_path(exhibition), class: "usage-link"
+
+

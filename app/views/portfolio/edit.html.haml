@@ -3,6 +3,6 @@
   .form-card
     .card-header-bar
       %h3.form-title= "Edit: #{@portfolio.title}"
-      = link_to "« Back to Portfolio", portfolio_path(@portfolio), class: "header-back-link"
+      = link_to "« Portfolio", portfolio_path(@portfolio), class: "header-back-link"
 
     = render "form"

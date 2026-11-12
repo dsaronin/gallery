@@ -137,7 +137,38 @@ def update
 
 # ----------------------------------------------------------
 # destroy  -- destorys a catalog (from db) and all its related pics
+#             guarded: aborts if any photo belongs to a portfolio or exhibition
 # ----------------------------------------------------------
+  def destroy
+    @catalog = Catalog.find(params[:id])
+
+    if @catalog.curated?
+      refs = (@catalog.curated_portfolios.pluck(:title) + @catalog.curated_exhibitions.pluck(:title)).join(", ")
+      flash[:alert] = "Cannot delete catalog '#{@catalog.name}': photos are curated in #{refs}."
+      flash[:show_flash] = true
+      redirect_to catalog_index_path and return
+    end
+
+    catalog_name = @catalog.name
+    catalog_id   = @catalog.id
+
+    ActiveRecord::Base.transaction do
+      Talent.where(cover_id: @catalog.photos.select(:id)).update_all(cover_id: nil)
+      @catalog.destroy!
+    end
+
+    gallery_state.current_catalog_id = nil if gallery_state.current_catalog_id == catalog_id
+
+    flash[:notice] = "Deleted catalog '#{catalog_name}' and its photos."
+    flash[:show_flash] = true
+    redirect_to catalog_index_path
+  rescue ActiveRecord::RecordNotFound
+    flash[:alert] = "Catalog not found."
+    flash[:show_flash] = true
+    redirect_to catalog_index_path
+  end
+
+
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
   def validate_catalog()

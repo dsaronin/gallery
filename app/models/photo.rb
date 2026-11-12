@@ -9,7 +9,10 @@ class Photo < ApplicationRecord
   belongs_to :talent, optional: true
   
   has_and_belongs_to_many :tags
-  has_and_belongs_to_many  :portfolio_items
+  has_many :portfolio_items, dependent: :destroy
+  has_many :portfolios, through: :portfolio_items
+  has_many :exhibition_items, dependent: :destroy
+  has_many :exhibitions, through: :exhibition_items
  
   validates :latitude, numericality: {allow_nil: true}
   validates :longitude, numericality: {allow_nil: true}

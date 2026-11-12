@@ -38,6 +38,8 @@
             %img{ src: public_fn(preview_photo.filename), class: "image", alt: preview_photo.photo_dsc }
 
   .card-actions
-    = button_to "Delete", portfolio_path(portfolio), method: :delete, form: { data: { turbo_confirm: "Are you sure you want to delete portfolio \"#{portfolio.name}\"?" } }, onclick: "return confirm('Are you sure you want to delete portfolio \"#{j(portfolio.name)}\"?')", class: "btn-card btn-card-delete"
+    = button_to portfolio_path(portfolio), method: :delete, form: { data: { turbo_confirm: "Are you sure you want to delete portfolio \"#{portfolio.name}\"?" } }, onclick: "return confirm('Are you sure you want to delete portfolio \"#{j(portfolio.name)}\"?')", class: "btn-card btn-card-delete" do
+      Delete
+      %span.clear-glyph ✘
     = link_to "Edit", edit_portfolio_path(portfolio), class: "btn-card"
     = link_to "View »", portfolio_path(portfolio), class: "btn-card"

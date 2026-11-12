@@ -5,6 +5,7 @@
 
 class Catalog < ApplicationRecord
 
+# ------------------------------------------------------------------------------
   belongs_to :talent, optional: true
   has_many :photos, dependent: :destroy
 
@@ -13,6 +14,27 @@ class Catalog < ApplicationRecord
   validates_presence_of  :fpath
 
   before_validation :set_default_name
+# ------------------------------------------------------------------------------
+
+  def curated?
+    photo_ids = photos.select(:id)
+    PortfolioItem.where(photo_id: photo_ids).exists? ||
+      ExhibitionItem.where(photo_id: photo_ids).exists?
+  end
+
+  def curated_portfolios
+    Portfolio.joins(:portfolio_items)
+             .where(portfolio_items: { photo_id: photos.select(:id) })
+             .distinct
+             .order(:title)
+  end
+
+  def curated_exhibitions
+    Exhibition.joins(:exhibition_items)
+              .where(exhibition_items: { photo_id: photos.select(:id) })
+              .distinct
+              .order(:title)
+  end
 
 # ------------------------------------------------------------------------------
   def self.dashboard_metrics
