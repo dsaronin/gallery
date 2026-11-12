@@ -1,6 +1,7 @@
 class Talent < ApplicationRecord
 # -----------------------------
   has_many :catalogs, dependent: :nullify
+  has_many :exhibitions, dependent: :nullify
   has_many :photos, through: :catalogs
   belongs_to :cover, class_name: "Photo", optional: true
 

@@ -76,7 +76,11 @@ class TalentController < ApplicationController
     @talent.destroy
 
     respond_to do |format|
-      format.html { redirect_to talent_url, notice: "Talent was successfully destroyed." }
+      format.html do
+        flash[:notice] = "Talent was successfully destroyed."
+        flash[:show_flash] = true
+        redirect_to talent_index_path, status: :see_other
+      end
       format.json { head :no_content }
     end
   end

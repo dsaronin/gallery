@@ -35,4 +35,5 @@
       - else
         = link_to "View »", talent, class: "action-link"
         = link_to "Edit »", edit_talent_path(talent), class: "action-link"
-        = button_to "Delete »", talent, method: :delete, form: { data: { turbo_confirm: "Delete talent '#{talent.talent_name}'?" } }, class: "action-link-delete"
+        = button_to "Delete ✘", talent, method: :delete, form: { data: { turbo_confirm: "Delete talent '#{talent.talent_name}'?" } }, class: "action-link-delete"
+

@@ -6,7 +6,7 @@
 class Photo < ApplicationRecord
 
   belongs_to :catalog
-  belongs_to :talent, optional: true
+  has_one :talent, through: :catalog
   
   has_and_belongs_to_many :tags
   has_many :portfolio_items, dependent: :destroy
