@@ -16,8 +16,7 @@ class CurationsController < ApplicationController
   # GET /portfolios/:portfolio_id/curation
   # GET /exhibitions/:exhibition_id/curation
   def show
-    session_state = ::Gallery::Environ::SessionState.load(session)
-    criteria = session_state.staged_criteria_for(@curatable)
+    criteria = @gallery_state.staged_criteria_for(@curatable)
 
     build_curation_workspace(criteria)
   end
@@ -26,13 +25,7 @@ class CurationsController < ApplicationController
   # Responds to Turbo Frame updates as the user adjusts filters
   def preview
     criteria = ::Gallery::CurationCriteria.new(curation_params)
-
-    session_state = ::Gallery::Environ::SessionState.load(session)
-    session_state.stage_criteria!(@curatable, criteria)
-    session_state.persist!(session)
-
-    Rails.logger.debug { ">>> [PREVIEW] Staged criteria hash: #{criteria.to_h.inspect}" }
-    Rails.logger.debug { ">>> [PREVIEW] Staged criteria active?: #{criteria.active?}" }
+    @gallery_state.stage_criteria!(@curatable, criteria)
 
     build_curation_workspace(criteria)
 
@@ -45,12 +38,7 @@ class CurationsController < ApplicationController
   # POST /portfolios/:portfolio_id/curation/commit
   # Persists criteria recipe and batch-inserts candidates into join table
   def commit
-    session_state = ::Gallery::Environ::SessionState.load(session)
-    staged_criteria = session_state.staged_criteria_for(@curatable)
-
-    Rails.logger.debug { ">>> [COMMIT] Session raw: #{session[:gallery_state].inspect}" }
-    Rails.logger.debug { ">>> [COMMIT] Retrieved staged criteria: #{staged_criteria.inspect}" }
-    Rails.logger.debug { ">>> [COMMIT] Staged criteria active?: #{staged_criteria.active?}" }
+    staged_criteria = @gallery_state.staged_criteria_for(@curatable)
 
     if staged_criteria.blank? || !staged_criteria.active?
       redirect_to polymorphic_path([@curatable, :curation]), alert: "No active filter criteria staged to ingest."
@@ -58,9 +46,7 @@ class CurationsController < ApplicationController
     end
 
     added_count = @curatable.curate_photos!(staged_criteria)
-
-    session_state.clear_staged_criteria!(@curatable)
-    session_state.persist!(session)
+    @gallery_state.clear_staged_criteria!(@curatable)
 
     notice_msg = "Ingested #{added_count} #{'photo'.pluralize(added_count)} into #{@curatable.class.model_name.human.downcase}."
     redirect_to @curatable, notice: notice_msg
@@ -69,9 +55,7 @@ class CurationsController < ApplicationController
   # DELETE /portfolios/:portfolio_id/curation/clear
   # Resets the criteria recipe on the curatable object
   def clear
-    session_state = ::Gallery::Environ::SessionState.load(session)
-    session_state.clear_staged_criteria!(@curatable)
-    session_state.persist!(session)
+    @gallery_state.clear_staged_criteria!(@curatable)
 
     redirect_to polymorphic_path([@curatable, :curation]), notice: "Staged curation criteria cleared."
   end
