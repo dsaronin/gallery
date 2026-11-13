@@ -42,14 +42,35 @@
                         = check_box_tag "curation_criteria[tag_ids][]", tag.id, @criteria.tag_ids.include?(tag.id)
                         = tag.name
 
-    - if @catalogs.any?
-      .filter-group.filter-group-catalogs
-        %h4 Catalogs
+    - if @portfolios.any? || @exhibitions.any? || @catalogs.any?
+      .filter-group.filter-group-sources
+        %h4 Curations
         .scroll-pane.scroll-pane-right
           .scroll-pane-inner
-            .checkbox-list
-              - @catalogs.each do |cat|
-                %label.checkbox-label
-                  = check_box_tag "curation_criteria[sources][catalog_ids][]", cat.id, @criteria.catalog_ids.include?(cat.id)
-                  = cat.name.presence || cat.fname
+            - if @portfolios.any?
+              .category-section
+                %strong Portfolios
+                .checkbox-list
+                  - @portfolios.each do |port|
+                    %label.checkbox-label
+                      = check_box_tag "curation_criteria[sources][portfolio_ids][]", port.id, @criteria.portfolio_ids.include?(port.id)
+                      = port.title.presence || port.name
+
+            - if @exhibitions.any?
+              .category-section
+                %strong Exhibitions
+                .checkbox-list
+                  - @exhibitions.each do |exh|
+                    %label.checkbox-label
+                      = check_box_tag "curation_criteria[sources][exhibition_ids][]", exh.id, @criteria.exhibition_ids.include?(exh.id)
+                      = exh.title
+
+            - if @catalogs.any?
+              .category-section
+                %strong Catalogs
+                .checkbox-list
+                  - @catalogs.each do |cat|
+                    %label.checkbox-label
+                      = check_box_tag "curation_criteria[sources][catalog_ids][]", cat.id, @criteria.catalog_ids.include?(cat.id)
+                      = cat.name.presence || cat.fname
 

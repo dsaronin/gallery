@@ -1,0 +1,14 @@
+-# app/views/exhibition/index.html.haml
+.view-container#exhibitions-index
+  .view-header
+    %h3.view-title Exhibitions &emsp;
+    = link_to "+", new_exhibition_path, class: "header-fab", title: "Create New Exhibition"
+
+  - if @exhibitions.empty?
+    .empty-state
+      %p No exhibitions have been created.
+      = link_to "Create Exhibition »", new_exhibition_path, class: "btn-card primary"
+  - else
+    .exhibition-grid
+      - @exhibitions.each do |exhibition|
+        = render partial: "exhibition/card", locals: { exhibition: exhibition }

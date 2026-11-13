@@ -1,0 +1,58 @@
+= form_for @exhibition, url: (@exhibition.persisted? ? exhibition_path(@exhibition) : exhibition_index_path), html: { class: "material-form" } do |f|
+  - if @exhibition.errors.any?
+    .form-error-panel
+      %h5= "#{pluralize(@exhibition.errors.count, 'error')} prevented saving:"
+      %ul
+        - @exhibition.errors.full_messages.each do |message|
+          %li= message
+
+  .form-grid
+    .form-field.full-width
+      = f.label :title, "Exhibition Title *"
+      = f.text_field :title, required: true, class: "form-input", placeholder: "e.g. High Sierra Light — Fall Show"
+
+    .form-field
+      = f.label :portfolio_id, "Source Portfolio"
+      = f.collection_select :portfolio_id, Portfolio.order(:title), :id, :title, { include_blank: "None" }, { class: "form-input form-select" }
+
+    .form-field
+      = f.label :venue_id, "Venue"
+      = f.collection_select :venue_id, Venue.order(:name), :id, :name, { include_blank: "None" }, { class: "form-input form-select" }
+
+    .form-field
+      = f.label :talent_id, "Featured Talent"
+      = f.collection_select :talent_id, Talent.order(:talent_name), :id, :talent_name, { include_blank: "None" }, { class: "form-input form-select" }
+
+    .form-field
+      = f.label :sales_policy, "Sales Policy"
+      = f.select :sales_policy, Exhibition.sales_policies.keys.map { |s| [s.humanize, s] }, {}, { class: "form-input form-select" }
+
+    .form-field.full-width
+      = f.label :budget, "Budget"
+      = f.text_field :budget, inputmode: "numeric", pattern: "[0-9]*", class: "form-input", placeholder: "0"
+
+    - if @exhibition.persisted?
+      .form-field
+        = f.label :status, "Exhibition Status *"
+        = f.select :status, Exhibition.statuses.keys.map { |s| [s.humanize, s] }, {}, { class: "form-input form-select" }
+
+      .form-field
+        = f.label :total_expenses, "Total Expenses"
+        = f.text_field :total_expenses, inputmode: "numeric", pattern: "[0-9]*", class: "form-input", placeholder: "0"
+
+      .form-field
+        = f.label :approved_by_artist_at, "Approved by Photographer"
+        = f.date_field :approved_by_artist_at, class: "form-input"
+
+      .form-field
+        = f.label :approved_by_venue_at, "Approved by Venue"
+        = f.date_field :approved_by_venue_at, class: "form-input"
+
+      .form-field.full-width
+        = f.label :placard_id, "Exhibition Placard"
+        = f.collection_select :placard_id, Placard.order(:title), :id, :title, { include_blank: "Default" }, { class: "form-input form-select" }
+
+  .form-actions-bar
+    = link_to "Cancel", (@exhibition.persisted? ? exhibition_path(@exhibition) : exhibition_index_path), class: "btn-cancel"
+    = f.submit (@exhibition.persisted? ? "Update Exhibition »" : "Create Exhibition »"), class: "btn-submit"
+

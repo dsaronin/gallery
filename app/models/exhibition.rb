@@ -21,9 +21,12 @@ class Exhibition < ApplicationRecord
 # *******************************************************
   def self.dashboard_metrics
     {
-      staged_count: ( where(status: :staged).count rescue 0 ),
-      planning_count: ( where(status: :planning).count rescue 0 ),
-      active_count: ( where(status: :active).count rescue 0 )
+      total_count: count,
+      draft_count: where(status: statuses[:draft]).count,
+      scheduled_count: where(status: statuses[:scheduled]).count,
+      active_count: where(status: statuses[:active]).count,
+      completed_count: where(status: statuses[:completed]).count,
+      curated_photos_count: joins(:exhibition_items).count
     }
   end
 # *******************************************************

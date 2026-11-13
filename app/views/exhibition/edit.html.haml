@@ -1,0 +1,8 @@
+-# app/views/exhibition/edit.html.haml
+.view-container#exhibition-form-view
+  .form-card
+    .card-header-bar
+      %h3.form-title= "Edit: #{@exhibition.title}"
+      = link_to "« Exhibition", exhibition_path(@exhibition), class: "header-back-link"
+
+    = render "form"

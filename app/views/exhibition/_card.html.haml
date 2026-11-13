@@ -1,0 +1,56 @@
+-# app/views/exhibition/_card.html.haml
+- items_count = exhibition.exhibition_items.size
+- preview_photo = exhibition.photos.first
+
+.exhibition-card
+  .card-header
+    %h4.card-title= truncate(exhibition.title, length: 28)
+    - if gallery_state.current_exhibition_id == exhibition.id
+      %span.badge-current Current
+
+  .card-body
+    .card-content-layout
+      %dl.assoc-list
+        .assoc-row
+          %dt Status:
+          %dd
+            %span{ class: "status-pill status-#{exhibition.status}" }= exhibition.status.humanize
+        .assoc-row
+          %dt Sales policy:
+          %dd= exhibition.sales_policy.humanize
+        .assoc-row
+          %dt Curated photos:
+          %dd= "#{items_count} #{'photo'.pluralize(items_count)}"
+        .assoc-row
+          %dt Portfolio:
+          %dd
+            - if exhibition.portfolio.present?
+              = exhibition.portfolio.title
+            - else
+              %span.subdued —
+        .assoc-row
+          %dt Venue:
+          %dd
+            - if exhibition.venue.present?
+              = exhibition.venue.name
+            - else
+              %span.subdued —
+        .assoc-row
+          %dt Placard:
+          %dd
+            - if exhibition.placard.present?
+              %span.placard-pill= exhibition.placard.title
+            - else
+              %span.subdued —
+
+      - if preview_photo
+        .card-thumbnail-preview
+          %a{ href: exhibition_path(exhibition), title: "Open #{exhibition.title}" }
+            %img{ src: public_fn(preview_photo.filename), class: "image", alt: preview_photo.photo_dsc }
+
+  .card-actions
+    = button_to exhibition_path(exhibition), method: :delete, form: { data: { turbo_confirm: "Are you sure you want to delete exhibition \"#{exhibition.title}\"?" } }, onclick: "return confirm('Are you sure you want to delete exhibition \"#{j(exhibition.title)}\"?')", class: "btn-card btn-card-delete" do
+      Delete
+      %span.clear-glyph ✘
+    = link_to "Edit", edit_exhibition_path(exhibition), class: "btn-card"
+    = link_to "View »", exhibition_path(exhibition), class: "btn-card"

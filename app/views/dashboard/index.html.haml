@@ -37,15 +37,15 @@
     .dashboard-card#card-exhibitions
       .card-header
         %h4.card-title Exhibitions
-        = link_to "+", "#", class: "card-fab", title: "Stage New Exhibition"
+        = link_to "+", new_exhibition_path, class: "card-fab", title: "Stage New Exhibition"
 
       .card-body
         = render 'exhibition/telemetry', metrics: @metrics[:exhibitions]
 
       .card-actions
         - if gallery_state.current_exhibition
-          = link_to "Open Current", "#", class: "btn-card primary"
-        = link_to "Exhibitions »", "#", class: "btn-card"
+          = link_to "Open Current", exhibition_path(gallery_state.current_exhibition), class: "btn-card primary"
+        = link_to "Exhibitions »", exhibition_index_path, class: "btn-card"
 
     -# ----------------------------------------------------
     -# 4. SHOWINGS CARD

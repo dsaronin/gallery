@@ -1,13 +1,13 @@
 %dl.assoc-list
   .assoc-row
-    %dt Staged:
-    %dd= "#{metrics[:staged_count]} complete"
+    %dt Total:
+    %dd= "#{metrics[:total_count]} #{'exhibition'.pluralize(metrics[:total_count])} (#{metrics[:draft_count]} draft)"
   .assoc-row
-    %dt Planning:
-    %dd= "#{metrics[:planning_count]} in progress"
+    %dt Scheduled:
+    %dd= "#{metrics[:scheduled_count]} upcoming"
   .assoc-row
     %dt Active:
-    %dd= "#{metrics[:active_count]} current runs"
+    %dd= "#{metrics[:active_count]} running (#{metrics[:completed_count]} completed)"
   .assoc-row
     %dt Current:
     %dd

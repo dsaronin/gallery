@@ -1,0 +1,8 @@
+-# app/views/exhibition/new.html.haml
+.view-container#exhibition-form-view
+  .form-card
+    .card-header-bar
+      %h3.form-title New Exhibition
+      = link_to "« Exhibitions", exhibition_index_path, class: "header-back-link"
+
+    = render "form"

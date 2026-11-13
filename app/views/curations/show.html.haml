@@ -6,8 +6,8 @@
       = turbo_frame_tag "curation_status" do
         = render "curation_status"
     .header-right
-      = button_to "« Portfolios", @curatable, method: :get, class: "btn btn-outline"
-      = button_to "Clear", url_for([:clear, @curatable, :curation]), method: :delete, class: "btn btn-outline"
+      = button_to "« #{@curatable.class.model_name.human}", @curatable, method: :get, class: "btn btn-outline"
+      = button_to "Clear ✘", url_for([:clear, @curatable, :curation]), method: :delete, class: "btn btn-outline"
       = button_tag "Preview", type: "submit", form: "curation-filter-form", class: "btn btn-secondary"
       = turbo_frame_tag "curation_actions" do
         = render "curation_actions"
