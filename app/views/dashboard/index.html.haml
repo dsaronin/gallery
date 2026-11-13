@@ -71,7 +71,7 @@
     .dashboard-card#card-admin
       .card-header
         %h4.card-title Venue…
-        %span.header-badge Infrastructure
+        = link_to "+", new_venue_path, class: "card-fab", title: "New Venue"
 
       .card-body
         = render 'venue/telemetry', metrics: @metrics[:admin]
