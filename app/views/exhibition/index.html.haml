@@ -2,6 +2,7 @@
 .view-container#exhibitions-index
   .view-header
     %h3.view-title Exhibitions &emsp;
+    = link_to "⊞", root_path, class: "header-home", title: "Dashboard"
     = link_to "+", new_exhibition_path, class: "header-fab", title: "Create New Exhibition"
 
   - if @exhibitions.empty?

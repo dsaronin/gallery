@@ -14,14 +14,13 @@
   .view-header
     display: flex
     justify-content: space-between
-    align-items: baseline
+    align-items: center
     margin-bottom: 1.2em
     padding: 0 0.2em
 
     .view-title-group
       display: inline-flex
-      align-items: baseline
-      gap: 1.5em
+      align-items: center
 
       .view-title
         margin: 0
@@ -29,16 +28,17 @@
         font-weight: 900
         color: colors.$BG_HEADER
 
-      .view-count
-        font-size: 0.8rem
-        font-weight: bold
-        color: colors.$colorBGray600
+      .header-home
+        +md.MD_HOME_NAV
+        margin-left: 1.5em
 
-    .btn-primary-action
-      +md.MD_BUTTON
+      .header-fab
+        +md.MD_FAB
+
+    .view-count
       font-size: 0.8rem
-      text-decoration: none
-      padding: 0.35em 0.8em
+      font-weight: bold
+      color: colors.$colorBGray600
 
   .empty-notice
     padding: 2.5em

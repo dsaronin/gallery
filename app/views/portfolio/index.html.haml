@@ -2,6 +2,7 @@
 .view-container#portfolios-index
   .view-header
     %h3.view-title Portfolios &emsp;
+    = link_to "⊞", root_path, class: "header-home", title: "Dashboard"
     = link_to "+", new_portfolio_path, class: "header-fab", title: "Create New Portfolio"
 
   - if @portfolios.empty?

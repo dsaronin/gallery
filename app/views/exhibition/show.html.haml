@@ -4,10 +4,10 @@
     .card-header-bar
       .header-left
         %h3.exhibition-title= @exhibition.title
-        = link_to "« back", exhibition_index_path, class: "header-back-link"
+        = link_to "« exhibitions", exhibition_index_path, class: "header-back-link"
         = link_to "edit", edit_exhibition_path(@exhibition), class: "header-action-link"
         - if @exhibition_items.any?
-          = button_to clear_items_exhibition_path(@exhibition), method: :delete, form_class: "inline-action-form", data: { turbo_confirm: "Are you sure you want to remove all photos and reset curation criteria for this exhibition?" }, class: "header-action-link btn-link-action" do
+          = button_to clear_items_exhibition_path(@exhibition), method: :delete, form_class: "inline-action-form", form: { data: { turbo_confirm: "Are you sure you want to remove all photos and reset curation criteria for exhibition \"#{@exhibition.title}\"?" } }, onclick: "return confirm('Are you sure you want to remove all photos and reset curation criteria for exhibition \"#{j(@exhibition.title)}\"?')", class: "header-action-link btn-link-action" do
             clear
             %span.clear-glyph ✘
         = link_to "curate »", exhibition_curation_path(@exhibition), class: "header-action-link"

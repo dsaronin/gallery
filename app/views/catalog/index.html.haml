@@ -1,6 +1,7 @@
 .view-container#catalogs-index
   .view-header
     %h3.view-title Catalogs &emsp;
+    = link_to "⊞", root_path, class: "header-home", title: "Dashboard"
     = link_to "+", catalog_selectcatalog_path, class: "header-fab", title: "Ingest New Catalog"
 
   - if @list.empty?

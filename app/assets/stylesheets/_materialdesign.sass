@@ -149,3 +149,33 @@ $elevation_6dp: 0 14px 28px rgba(0, 0, 0, 0.20), 0 5px 10px rgba(0, 0, 0, 0.22)
     box-shadow: $elevation_2dp
     transform: scale(1.08)
     text-decoration: none
+
+// --------------------------------------------------------
+// Canonical Material Flat Bevelled Home / Dashboard Button
+// --------------------------------------------------------
+=MD_HOME_NAV($size: 26px, $bg: colors.$colorBGray100, $fg: colors.$colorSecondary700)
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  width: $size
+  height: $size
+  min-width: $size
+  min-height: $size
+  padding: 0
+  margin: 0 0.55em 0 0
+  font-size: 1.15rem
+  font-weight: 800
+  line-height: 1
+  text-decoration: none
+  color: $fg
+  background-color: $bg
+  border: 1px solid colors.$colorBGray200
+  +MD_CORNER(4px)
+  cursor: pointer
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease
+
+  &:hover
+    background-color: colors.$colorBGray300
+    border-color: colors.$colorBGray400
+    color: colors.$BG_HEADER
+    text-decoration: none

@@ -12,11 +12,11 @@
   .view-header
     .view-title-group
       %h3.view-title= @target_catalog.present? ? "Select Talent" : "Talents"
-      %span.view-count= "#{@talents.size} #{'model'.pluralize(@talents.size)}"
-
-    .view-actions
+      = link_to "⊞", root_path, class: "header-home", title: "Dashboard"
       - unless @target_catalog.present?
-        = link_to "+ New Talent »", new_talent_path, class: "btn-primary-action"
+        = link_to "+", new_talent_path, class: "header-fab", title: "New Talent"
+
+    %span.view-count= "#{@talents.size} #{'model'.pluralize(@talents.size)}"
 
   - if @talents.blank?
     .empty-notice

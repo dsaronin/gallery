@@ -9,9 +9,20 @@
   box-sizing: border-box
   padding: 0.5em 1em
 
-  .admin-title
+  .view-header
+    display: flex
+    align-items: center
+    gap: 1.2em
     margin: 0 0 0.8em 0
-    color: colors.$BG_HEADER
+
+    .view-title
+      margin: 0
+      font-size: 1.4rem
+      font-weight: 900
+      color: colors.$BG_HEADER
+
+    .header-home
+      +md.MD_HOME_NAV
 
   .tag-admin-creators
     width: 100%

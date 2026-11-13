@@ -13,6 +13,8 @@
         = render 'catalog/telemetry', metrics: @metrics[:catalogs]
 
       .card-actions
+        - if gallery_state.current_catalog
+          = link_to "Continue", catalog_path(gallery_state.current_catalog), class: "btn-card primary"
         = link_to "Catalogs »", catalog_index_path, class: "btn-card"
 
     -# ----------------------------------------------------
@@ -28,7 +30,7 @@
 
       .card-actions
         - if gallery_state.current_portfolio
-          = link_to "Open Current", portfolio_path(gallery_state.current_portfolio), class: "btn-card primary"
+          = link_to "Continue", portfolio_path(gallery_state.current_portfolio), class: "btn-card primary"
         = link_to "Portfolios »", portfolio_index_path, class: "btn-card"
 
     -# ----------------------------------------------------
@@ -44,7 +46,7 @@
 
       .card-actions
         - if gallery_state.current_exhibition
-          = link_to "Open Current", exhibition_path(gallery_state.current_exhibition), class: "btn-card primary"
+          = link_to "Continue", exhibition_path(gallery_state.current_exhibition), class: "btn-card primary"
         = link_to "Exhibitions »", exhibition_index_path, class: "btn-card"
 
     -# ----------------------------------------------------
@@ -60,15 +62,15 @@
 
       .card-actions
         - if gallery_state.current_showing
-          = link_to "Open Current", "#", class: "btn-card primary"
+          = link_to "Continue", "#", class: "btn-card primary"
         = link_to "Showings »", "#", class: "btn-card"
 
     -# ----------------------------------------------------
-    -# 5. ADMIN CARD
+    -# 5. VENUE CARD
     -# ----------------------------------------------------
     .dashboard-card#card-admin
       .card-header
-        %h4.card-title Admin
+        %h4.card-title Venue…
         %span.header-badge Infrastructure
 
       .card-body
@@ -76,7 +78,7 @@
 
       .card-actions.admin-actions
         - if gallery_state.current_venue
-          = link_to "Open Current", venue_path(gallery_state.current_venue), class: "btn-card primary"
+          = link_to "Continue", venue_path(gallery_state.current_venue), class: "btn-card primary"
         = link_to "Venues »", venue_index_path, class: "btn-card"
         = link_to "Talents »", talent_index_path, class: "btn-card"
         = link_to "Tags »", tag_index_path, class: "btn-card"

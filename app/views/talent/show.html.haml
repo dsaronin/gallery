@@ -5,8 +5,8 @@
       %span.talent-code= @talent.talent_code
 
     .view-actions
-      = link_to "« Talent List", talent_index_path, class: "btn-secondary-action"
-      = link_to "Edit Talent »", edit_talent_path(@talent), class: "btn-primary-action"
+      = link_to "« talents", talent_index_path, class: "btn-secondary-action"
+      = link_to "edit", edit_talent_path(@talent), class: "btn-primary-action"
 
   .talent-inspector-card
     .inspector-body

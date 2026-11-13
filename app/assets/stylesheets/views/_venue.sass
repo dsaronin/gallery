@@ -24,6 +24,9 @@
       font-weight: 900
       color: colors.$BG_HEADER
 
+    .header-home
+      +md.MD_HOME_NAV
+
     .header-fab
       +md.MD_FAB
 
@@ -241,14 +244,18 @@
           font-family: monospace
           color: colors.$colorBGray500
 
-    .venue-details-grid
+    .venue-subcards-grid
       display: grid
       grid-template-columns: 1fr 1fr
-      gap: 1.5em
-      margin-bottom: 1em
+      gap: 1.2em
+      align-items: stretch
 
-      @media (max-width: 700px)
+      @media (max-width: 767px)
         grid-template-columns: 1fr
+
+    .venue-subcard
+      +md.MD_CARD(colors.$colorBGray050, colors.$colorBGray200)
+      min-height: auto
 
       .detail-list
         margin: 0
@@ -265,7 +272,7 @@
         line-height: 1.4
 
         dt
-          min-width: 8.5em
+          min-width: 8em
           flex-shrink: 0
           font-weight: 900
           text-transform: lowercase
@@ -275,7 +282,9 @@
         dd
           margin: 0
           flex-grow: 1
+          min-width: 0
           color: colors.$colorBGray700
+          word-break: break-word
 
           a
             color: colors.$colorSecondary900
@@ -287,20 +296,17 @@
             font-style: italic
             color: colors.$colorBGray500
 
-    .venue-notes-panel
-      margin-top: 0.8em
-      padding-top: 0.8em
-      border-top: 1px solid colors.$colorBGray200
+      .detail-row-notes
+        margin-top: 0.35em
+        padding-top: 0.5em
+        border-top: 1px solid colors.$colorBGray200
 
-      h5
-        margin: 0 0 0.35em 0
-        font-size: 0.85rem
-        color: colors.$BG_HEADER
-
-      p
-        margin: 0
-        font-size: 0.85rem
-        color: colors.$colorBGray700
+        dd p
+          margin: 0
+          padding: 0
+          font-size: 0.85rem
+          line-height: 1.4
+          color: colors.$colorBGray700
 
 // ----------------------------------------------------
 // Venue New & Edit Form View
