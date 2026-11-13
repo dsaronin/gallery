@@ -16,6 +16,14 @@ module Gallery
       pop_up:             5
     }.freeze
 
+    VENUE_STATUSES = {
+      mock:     0,
+      pending:  1,
+      booked:   2,
+      showing:  3,
+      archived: 4
+    }.freeze
+
     PORTFOLIO_STATUSES = {
       draft:    0,
       active:   1,

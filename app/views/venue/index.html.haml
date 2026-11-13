@@ -1,0 +1,14 @@
+-# app/views/venue/index.html.haml
+.view-container#venues-index
+  .view-header
+    %h3.view-title Venues &emsp;
+    = link_to "+", new_venue_path, class: "header-fab", title: "Add New Venue"
+
+  - if @venues.empty?
+    .empty-state
+      %p No venues have been configured.
+      = link_to "Add Venue »", new_venue_path, class: "btn-card primary"
+  - else
+    .venue-grid
+      - @venues.each do |venue|
+        = render partial: "venue/card", locals: { venue: venue }

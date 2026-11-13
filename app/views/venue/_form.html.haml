@@ -1,0 +1,66 @@
+= form_for @venue, url: (@venue.persisted? ? venue_path(@venue) : venue_index_path), html: { class: "material-form" } do |f|
+  - if @venue.errors.any?
+    .form-error-panel
+      %h5= "#{pluralize(@venue.errors.count, 'error')} prevented saving:"
+      %ul
+        - @venue.errors.full_messages.each do |message|
+          %li= message
+
+  .form-grid
+    .form-field.full-width
+      = f.label :name, "Venue Name *"
+      = f.text_field :name, required: true, class: "form-input", placeholder: "e.g. Oakland Contemporary Art Space"
+
+    .form-field
+      = f.label :space_name, "Space / Room Name"
+      = f.text_field :space_name, class: "form-input", placeholder: "e.g. Main Gallery"
+
+    .form-field
+      = f.label :venue_type, "Venue Type"
+      = f.select :venue_type, Venue.venue_types.keys.map { |t| [t.humanize, t] }, {}, { class: "form-input form-select" }
+
+    .form-field
+      = f.label :wall_linear_meters, "Wall Linear Meters (m)"
+      = f.text_field :wall_linear_meters, inputmode: "numeric", pattern: "[0-9]*", class: "form-input", placeholder: "20"
+
+    .form-field
+      = f.label :rate_per_day, "Rate per Day ($)"
+      = f.text_field :rate_per_day, inputmode: "numeric", pattern: "[0-9]*", class: "form-input", placeholder: "0"
+
+    .form-field.full-width
+      = f.label :address, "Street Address"
+      = f.text_field :address, class: "form-input", placeholder: "e.g. 450 Broadway, Oakland, CA 94607"
+
+    - if @venue.persisted?
+      .form-field
+        = f.label :status, "Venue Status *"
+        = f.select :status, Venue.statuses.keys.map { |s| [s.humanize, s] }, {}, { class: "form-input form-select" }
+
+      .form-field
+        = f.label :contact_name, "Contact Name"
+        = f.text_field :contact_name, class: "form-input", placeholder: "Full Name"
+
+      .form-field
+        = f.label :contact_position, "Contact Position"
+        = f.text_field :contact_position, class: "form-input", placeholder: "e.g. Gallery Director"
+
+      .form-field
+        = f.label :contact_email, "Contact Email"
+        = f.email_field :contact_email, class: "form-input", placeholder: "curator@example.org"
+
+      .form-field
+        = f.label :contact_phone, "Contact Phone"
+        = f.text_field :contact_phone, class: "form-input", placeholder: "+1-510-555-0100"
+
+      .form-field.full-width
+        = f.label :website_url, "Website URL"
+        = f.url_field :website_url, class: "form-input", placeholder: "https://example.org"
+
+      .form-field.full-width
+        = f.label :notes, "Venue & Physical Notes"
+        = f.text_area :notes, rows: 4, class: "form-input form-textarea", placeholder: "Lighting specs, hanging hardware rules, wall dimensions..."
+
+  .form-actions-bar
+    = link_to "Cancel", (@venue.persisted? ? venue_path(@venue) : venue_index_path), class: "btn-cancel"
+    = f.submit (@venue.persisted? ? "Update Venue »" : "Create Venue »"), class: "btn-submit"
+

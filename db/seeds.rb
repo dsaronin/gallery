@@ -72,5 +72,37 @@ if File.exist?(talents_file)
   end
 end
 
+# 4. Venues
+venues_file = Rails.root.join("db", "seeds", "venues.yml")
+if File.exist?(venues_file)
+  venues = YAML.safe_load_file(venues_file) || []
+  puts "Loading Venues from #{venues_file.basename}..."
+
+  venues.each do |entry|
+    venue = Venue.find_or_initialize_by(name: entry["name"])
+    venue.venue_type         = entry["venue_type"] if entry["venue_type"].present?
+    venue.status             = entry["status"]     if entry["status"].present?
+    venue.space_name         = entry["space_name"]
+    venue.wall_linear_meters = entry["wall_linear_meters"]
+    venue.rate_per_day       = entry["rate_per_day"]
+    venue.address            = entry["address"]
+    venue.contact_name       = entry["contact_name"]
+    venue.contact_position   = entry["contact_position"]
+    venue.contact_email      = entry["contact_email"]
+    venue.contact_phone      = entry["contact_phone"]
+    venue.website_url        = entry["website_url"]
+    venue.notes              = entry["notes"]
+
+    if venue.new_record?
+      venue.save!
+      puts "  [CREATE] Venue: #{venue.name} (#{venue.status}, #{venue.venue_type})"
+    else
+      venue.save! if venue.changed?
+      puts "  [EXISTS] Venue: #{venue.name} (#{venue.status}, #{venue.venue_type})"
+    end
+  end
+end
+
+
 puts "== Seeding Complete =="
 

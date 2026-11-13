@@ -1,0 +1,8 @@
+-# app/views/venue/edit.html.haml
+.view-container#venue-form-view
+  .form-card
+    .card-header-bar
+      %h3.form-title= "Edit: #{@venue.name}"
+      = link_to "« Venue", venue_path(@venue), class: "header-back-link"
+
+    = render "form"

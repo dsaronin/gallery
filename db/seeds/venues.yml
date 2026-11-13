@@ -1,0 +1,14 @@
+- name: "Mock Gallery"
+  venue_type: "commercial_gallery"
+  status: "mock"
+  space_name: "Virtual Exhibition Hall"
+  wall_linear_meters: 20
+  rate_per_day: 0
+  address: "100 Virtual Staging Way, Suite 1, Oakland, CA 94612"
+  contact_name: "Jamaal Stevens"
+  contact_position: "Talent manager"
+  contact_email: "staging@gallery.local"
+  contact_phone: "+1-510-555-0100"
+  website_url: "http://localhost:8080/venue"
+  notes: "Generic abstract venue for staging and planning exhibitions prior to booking a physical space."
+

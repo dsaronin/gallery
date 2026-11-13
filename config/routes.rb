@@ -39,6 +39,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :venue, controller: :venue
+
   resources :category, only: [:create, :update, :destroy]
   resources :tag,      only: [:index, :create, :update, :destroy]
 

@@ -1,0 +1,53 @@
+-# app/views/venue/_card.html.haml
+.venue-card
+  .card-header
+    %h4.card-title= truncate(venue.name, length: 28)
+    - if gallery_state.current_venue_id == venue.id
+      %span.badge-current Current
+
+  .card-body
+    .card-content-layout
+      %dl.assoc-list
+        .assoc-row
+          %dt Status:
+          %dd
+            %span{ class: "status-pill status-#{venue.status}" }= venue.status.humanize
+        .assoc-row
+          %dt Type:
+          %dd= venue.venue_type.humanize
+        .assoc-row
+          %dt Space:
+          %dd
+            - if venue.space_name.present?
+              = venue.space_name
+            - else
+              %span.subdued —
+        .assoc-row
+          %dt Wall space:
+          %dd
+            - if venue.wall_linear_meters.present?
+              = "#{venue.wall_linear_meters} m"
+            - else
+              %span.subdued —
+        .assoc-row
+          %dt Rate / day:
+          %dd
+            - if venue.rate_per_day.present?
+              = "$#{venue.rate_per_day}"
+            - else
+              %span.subdued —
+        .assoc-row
+          %dt Contact:
+          %dd
+            - if venue.contact_name.present?
+              = venue.contact_name
+            - else
+              %span.subdued —
+
+  .card-actions
+    - if venue.deletable?
+      = button_to venue_path(venue), method: :delete, form: { data: { turbo_confirm: "Are you sure you want to delete venue \"#{venue.name}\"?" } }, onclick: "return confirm('Are you sure you want to delete venue \"#{j(venue.name)}\"?')", class: "btn-card btn-card-delete" do
+        Delete
+        %span.clear-glyph ✘
+    = link_to "Edit", edit_venue_path(venue), class: "btn-card"
+    = link_to "View »", venue_path(venue), class: "btn-card"

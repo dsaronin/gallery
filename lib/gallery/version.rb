@@ -4,7 +4,7 @@
 
 module Gallery
 
-  VERSION = "0.38"
+  VERSION = "0.39"
 
 end  # module Gallery
 

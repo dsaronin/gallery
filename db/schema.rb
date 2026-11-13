@@ -189,6 +189,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
   create_table "venues", force: :cascade do |t|
     t.string "name", null: false
     t.integer "venue_type", default: 0, null: false
+    t.integer "status", default: 0, null: false
     t.string "space_name"
     t.integer "wall_linear_meters"
     t.integer "rate_per_day"

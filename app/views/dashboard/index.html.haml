@@ -75,6 +75,8 @@
         = render 'venue/telemetry', metrics: @metrics[:admin]
 
       .card-actions.admin-actions
-        = link_to "Venues »", "#", class: "btn-card"
+        - if gallery_state.current_venue
+          = link_to "Open Current", venue_path(gallery_state.current_venue), class: "btn-card primary"
+        = link_to "Venues »", venue_index_path, class: "btn-card"
         = link_to "Talents »", talent_index_path, class: "btn-card"
         = link_to "Tags »", tag_index_path, class: "btn-card"

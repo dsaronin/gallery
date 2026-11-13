@@ -14,6 +14,7 @@ module Gallery
                     :current_portfolio_id,
                     :current_exhibition_id,
                     :current_showing_id,
+                    :current_venue_id,
                     :current_tag_id,
                     :staged_curations
 
@@ -27,6 +28,7 @@ module Gallery
         @current_portfolio_id  = attrs[:current_portfolio_id]
         @current_exhibition_id = attrs[:current_exhibition_id]
         @current_showing_id    = attrs[:current_showing_id]
+        @current_venue_id      = attrs[:current_venue_id]
         @staged_curations      = (attrs[:staged_curations] || {}).transform_keys(&:to_s)
       end
 
@@ -47,6 +49,7 @@ module Gallery
           current_portfolio_id:  @current_portfolio_id,
           current_exhibition_id: @current_exhibition_id,
           current_showing_id:    @current_showing_id,
+          current_venue_id:      @current_venue_id,
           current_category_id:   @current_category_id,
           current_tag_id:        @current_tag_id,
           staged_curations:      @staged_curations
@@ -109,6 +112,11 @@ module Gallery
         @current_showing ||= Showing.find_by(id: @current_showing_id)
       end
 
+      def current_venue
+        return nil unless @current_venue_id
+        @current_venue ||= Venue.find_by(id: @current_venue_id)
+      end
+
       # Atomically set active tag and synchronize its category
       def set_active_tag!(tag_or_id)
         tag = tag_or_id.is_a?(Tag) ? tag_or_id : Tag.find_by(id: tag_or_id)
@@ -126,6 +134,7 @@ module Gallery
         @current_portfolio_id  = nil
         @current_exhibition_id = nil
         @current_showing_id    = nil
+        @current_venue_id      = nil
         @staged_curations      = {}
       end
 

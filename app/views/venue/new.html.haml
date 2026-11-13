@@ -1,0 +1,8 @@
+-# app/views/venue/new.html.haml
+.view-container#venue-form-view
+  .form-card
+    .card-header-bar
+      %h3.form-title New Venue
+      = link_to "« Venues", venue_index_path, class: "header-back-link"
+
+    = render "form"

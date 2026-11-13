@@ -3,6 +3,7 @@ class CreateVenues < ActiveRecord::Migration[7.1]
     create_table :venues do |t|
       t.string  :name, null: false
       t.integer :venue_type, null: false, default: 0
+      t.integer :status,     null: false, default: 0
       t.string  :space_name
       t.integer :wall_linear_meters
       t.integer :rate_per_day

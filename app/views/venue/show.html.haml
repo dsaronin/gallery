@@ -1,0 +1,65 @@
+-# app/views/venue/show.html.haml
+.view-container#venue-show-view
+  .venue-card
+    .card-header-bar
+      .header-left
+        %h3.venue-title= @venue.name
+        = link_to "« back", venue_index_path, class: "header-back-link"
+        = link_to "edit", edit_venue_path(@venue), class: "header-action-link"
+        - if @venue.deletable?
+          = button_to venue_path(@venue), method: :delete, form_class: "inline-action-form", data: { turbo_confirm: "Are you sure you want to delete venue \"#{@venue.name}\"?" }, class: "header-action-link btn-link-action" do
+            delete
+            %span.clear-glyph ✘
+
+      .header-right
+        %span.venue-status-pill{ class: "status-#{@venue.status}" }= @venue.status.humanize
+        - if @venue.wall_linear_meters.present?
+          %span.wall-capacity= "#{@venue.wall_linear_meters} m wall"
+        %span.venue-meta= @venue.venue_type.humanize
+
+    .venue-details-grid
+      %dl.detail-list
+        .detail-row
+          %dt Space Name:
+          %dd= @venue.space_name.presence || "—"
+        .detail-row
+          %dt Address:
+          %dd= @venue.address.presence || "—"
+        .detail-row
+          %dt Daily Rate:
+          %dd= @venue.rate_per_day.present? ? "$#{@venue.rate_per_day} / day" : "—"
+        .detail-row
+          %dt Website:
+          %dd
+            - if @venue.website_url.present?
+              = link_to @venue.website_url, @venue.website_url, target: "_blank", rel: "noopener"
+            - else
+              —
+
+      %dl.detail-list
+        .detail-row
+          %dt Contact:
+          %dd
+            - if @venue.contact_name.present?
+              = @venue.contact_name
+              - if @venue.contact_position.present?
+                %span.subdued= "(#{@venue.contact_position})"
+            - else
+              —
+        .detail-row
+          %dt Email:
+          %dd= @venue.contact_email.presence || "—"
+        .detail-row
+          %dt Phone:
+          %dd= @venue.contact_phone.presence || "—"
+        .detail-row
+          %dt Exhibitions:
+          %dd= "#{@venue.exhibitions.count} staged"
+
+    - if @venue.notes.present?
+      .venue-notes-panel
+        %h5 Venue Notes
+        %p= simple_format(@venue.notes)
+
+    -# Reserved slot for v2 venue visuals (.thumbnail-grid)
+    .venue-visuals-placeholder
