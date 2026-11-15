@@ -55,15 +55,15 @@
     .dashboard-card#card-showings
       .card-header
         %h4.card-title Showings
-        = link_to "+", "#", class: "card-fab", title: "Book Run"
+        = link_to "+", new_showing_path, class: "card-fab", title: "Book Run"
 
       .card-body
         = render 'showing/telemetry', metrics: @metrics[:showings]
 
       .card-actions
         - if gallery_state.current_showing
-          = link_to "Continue", "#", class: "btn-card primary"
-        = link_to "Showings »", "#", class: "btn-card"
+          = link_to "Continue", showing_path(gallery_state.current_showing), class: "btn-card primary"
+        = link_to "Showings »", showing_index_path, class: "btn-card"
 
     -# ----------------------------------------------------
     -# 5. VENUE CARD

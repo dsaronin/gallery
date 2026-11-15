@@ -1,0 +1,56 @@
+-# app/views/showing/_card.html.haml
+- preview_photo = showing.exhibition&.photos&.first
+
+.showing-card
+  .card-header
+    %h4.card-title= truncate(showing.title, length: 28)
+    - if gallery_state.current_showing_id == showing.id
+      %span.badge-current Current
+
+  .card-body
+    .card-content-layout
+      %dl.assoc-list
+        .assoc-row
+          %dt Status:
+          %dd
+            %span{ class: "status-pill status-#{showing.status}" }= showing.status.humanize
+        .assoc-row
+          %dt Exhibition:
+          %dd
+            - if showing.exhibition.present?
+              = truncate(showing.exhibition.title, length: 30)
+            - else
+              %span.subdued —
+        .assoc-row
+          %dt Venue:
+          %dd
+            - if showing.venue.present?
+              = truncate(showing.venue.name, length: 30)
+            - else
+              %span.subdued —
+        .assoc-row
+          %dt Dates:
+          %dd= "#{showing.start_date.strftime('%b %d, %Y')} – #{showing.end_date.strftime('%b %d, %Y')}"
+        .assoc-row
+          %dt Prep / Tear:
+          %dd= "#{showing.prep_days}d / #{showing.teardown_days}d"
+        .assoc-row
+          %dt Reception:
+          %dd
+            - if showing.reception_date.present?
+              = showing.reception_date.strftime("%b %d, %Y %H:%M")
+            - else
+              %span.subdued —
+
+      - if preview_photo
+        .card-thumbnail-preview
+          %a{ href: showing_path(showing), title: "Open #{showing.title}" }
+            %img{ src: public_fn(preview_photo.filename), class: "image", alt: preview_photo.photo_dsc }
+
+  .card-actions
+    - if showing.deletable?
+      = button_to showing_path(showing), method: :delete, form: { data: { turbo_confirm: "Are you sure you want to delete showing \"#{showing.title}\"?" } }, onclick: "return confirm('Are you sure you want to delete showing \"#{j(showing.title)}\"?')", class: "btn-card btn-card-delete" do
+        Delete
+        %span.clear-glyph ✘
+    = link_to "Edit", edit_showing_path(showing), class: "btn-card"
+    = link_to "View »", showing_path(showing), class: "btn-card"

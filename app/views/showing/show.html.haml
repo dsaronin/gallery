@@ -1,0 +1,99 @@
+-# app/views/showing/show.html.haml
+- run_days = (@showing.end_date - @showing.start_date).to_i + 1
+- preview_photo = @showing.exhibition&.photos&.first
+.view-container#showing-show-view
+  .showing-card
+    .card-header-bar
+      .header-left
+        %h3.showing-title= @showing.title
+        = link_to "« showings", showing_index_path, class: "header-back-link"
+        = link_to "edit", edit_showing_path(@showing), class: "header-action-link"
+        - if @showing.deletable?
+          = button_to showing_path(@showing), method: :delete, form_class: "inline-action-form", form: { data: { turbo_confirm: "Are you sure you want to delete showing \"#{@showing.title}\"?" } }, onclick: "return confirm('Are you sure you want to delete showing \"#{j(@showing.title)}\"?')", class: "header-action-link btn-link-action" do
+            delete
+            %span.clear-glyph ✘
+
+      .header-right-group
+        .header-right
+          %span.showing-status-pill{ class: "status-#{@showing.status}" }= @showing.status.humanize
+          %span.run-dates= "#{@showing.start_date.strftime('%b %d, %Y')} – #{@showing.end_date.strftime('%b %d, %Y')}"
+          %span.showing-meta= "#{pluralize(run_days, 'day')} run"
+
+        - if preview_photo
+          .card-thumbnail-preview
+            %a{ href: exhibition_path(@showing.exhibition), title: "Open #{@showing.exhibition.title}" }
+              %img{ src: public_fn(preview_photo.filename), class: "image", alt: preview_photo.photo_dsc }
+
+    .showing-subcards-grid
+      -# Left Card: Schedule & Staging
+      .showing-subcard#showing-schedule-card
+        .card-header
+          %h4.card-title Schedule
+          %span.header-badge Staging & Dates
+
+        .card-body
+          %dl.detail-list
+            .detail-row
+              %dt Exhibition:
+              %dd
+                - if @showing.exhibition.present?
+                  = link_to @showing.exhibition.title, exhibition_path(@showing.exhibition)
+                - else
+                  %span.subdued —
+            .detail-row
+              %dt Venue:
+              %dd
+                - if @showing.venue.present?
+                  = link_to @showing.venue.name, venue_path(@showing.venue)
+                - else
+                  %span.subdued —
+            .detail-row
+              %dt Start date:
+              %dd= @showing.start_date.strftime("%B %d, %Y")
+            .detail-row
+              %dt End date:
+              %dd= @showing.end_date.strftime("%B %d, %Y")
+            .detail-row
+              %dt Prep / Tear:
+              %dd= "#{pluralize(@showing.prep_days, 'day')} prep / #{pluralize(@showing.teardown_days, 'day')} teardown"
+            .detail-row
+              %dt Reception:
+              %dd
+                - if @showing.reception_date.present?
+                  = @showing.reception_date.strftime("%B %d, %Y at %H:%M")
+                - else
+                  %span.subdued —
+            .detail-row.detail-row-notes
+              %dt Notes:
+              %dd
+                - if @showing.notes.present?
+                  = simple_format(@showing.notes)
+                - else
+                  %span.subdued —
+
+      -# Right Card: Operations & Venue Context
+      .showing-subcard#showing-operations-card
+        .card-header
+          %h4.card-title Operations
+          %span.header-badge Logistics & Attendance
+
+        .card-body
+          %dl.detail-list
+            .detail-row
+              %dt Status:
+              %dd= @showing.status.humanize
+            .detail-row
+              %dt Rental cost:
+              %dd= @showing.rental_cost.present? ? "$#{@showing.rental_cost}" : "—"
+            .detail-row
+              %dt Visitation:
+              %dd= @showing.visitation_count
+            .detail-row
+              %dt Showroom:
+              %dd= @showing.venue&.space_name.presence || "—"
+            .detail-row
+              %dt Wall size:
+              %dd= @showing.venue&.wall_linear_meters.present? ? "#{@showing.venue.wall_linear_meters} (m)" : "—"
+            .detail-row
+              %dt Coordinator:
+              %dd= @showing.venue&.contact_name.presence || "—"

@@ -1,0 +1,8 @@
+-# app/views/showing/new.html.haml
+.view-container#showing-form-view
+  .form-card
+    .card-header-bar
+      %h3.form-title New Showing
+      = link_to "« Showings", showing_index_path, class: "header-back-link"
+
+    = render "form"

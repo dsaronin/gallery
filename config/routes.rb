@@ -40,6 +40,7 @@ Rails.application.routes.draw do
   end
 
   resources :venue, controller: :venue
+  resources :showing, controller: :showing
 
   resources :category, only: [:create, :update, :destroy]
   resources :tag,      only: [:index, :create, :update, :destroy]

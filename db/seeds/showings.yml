@@ -1,0 +1,13 @@
+- title: "Mock Exhibition Run"
+  status: "scheduled"
+  start_date: "2026-12-01"
+  end_date: "2026-12-21"
+  prep_days: 2
+  teardown_days: 1
+  rental_cost: 0
+  reception_date: "2026-12-04 18:00:00"
+  visitation_count: 0
+  venue_name: "Mock Gallery"
+  notes: "Abstract staging run for rehearsal scheduling, lighting checks, and opening reception timeline."
+
+

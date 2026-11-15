@@ -140,7 +140,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
   end
 
   create_table "showings", force: :cascade do |t|
-    t.string "title"
+    t.string "title", null: false
     t.integer "status", default: 0, null: false
     t.date "start_date", null: false
     t.date "end_date", null: false
@@ -150,8 +150,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
     t.datetime "reception_date"
     t.integer "visitation_count", default: 0, null: false
     t.text "notes"
-    t.integer "exhibition_id", null: false
-    t.integer "venue_id", null: false
+    t.integer "exhibition_id"
+    t.integer "venue_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["exhibition_id"], name: "index_showings_on_exhibition_id"

@@ -1,0 +1,15 @@
+-# app/views/showing/index.html.haml
+.view-container#showings-index
+  .view-header
+    %h3.view-title Showings &emsp;
+    = link_to "⊞", root_path, class: "header-home", title: "Dashboard"
+    = link_to "+", new_showing_path, class: "header-fab", title: "Schedule New Showing"
+
+  - if @showings.empty?
+    .empty-state
+      %p No showings have been scheduled.
+      = link_to "Book Showing »", new_showing_path, class: "btn-card primary"
+  - else
+    .showing-grid
+      - @showings.each do |showing|
+        = render partial: "showing/card", locals: { showing: showing }

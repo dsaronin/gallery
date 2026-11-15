@@ -56,6 +56,7 @@ ActiveRecord::Base.transaction do
 
   # 5. Schedule Showing & Validate DateRangeValidatable
   showing = Showing.new(
+    title: "Expressions in Light — Opening Run",
     exhibition: exhibition,
     venue: venue,
     start_date: Date.current,

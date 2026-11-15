@@ -103,6 +103,37 @@ if File.exist?(venues_file)
   end
 end
 
+# 5. Showings
+showings_file = Rails.root.join("db", "seeds", "showings.yml")
+if File.exist?(showings_file)
+  showings = YAML.safe_load_file(showings_file) || []
+  puts "Loading Showings from #{showings_file.basename}..."
+
+  showings.each do |entry|
+    showing = Showing.find_or_initialize_by(title: entry["title"])
+    showing.status           = entry["status"] if entry["status"].present?
+    showing.start_date       = entry["start_date"]
+    showing.end_date         = entry["end_date"]
+    showing.prep_days        = entry.fetch("prep_days", ::Gallery::Environ::DEFAULT_PREP_DAYS)
+    showing.teardown_days    = entry.fetch("teardown_days", ::Gallery::Environ::DEFAULT_TEARDOWN_DAYS)
+    showing.rental_cost      = entry["rental_cost"]
+    showing.reception_date   = entry["reception_date"]
+    showing.visitation_count = entry.fetch("visitation_count", 0)
+    showing.notes            = entry["notes"]
+
+    if entry["venue_name"].present?
+      showing.venue = Venue.find_by(name: entry["venue_name"])
+    end
+
+    if showing.new_record?
+      showing.save!
+      puts "  [CREATE] Showing: #{showing.title} (#{showing.status}, #{showing.start_date}..#{showing.end_date})"
+    else
+      showing.save! if showing.changed?
+      puts "  [EXISTS] Showing: #{showing.title} (#{showing.status}, #{showing.start_date}..#{showing.end_date})"
+    end
+  end
+end
 
 puts "== Seeding Complete =="
 

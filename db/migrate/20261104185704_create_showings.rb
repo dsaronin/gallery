@@ -1,7 +1,7 @@
 class CreateShowings < ActiveRecord::Migration[7.1]
   def change
     create_table :showings do |t|
-      t.string     :title
+      t.string     :title, null: false
       t.integer    :status, null: false, default: 0
       t.date       :start_date, null: false
       t.date       :end_date, null: false
@@ -11,8 +11,8 @@ class CreateShowings < ActiveRecord::Migration[7.1]
       t.datetime   :reception_date
       t.integer    :visitation_count, null: false, default: 0
       t.text       :notes
-      t.references :exhibition, null: false, foreign_key: true, index: true
-      t.references :venue, null: false, foreign_key: true, index: true
+      t.references :exhibition, null: true, foreign_key: true, index: true
+      t.references :venue, null: true, foreign_key: true, index: true
 
       t.timestamps
     end
