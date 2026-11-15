@@ -1,0 +1,68 @@
+-# app/views/placard/show.html.haml
+- pd = @collection_placard_data
+- is_exhibition = @collection.is_a?(Exhibition)
+
+.view-container#placard-show-view
+  .placard-master-card
+    .card-header-bar
+      .header-left
+        %h3.placard-collection-title= pd.name
+        = link_to "« placards", placard_index_path, class: "header-back-link"
+        - if @collection.placard.present?
+          = link_to "edit", edit_placard_path(@collection.placard, target_type: @collection.class.name, target_id: @collection.id), class: "header-action-link"
+        - else
+          = link_to "edit", new_placard_path(target_type: @collection.class.name, target_id: @collection.id), class: "header-action-link"
+        = link_to "show", target_placard_itemcard_path(@collection), class: "header-action-link"
+
+      .header-right
+        %span.collection-type-pill{ class: (is_exhibition ? "type-exhibition" : "type-portfolio") }
+          = @collection.class.name
+        %span.item-count= "#{@item_entries.size} #{'placard'.pluralize(@item_entries.size)}"
+
+    .master-summary-body
+      %dl.master-meta-grid
+        .meta-cell
+          %dt Artist:
+          %dd{ class: placard_provenance_class(pd, :artist_name) }= pd.artist_name.presence || "—"
+        .meta-cell
+          %dt Medium:
+          %dd{ class: placard_provenance_class(pd, :medium) }= pd.medium.presence || "—"
+        .meta-cell
+          %dt Dimensions:
+          %dd{ class: placard_provenance_class(pd, :dimensions_display) }= pd.dimensions_display.presence || "—"
+        .meta-cell
+          %dt Edition:
+          %dd{ class: placard_provenance_class(pd, :edition_info) }= pd.edition_info.presence || "—"
+        .meta-cell
+          %dt Price:
+          %dd{ class: placard_provenance_class(pd, :price) }= format_placard_price(pd.price) || "—"
+        .meta-cell
+          %dt License:
+          %dd{ class: placard_provenance_class(pd, :cc_license) }= pd.cc_license_label
+
+    .thumbnail-grid-wrapper
+      - if @item_entries.empty?
+        .empty-items-note
+          %p No items have been curated into this #{@collection.class.name.downcase} yet.
+      - else
+        .thumbnail-grid.placard-thumbnail-grid
+          - @item_entries.each do |entry|
+            - item    = entry[:item]
+            - photo   = entry[:photo]
+            - item_pd = entry[:placard_data]
+            - has_override = entry[:placard].present?
+            .thumbnail.pseudo-placard-thumb{ class: ("has-direct-override" if has_override) }
+              = link_to target_placard_itemcard_path(item), class: "pseudo-placard-link", title: "Inspect Placard Card" do
+                .pseudo-placard-mini
+                  - if photo
+                    %img{ src: public_fn(photo.filename), class: "mini-thumb-img", alt: item_pd.title }
+                  .mini-placard-text
+                    .mini-title= truncate(item_pd.title.to_s, length: 24)
+                    .mini-meta= [item_pd.date_created_display, format_placard_price(item_pd.price)].compact.join(" • ")
+                    .mini-badge
+                      - if has_override
+                        %span.badge-direct Direct Override
+                      - else
+                        %span.badge-cascaded Cascaded
+
+              = link_to truncate(item_pd.title.to_s, length: 22), target_placard_itemcard_path(item), class: "photo-desc-link"

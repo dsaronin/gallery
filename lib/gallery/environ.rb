@@ -29,6 +29,7 @@ class Environ
 #----------------------------------------------------------
   require_relative 'environ/session_state'
   require_relative 'environ/cc_license'
+  require_relative 'environ/placard_data'
   require_relative 'environ/dictionaries'
 # +++++++++++++++++++++++++++++++++++++++++++++++++
 # +++++++++++++++++++++++++++++++++++++++++++++++++

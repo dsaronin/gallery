@@ -1,0 +1,42 @@
+-# app/views/placard/_card.html.haml
+- pd = collection.placard_data
+- item_count = collection.items_association.size
+- is_exhibition = collection.is_a?(Exhibition)
+
+.placard-collection-card
+  .card-header
+    %h4.card-title= truncate(pd.name.to_s, length: 32)
+    %span.collection-type-pill{ class: (is_exhibition ? "type-exhibition" : "type-portfolio") }
+      = collection.class.name
+
+  .card-body
+    %dl.assoc-list
+      .assoc-row
+        %dt Collection:
+        %dd= is_exhibition ? collection.title : collection.name
+      .assoc-row
+        %dt Artist:
+        %dd= pd.artist_name.presence || "—"
+      .assoc-row
+        %dt Medium:
+        %dd
+          - if pd.medium.present?
+            = truncate(pd.medium, length: 42)
+          - else
+            %span.subdued —
+      .assoc-row
+        %dt License:
+        %dd= pd.cc_license_label
+      .assoc-row
+        %dt Items:
+        %dd= "#{item_count} #{'item'.pluralize(item_count)}"
+      .assoc-row
+        %dt Override:
+        %dd
+          - if collection.placard.present?
+            %span.override-badge.is-persisted Custom Master Placard
+          - else
+            %span.override-badge.is-inherited Inherited / Default
+
+  .card-actions
+    = link_to "Placards »", collection_placard_show_path(collection), class: "btn-card primary"

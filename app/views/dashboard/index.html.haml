@@ -47,6 +47,7 @@
       .card-actions
         - if gallery_state.current_exhibition
           = link_to "Continue", exhibition_path(gallery_state.current_exhibition), class: "btn-card primary"
+        = link_to "Placards »", placard_index_path, class: "btn-card"
         = link_to "Exhibitions »", exhibition_index_path, class: "btn-card"
 
     -# ----------------------------------------------------

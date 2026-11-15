@@ -2,7 +2,9 @@ require "yaml"
 
 puts "== Seeding Database =="
 
+# ***********************************************************
 # 1. Categories
+# ***********************************************************
 categories_file = Rails.root.join("db", "seeds", "categories.yml")
 if File.exist?(categories_file)
   categories = YAML.safe_load_file(categories_file) || []
@@ -19,7 +21,9 @@ if File.exist?(categories_file)
   end
 end
 
+# ***********************************************************
 # 2. Tags
+# ***********************************************************
 tags_file = Rails.root.join("db", "seeds", "tags.yml")
 if File.exist?(tags_file)
   tags = YAML.safe_load_file(tags_file) || []
@@ -45,7 +49,9 @@ if File.exist?(tags_file)
   end
 end
 
+# ***********************************************************
 # 3. Talents
+# ***********************************************************
 talents_file = Rails.root.join("db", "seeds", "talents.yml")
 if File.exist?(talents_file)
   talents = YAML.safe_load_file(talents_file) || []
@@ -72,7 +78,9 @@ if File.exist?(talents_file)
   end
 end
 
+# ***********************************************************
 # 4. Venues
+# ***********************************************************
 venues_file = Rails.root.join("db", "seeds", "venues.yml")
 if File.exist?(venues_file)
   venues = YAML.safe_load_file(venues_file) || []
@@ -103,7 +111,9 @@ if File.exist?(venues_file)
   end
 end
 
+# ***********************************************************
 # 5. Showings
+# ***********************************************************
 showings_file = Rails.root.join("db", "seeds", "showings.yml")
 if File.exist?(showings_file)
   showings = YAML.safe_load_file(showings_file) || []
@@ -135,5 +145,50 @@ if File.exist?(showings_file)
   end
 end
 
+# ***********************************************************
+# 6. Placards (Mock Portfolio Placard)
+# ***********************************************************
+placards_file = Rails.root.join("db", "seeds", "placards.yml")
+if File.exist?(placards_file)
+  placards = YAML.safe_load_file(placards_file) || []
+  puts "Loading Placards from #{placards_file.basename}..."
+
+  placards.each do |entry|
+    placard = Placard.find_or_initialize_by(title: entry["title"])
+    placard.subtitle           = entry["subtitle"]
+    placard.curatorial_notes   = entry["curatorial_notes"]
+    placard.artist_name        = entry["artist_name"]
+    placard.medium             = entry["medium"]
+    placard.dimensions_display = entry["dimensions_display"]
+    placard.edition_info       = entry["edition_info"]
+    placard.price              = entry["price"]
+    placard.sales_notes        = entry["sales_notes"]
+    placard.cc_license         = entry["cc_license"] if entry["cc_license"].present?
+    placard.copyright_year     = entry["copyright_year"]
+    placard.copyright_holder   = entry["copyright_holder"]
+
+    if placard.new_record?
+      placard.save!
+      puts "  [CREATE] Placard: #{placard.title}"
+    else
+      placard.save! if placard.changed?
+      puts "  [EXISTS] Placard: #{placard.title}"
+    end
+
+    if entry["portfolio_name"].present?
+      portfolio = Portfolio.find_or_initialize_by(name: entry["portfolio_name"])
+      portfolio.title ||= entry["portfolio_title"] || entry["title"]
+      portfolio.placard = placard
+      portfolio.save!
+      puts "  [LINKED] Portfolio '#{portfolio.name}' -> Placard ##{placard.id}"
+    end
+  end
+end
+
+puts "== Seeding Complete =="
+
+# ***********************************************************
+
+# ***********************************************************
 puts "== Seeding Complete =="
 

@@ -4,6 +4,7 @@
 # ----------------------------------------------------------
 
 class Photo < ApplicationRecord
+  include Placardable
 
   belongs_to :catalog
   has_one :talent, through: :catalog
@@ -56,6 +57,31 @@ class Photo < ApplicationRecord
     stars.positive?
   end
 
+  def rated?
+    stars.positive?
+  end
+
+  # Placardable baseline ITEM_FIELDS derived from intrinsic Photo metadata
+  def placard_attributes
+    {
+      title:                photo_dsc.presence || File.basename(filename.to_s, ".*").presence,
+      date_created_display: photodate&.year&.to_s,
+      location_display:     formatted_coordinates,
+      curatorial_notes:     notes.presence
+    }.compact
+  end
+
+  def placard_provenance_status
+    :intrinsic
+  end
+
+  private
+
+  def formatted_coordinates
+    return nil unless latitude.present? && longitude.present?
+
+    format("%.4f, %.4f", latitude, longitude)
+  end
 
 
 # ------------------------------------------------------------------------------

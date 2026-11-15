@@ -42,6 +42,18 @@ Rails.application.routes.draw do
   resources :venue, controller: :venue
   resources :showing, controller: :showing
 
+  resources :placard, controller: :placard do
+    collection do
+      get :collection_show, action: :show
+      get :itemcard
+      get :display
+    end
+    member do
+      get :itemcard
+      get :display
+    end
+  end
+
   resources :category, only: [:create, :update, :destroy]
   resources :tag,      only: [:index, :create, :update, :destroy]
 

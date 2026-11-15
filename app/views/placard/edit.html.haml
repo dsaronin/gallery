@@ -1,0 +1,8 @@
+-# app/views/placard/edit.html.haml
+.view-container#placard-form-view
+  .form-card
+    .card-header-bar
+      %h3.form-title= "Edit Placard: #{@placard.title.presence || @upstream_data&.title || 'Override'}"
+      = link_to "« Item Card", target_placard_itemcard_path(@target, @placard), class: "header-back-link"
+
+    = render "form"

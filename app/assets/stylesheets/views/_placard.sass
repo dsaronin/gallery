@@ -1,0 +1,704 @@
+// app/assets/stylesheets/views/_placard.sass
+@use "../colors"
+@use "../materialdesign" as md
+
+// ----------------------------------------------------
+// Placards Index View (<Collection> Cards)
+// ----------------------------------------------------
+#placards-index
+  width: 100%
+  box-sizing: border-box
+  padding: 0.8em 0.5em
+  max-width: 1440px
+  margin: 0 auto
+
+  .view-header
+    display: flex
+    align-items: center
+    margin-bottom: 1.2em
+    padding: 0 0.2em
+
+    .view-title
+      margin: 0
+      font-size: 1.4rem
+      font-weight: 900
+      color: colors.$BG_HEADER
+
+    .header-home
+      +md.MD_HOME_NAV
+
+    .header-fab
+      +md.MD_FAB
+
+  .empty-state
+    +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
+    padding: 2em
+    text-align: center
+    display: flex
+    flex-direction: column
+    align-items: center
+    gap: 1em
+
+  .placard-collection-grid
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(320px, 620px))
+    gap: 1em
+    width: 100%
+    box-sizing: border-box
+
+  .placard-collection-card
+    +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
+
+    .collection-type-pill
+      font-size: 0.65rem
+      font-weight: bold
+      text-transform: uppercase
+      padding: 0.2em 0.55em
+      +md.BEVEL_CORNER(3px)
+
+      &.type-portfolio
+        background-color: colors.$colorSecondary100
+        color: colors.$colorSecondary900
+
+      &.type-exhibition
+        background-color: colors.$BASIC_BG
+        color: colors.$BASIC_FG
+
+    .assoc-list
+      margin: 0
+      padding: 0
+      display: flex
+      flex-direction: column
+      gap: 0.35em
+      width: 100%
+
+    .assoc-row
+      display: flex
+      flex-direction: row
+      align-items: baseline
+      font-size: 0.80rem
+      line-height: 1.35
+
+      dt
+        min-width: 7.5em
+        flex-shrink: 0
+        font-weight: 900
+        text-transform: lowercase
+        color: colors.$BG_HEADER
+        margin: 0
+
+      dd
+        margin: 0
+        flex-grow: 1
+        min-width: 0
+        color: colors.$colorBGray700
+
+        .subdued
+          font-style: italic
+          color: colors.$colorBGray400
+
+        .override-badge
+          font-size: 0.70rem
+          font-weight: bold
+          padding: 0.1em 0.45em
+          +md.BEVEL_CORNER(3px)
+
+          &.is-persisted
+            background-color: colors.$colorSecondaryAccent100
+            color: colors.$colorSecondaryAccent700
+
+          &.is-inherited
+            background-color: colors.$colorBGray200
+            color: colors.$colorBGray700
+
+    .btn-card
+      +md.MD_BUTTON
+
+// ----------------------------------------------------
+// Placard Show View (Master Header + Pseudo-Placard Grid)
+// ----------------------------------------------------
+#placard-show-view
+  width: 100%
+  box-sizing: border-box
+  padding: 0.8em 0.5em
+  max-width: 1440px
+  margin: 0 auto
+
+  .placard-master-card
+    +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
+    padding: 0.6em 1.2em 1.2em 1.2em
+
+    .card-header-bar
+      display: flex
+      justify-content: space-between
+      align-items: flex-start
+      border-bottom: 2px solid colors.$colorBGray200
+      padding-bottom: 0.6em
+      margin-bottom: 1em
+
+      .header-left
+        display: inline-flex
+        align-items: baseline
+        gap: 1.4em
+        padding-top: 0.5em
+
+        .placard-collection-title
+          margin: 0
+          font-size: 1.3rem
+          font-weight: 900
+          color: colors.$BG_HEADER
+
+        .header-back-link, .header-action-link
+          font-size: 0.8rem
+          font-weight: bold
+          color: colors.$colorSecondary900
+          text-decoration: none
+          &:hover
+            text-decoration: underline
+
+      .header-right
+        display: inline-flex
+        flex-direction: column
+        align-items: flex-end
+        gap: 0.25em
+
+        .collection-type-pill
+          font-size: 0.70rem
+          font-weight: bold
+          padding: 0.15em 0.5em
+          +md.BEVEL_CORNER(3px)
+
+          &.type-portfolio
+            background-color: colors.$colorSecondary100
+            color: colors.$colorSecondary900
+
+          &.type-exhibition
+            background-color: colors.$BASIC_BG
+            color: colors.$BASIC_FG
+
+        .item-count
+          font-size: 0.75rem
+          font-weight: bold
+          color: colors.$colorBGray700
+
+    .master-summary-body
+      background-color: colors.$colorBGray050
+      border: 1px solid colors.$colorBGray200
+      padding: 0.75em 1em
+      margin-bottom: 1.2em
+      +md.MD_CORNER(4px)
+
+      .master-meta-grid
+        display: grid
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))
+        gap: 0.6em 1.2em
+        margin: 0
+
+        .meta-cell
+          display: flex
+          flex-direction: row
+          align-items: baseline
+          gap: 0.45em
+          font-size: 0.80rem
+
+          dt
+            font-weight: 900
+            text-transform: lowercase
+            color: colors.$BG_HEADER
+            margin: 0
+
+          dd
+            margin: 0
+
+    .placard-thumbnail-grid
+      .pseudo-placard-thumb
+        width: 170px
+        min-height: 155px
+        padding: 0.45em
+        background-color: colors.$colorBGray050
+        border: 1px solid colors.$colorBGray200
+        +md.MD_CORNER(4px)
+        display: flex
+        flex-direction: column
+        justify-content: space-between
+
+        &.has-direct-override
+          border-left: 3px solid colors.$BASIC_BG
+
+        .pseudo-placard-link
+          text-decoration: none
+          color: inherit
+          display: block
+
+        .pseudo-placard-mini
+          display: flex
+          flex-direction: column
+          gap: 0.35em
+
+          .mini-thumb-img
+            width: 100%
+            height: 75px
+            object-fit: cover
+            border: 1px solid colors.$colorBGray200
+
+          .mini-placard-text
+            text-align: left
+
+            .mini-title
+              font-size: 0.75rem
+              font-weight: bold
+              color: colors.$BG_HEADER
+              line-height: 1.2
+
+            .mini-meta
+              font-size: 0.65rem
+              color: colors.$colorBGray600
+              margin-top: 0.15em
+
+            .mini-badge
+              margin-top: 0.25em
+
+              .badge-direct, .badge-cascaded
+                font-size: 0.58rem
+                font-weight: bold
+                padding: 0.1em 0.35em
+                +md.BEVEL_CORNER(2px)
+
+              .badge-direct
+                background-color: colors.$BASIC_BG
+                color: colors.$BASIC_FG
+
+              .badge-cascaded
+                background-color: colors.$colorSecondary100
+                color: colors.$colorSecondary900
+
+// ----------------------------------------------------
+// Provenance Color Coding (Direct vs Cascaded)
+// ----------------------------------------------------
+.placard-val-direct
+  color: colors.$BG_HEADER
+  font-weight: 700
+
+.placard-val-cascaded
+  color: colors.$colorSecondary800
+  font-style: italic
+
+.placard-val-empty
+  color: colors.$colorBGray400
+
+// ----------------------------------------------------
+// Placard Itemcard View (Administrative Full Card)
+// ----------------------------------------------------
+#placard-itemcard-view
+  width: 100%
+  box-sizing: border-box
+  padding: 0.8em 0.5em
+  max-width: 1440px
+  margin: 0 auto
+
+  .placard-detail-card
+    +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
+    padding: 0.6em 1.2em 1.2em 1.2em
+
+    .card-header-bar
+      display: flex
+      justify-content: space-between
+      align-items: flex-start
+      border-bottom: 2px solid colors.$colorBGray200
+      padding-bottom: 0.6em
+      margin-bottom: 1.2em
+
+      .header-left
+        display: inline-flex
+        align-items: baseline
+        gap: 1.4em
+        padding-top: 0.5em
+
+        .placard-title
+          margin: 0
+          font-size: 1.3rem
+          font-weight: 900
+          color: colors.$BG_HEADER
+
+        .inline-action-form
+          display: inline
+          margin: 0
+          padding: 0
+
+        .header-back-link, .header-action-link
+          font-size: 0.8rem
+          font-weight: bold
+          color: colors.$colorSecondary900
+          text-decoration: none
+          &:hover
+            text-decoration: underline
+
+          &.primary-action
+            color: colors.$BASIC_BG
+
+        .btn-link-action
+          background: none
+          border: none
+          padding: 0
+          margin: 0
+          font-family: inherit
+          cursor: pointer
+          display: inline-flex
+          align-items: baseline
+          gap: 0.25em
+
+          .clear-glyph
+            color: colors.$TURKIYE_RED
+
+      .header-right
+        display: inline-flex
+        flex-direction: column
+        align-items: flex-end
+        gap: 0.25em
+
+        .provenance-legend
+          display: inline-flex
+          gap: 0.5em
+
+          .legend-chip
+            font-size: 0.65rem
+            font-weight: bold
+            padding: 0.12em 0.45em
+            +md.BEVEL_CORNER(3px)
+
+            &.direct
+              background-color: colors.$colorBGray200
+              color: colors.$BG_HEADER
+
+            &.cascaded
+              background-color: colors.$colorSecondary100
+              color: colors.$colorSecondary900
+
+        .target-meta
+          font-size: 0.65rem
+          font-family: monospace
+          color: colors.$colorBGray500
+
+    .placard-subcards-grid
+      display: grid
+      grid-template-columns: 1fr 1fr
+      gap: 1.2em
+      align-items: stretch
+
+      @media (max-width: 767px)
+        grid-template-columns: 1fr
+
+    .placard-subcard
+      +md.MD_CARD(colors.$colorBGray050, colors.$colorBGray200)
+
+      .detail-list
+        margin: 0
+        padding: 0
+        display: flex
+        flex-direction: column
+        gap: 0.45em
+
+      .detail-row
+        display: flex
+        flex-direction: row
+        align-items: baseline
+        font-size: 0.85rem
+        line-height: 1.4
+
+        dt
+          min-width: 9em
+          flex-shrink: 0
+          font-weight: 900
+          text-transform: lowercase
+          color: colors.$BG_HEADER
+          margin: 0
+
+        dd
+          margin: 0
+          flex-grow: 1
+          min-width: 0
+          word-break: break-word
+
+          .prov-tag
+            display: inline-block
+            margin-left: 0.5em
+            font-size: 0.62rem
+            font-style: normal
+            font-weight: bold
+            padding: 0.05em 0.4em
+            background-color: colors.$colorBGray100
+            color: colors.$colorBGray600
+            +md.BEVEL_CORNER(2px)
+
+          .subdued
+            font-style: italic
+            color: colors.$colorBGray500
+
+      .detail-row-notes
+        margin-top: 0.35em
+        padding-top: 0.5em
+        border-top: 1px solid colors.$colorBGray200
+
+        dd p
+          margin: 0
+          padding: 0
+          font-size: 0.85rem
+          line-height: 1.4
+
+// ----------------------------------------------------
+// Placard Display View (WYSIWYG Physical Wall Card)
+// ----------------------------------------------------
+#placard-display-view
+  width: 100%
+  box-sizing: border-box
+  padding: 1em 0.5em
+  max-width: 760px
+  margin: 0 auto
+
+  .display-toolbar
+    display: flex
+    justify-content: space-between
+    align-items: center
+    margin-bottom: 1em
+
+    .btn-card
+      +md.MD_BUTTON
+
+    .toolbar-hint
+      font-size: 0.72rem
+      font-style: italic
+      color: colors.$colorBGray500
+
+  .wall-placard-sheet
+    display: flex
+    justify-content: center
+    padding: 1.5em
+    background-color: colors.$colorBGray100
+    +md.MD_CORNER(6px)
+
+  .wall-placard-card
+    width: 100%
+    max-width: 540px
+    background-color: #ffffff
+    border: 1px solid colors.$colorBGray300
+    box-shadow: md.$elevation_4dp
+    padding: 2.2em 2.5em
+    box-sizing: border-box
+    color: #1a1a1a
+    display: flex
+    flex-direction: column
+    gap: 0.9em
+
+    .wall-artist
+      font-size: 0.95rem
+      font-weight: 700
+      letter-spacing: 0.04em
+      text-transform: uppercase
+      color: #333333
+
+    .wall-title-block
+      display: flex
+      align-items: baseline
+      flex-wrap: wrap
+      gap: 0.5em
+
+      .wall-title
+        margin: 0
+        padding: 0
+        font-size: 1.35rem
+        font-weight: 900
+        font-style: italic
+        color: #111111
+
+      .wall-year
+        font-size: 0.95rem
+        font-weight: 400
+        color: #444444
+
+    .wall-subtitle
+      font-size: 0.9rem
+      font-weight: 600
+      color: #444444
+      margin-top: -0.5em
+
+    .wall-location
+      font-size: 0.82rem
+      color: #555555
+
+    .wall-specs-block
+      border-top: 1px solid colors.$colorBGray200
+      padding-top: 0.75em
+      display: flex
+      flex-direction: column
+      gap: 0.25em
+      font-size: 0.82rem
+      color: #333333
+
+    .wall-narrative
+      border-top: 1px solid colors.$colorBGray200
+      padding-top: 0.75em
+
+      p
+        margin: 0
+        padding: 0
+        font-size: 0.85rem
+        line-height: 1.55
+        color: #222222
+
+    .wall-footer-block
+      border-top: 1px solid colors.$colorBGray200
+      padding-top: 0.75em
+      display: flex
+      justify-content: space-between
+      align-items: flex-end
+      flex-wrap: wrap
+      gap: 0.75em
+      font-size: 0.75rem
+      color: #555555
+
+      .wall-commercial
+        display: flex
+        flex-direction: column
+        gap: 0.2em
+
+        .wall-price
+          font-weight: 700
+          font-size: 0.85rem
+          color: #111111
+
+      .wall-rights
+        display: flex
+        flex-direction: column
+        align-items: flex-end
+        gap: 0.2em
+
+// ----------------------------------------------------
+// Placard New & Edit Form View
+// ----------------------------------------------------
+#placard-form-view
+  width: 100%
+  box-sizing: border-box
+  padding: 1.5em 0.5em
+  max-width: 720px
+  margin: 0 auto
+
+  .form-card
+    +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
+    padding: 1.5em
+
+    .card-header-bar
+      display: flex
+      justify-content: space-between
+      align-items: baseline
+      border-bottom: 2px solid colors.$colorBGray200
+      padding-bottom: 0.6em
+      margin-bottom: 1.2em
+
+      .form-title
+        margin: 0
+        font-size: 1.3rem
+        font-weight: 900
+        color: colors.$BG_HEADER
+
+      .header-back-link
+        font-size: 0.8rem
+        font-weight: bold
+        color: colors.$colorSecondary900
+        text-decoration: none
+        &:hover
+          text-decoration: underline
+
+    .material-form
+      display: flex
+      flex-direction: column
+      gap: 1em
+
+  .form-error-panel
+    background-color: colors.$colorSecondary050
+    border: 1px solid colors.$colorSecondary200
+    padding: 0.8em 1em
+    +md.BEVEL_CORNER(4px)
+    margin-bottom: 0.5em
+
+    h5
+      margin: 0 0 0.4em 0
+      font-size: 0.85rem
+      color: colors.$TURKIYE_RED
+
+    ul
+      margin: 0
+      padding-left: 1.2em
+      li
+        font-size: 0.75rem
+        color: colors.$colorBGray800
+
+  .form-grid
+    display: grid
+    grid-template-columns: 1fr 1fr
+    gap: 1.2em
+    width: 100%
+
+    @media (max-width: 550px)
+      grid-template-columns: 1fr
+
+    .form-field
+      display: flex
+      flex-direction: column
+      gap: 0.3em
+
+      &.full-width
+        grid-column: 1 / -1
+
+      label
+        width: 100%
+        font-size: 0.75rem
+        font-weight: bold
+        color: colors.$BG_HEADER
+        margin: 0
+
+      .form-input
+        width: 100%
+        box-sizing: border-box
+        padding: 0.45em 0.6em
+        font-size: 0.85rem
+        border: 1px solid colors.$colorBGray300
+        background-color: colors.$colorBGray200
+        color: colors.$BG_HEADER
+        +md.BEVEL_CORNER(3px)
+        text-align: left
+
+        &:focus
+          outline: none
+          border: 2px solid colors.$colorSecondary500
+
+      .form-select
+        height: 2.2em
+
+      .form-textarea
+        font-family: inherit
+        resize: vertical
+
+  .form-actions-bar
+    display: flex
+    justify-content: flex-end
+    align-items: center
+    gap: 1em
+    margin-top: 1em
+    padding-top: 1em
+    border-top: 1px solid colors.$colorBGray200
+
+    .btn-cancel
+      font-size: 0.8rem
+      font-weight: bold
+      color: colors.$colorBGray600
+      text-decoration: none
+      &:hover
+        color: colors.$BG_HEADER
+        text-decoration: underline
+
+    .btn-submit
+      +md.MD_BUTTON
+      font-size: 0.85rem
+      padding: 0.4em 1em
+      width: auto !important
+      cursor: pointer

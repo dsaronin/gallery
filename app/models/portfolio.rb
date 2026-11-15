@@ -1,5 +1,6 @@
 class Portfolio < ApplicationRecord
   include Curatable
+  include Placardable
 
   enum :status, ::Gallery::Environ::PORTFOLIO_STATUSES, default: :draft
 
@@ -33,6 +34,32 @@ class Portfolio < ApplicationRecord
   def items_association
     portfolio_items
   end
+# **********************************************************
+
+  # Class-level fallback PlacardData factory when no persisted Placard exists
+  def self.default_placard_data(portfolio, preceding_data = nil)
+    base = preceding_data || ::Gallery::Environ::PlacardData.new
+    title_seed = base.merge(
+      Placard,
+      { title: portfolio.title.presence || portfolio.name },
+      status: :default
+    )
+    attrs = {
+      artist_name:      ::Gallery::Environ::DEFAULT_ARTIST_NAME,
+      copyright_holder: ::Gallery::Environ::DEFAULT_ARTIST_NAME,
+      copyright_year:   Date.current.year,
+      cc_license:       ::Gallery::Environ::CcLicense::DICTIONARY[:all_rights_reserved]
+    }
+    title_seed.merge(portfolio, attrs, status: :default)
+  end
+
+  # Resolves COLLECTION partition cascade: default fallback -> persisted Portfolio#placard
+  def placard_data(preceding_data = nil)
+    base = self.class.default_placard_data(self, preceding_data)
+    placard ? placard.placard_data(base) : base
+  end
+
+# **********************************************************
 
 # **********************************************************
   private

@@ -1,5 +1,6 @@
 class Exhibition < ApplicationRecord
   include Curatable
+  include Placardable
 
   enum :status, ::Gallery::Environ::EXHIBITION_STATUSES, default: :draft
   enum :sales_policy, ::Gallery::Environ::SALES_POLICIES, default: :not_for_sale
@@ -35,8 +36,41 @@ class Exhibition < ApplicationRecord
     ::Gallery::Environ::MAX_EXHIBITION_SIZE
   end
 
+# *******************************************************
   def items_association
     exhibition_items
+  end
+# *******************************************************
+
+  # Class-level fallback PlacardData factory when no persisted Placard exists
+  def self.default_placard_data(exhibition, preceding_data = nil)
+    base = preceding_data || ::Gallery::Environ::PlacardData.new
+    title_seed = base.merge(
+      Placard,
+      { title: exhibition.title },
+      status: :default
+    )
+    attrs = {
+      artist_name:      ::Gallery::Environ::DEFAULT_ARTIST_NAME,
+      copyright_holder: ::Gallery::Environ::DEFAULT_ARTIST_NAME,
+      copyright_year:   Date.current.year,
+      cc_license:       ::Gallery::Environ::CcLicense::DICTIONARY[:all_rights_reserved]
+    }
+    title_seed.merge(exhibition, attrs, status: :default)
+  end
+
+  # Resolves COLLECTION partition cascade:
+  # Portfolio.placard -> Exhibition fallback -> persisted Exhibition#placard
+  def placard_data(preceding_data = nil)
+    upstream = if portfolio
+                 port_pd = portfolio.placard_data(preceding_data)
+                 # Carry exhibition title as :default unless overridden by Exhibition#placard
+                 port_pd.merge(Placard, { title: title }, status: :default)
+               else
+                 self.class.default_placard_data(self, preceding_data)
+               end
+
+    placard ? placard.placard_data(upstream) : upstream
   end
 # *******************************************************
 

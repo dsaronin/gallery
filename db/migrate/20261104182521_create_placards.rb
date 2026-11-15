@@ -12,7 +12,7 @@ class CreatePlacards < ActiveRecord::Migration[7.1]
       t.string  :edition_info
       t.integer :price
       t.string  :sales_notes
-      t.integer :cc_license, null: false, default: 0
+      t.integer :cc_license
       t.integer :copyright_year
       t.string  :copyright_holder
 

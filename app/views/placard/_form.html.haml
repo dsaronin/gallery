@@ -1,0 +1,73 @@
+= form_for @placard, url: (@placard.persisted? ? placard_path(@placard) : placard_index_path), html: { class: "material-form" } do |f|
+  - if @target
+    = hidden_field_tag :target_type, @target.class.name
+    = hidden_field_tag :target_id, @target.id
+
+  - if @placard.errors.any?
+    .form-error-panel
+      %h5= "#{pluralize(@placard.errors.count, 'error')} prevented saving:"
+      %ul
+        - @placard.errors.full_messages.each do |message|
+          %li= message
+
+  .form-grid
+    .form-field.full-width
+      = f.label :title, "Placard Title"
+      = f.text_field :title, class: "form-input", placeholder: (@upstream_data&.title.presence || "Leave blank to inherit title")
+
+    .form-field.full-width
+      = f.label :subtitle, "Subtitle"
+      = f.text_field :subtitle, class: "form-input", placeholder: (@upstream_data&.subtitle.presence || "Optional series or work subtitle")
+
+    .form-field
+      = f.label :artist_name, "Artist Name"
+      = f.text_field :artist_name, class: "form-input", placeholder: (@upstream_data&.artist_name.presence || "Inherited artist")
+
+    .form-field
+      = f.label :medium, "Print Medium"
+      = f.text_field :medium, class: "form-input", placeholder: (@upstream_data&.medium.presence || "e.g. Archival Pigment Print")
+
+    .form-field
+      = f.label :dimensions_display, "Dimensions"
+      = f.text_field :dimensions_display, class: "form-input", placeholder: (@upstream_data&.dimensions_display.presence || "e.g. 40 x 60 cm")
+
+    .form-field
+      = f.label :price, "Price ($)"
+      = f.text_field :price, inputmode: "numeric", pattern: "[0-9]*", class: "form-input", placeholder: (@upstream_data&.price.present? ? @upstream_data.price.to_s : "Leave blank to inherit")
+
+    - if @placard.persisted?
+      .form-field
+        = f.label :date_created_display, "Date / Year Created"
+        = f.text_field :date_created_display, class: "form-input", placeholder: (@upstream_data&.date_created_display.presence || "e.g. 2025")
+
+      .form-field
+        = f.label :location_display, "Location"
+        = f.text_field :location_display, class: "form-input", placeholder: (@upstream_data&.location_display.presence || "e.g. Oakland, CA")
+
+      .form-field
+        = f.label :edition_info, "Edition Info"
+        = f.text_field :edition_info, class: "form-input", placeholder: (@upstream_data&.edition_info.presence || "e.g. Edition of 10 + 2 AP")
+
+      .form-field
+        = f.label :cc_license, "Creative Commons License"
+        = f.select :cc_license, [["— Inherit (#{@upstream_data&.cc_license_label || 'All Rights Reserved'}) —", ""]] + Gallery::Environ::CcLicense.options_for_select, { selected: @placard.cc_license.to_s }, { class: "form-input form-select" }
+
+      .form-field
+        = f.label :copyright_year, "Copyright Year"
+        = f.text_field :copyright_year, inputmode: "numeric", pattern: "[0-9]*", class: "form-input", placeholder: (@upstream_data&.copyright_year.to_s.presence || Date.current.year.to_s)
+
+      .form-field
+        = f.label :copyright_holder, "Copyright Holder"
+        = f.text_field :copyright_holder, class: "form-input", placeholder: (@upstream_data&.copyright_holder.presence || Gallery::Environ::DEFAULT_ARTIST_NAME)
+
+      .form-field.full-width
+        = f.label :sales_notes, "Sales & Framing Notes"
+        = f.text_field :sales_notes, class: "form-input", placeholder: (@upstream_data&.sales_notes.presence || "Framing, shipping, or gallery commission notes")
+
+      .form-field.full-width
+        = f.label :curatorial_notes, "Curatorial / Artist Narrative"
+        = f.text_area :curatorial_notes, rows: 4, class: "form-input form-textarea", placeholder: (@upstream_data&.curatorial_notes.presence || "Story or context behind the photograph...")
+
+  .form-actions-bar
+    = link_to "Cancel", (@target ? target_placard_itemcard_path(@target, @placard) : placard_index_path), class: "btn-cancel"
+    = f.submit (@placard.persisted? ? "Update Placard »" : "Create Placard »"), class: "btn-submit"

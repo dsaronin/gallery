@@ -102,7 +102,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
     t.string "edition_info"
     t.integer "price"
     t.string "sales_notes"
-    t.integer "cc_license", default: 0, null: false
+    t.integer "cc_license"
     t.integer "copyright_year"
     t.string "copyright_holder"
     t.datetime "created_at", null: false

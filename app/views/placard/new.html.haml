@@ -1,0 +1,8 @@
+-# app/views/placard/new.html.haml
+.view-container#placard-form-view
+  .form-card
+    .card-header-bar
+      %h3.form-title= @target ? "New Placard: #{@target.class.name}" : "New Placard"
+      = link_to "« Back", (@target ? target_placard_itemcard_path(@target) : placard_index_path), class: "header-back-link"
+
+    = render "form"

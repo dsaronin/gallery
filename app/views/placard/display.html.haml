@@ -1,0 +1,49 @@
+-# app/views/placard/display.html.haml
+- pd = @placard_data
+- back_path = target_placard_itemcard_path(@target, @placard)
+
+.view-container#placard-display-view
+  .display-toolbar
+    = link_to "« Item Card", back_path, class: "btn-card"
+    %span.toolbar-hint Print Preview — Physical Gallery Wall Placard
+
+  .wall-placard-sheet
+    .wall-placard-card
+      - if pd.artist_name.present?
+        .wall-artist= pd.artist_name
+
+      .wall-title-block
+        %h2.wall-title= pd.title.presence || "Untitled"
+        - if pd.date_created_display.present?
+          %span.wall-year= pd.date_created_display
+
+      - if pd.subtitle.present?
+        .wall-subtitle= pd.subtitle
+
+      - if pd.location_display.present?
+        .wall-location= pd.location_display
+
+      .wall-specs-block
+        - if pd.medium.present?
+          .wall-medium= pd.medium
+        - if pd.dimensions_display.present?
+          .wall-dimensions= pd.dimensions_display
+        - if pd.edition_info.present?
+          .wall-edition= pd.edition_info
+
+      - if pd.curatorial_notes.present?
+        .wall-narrative
+          = simple_format(pd.curatorial_notes)
+
+      .wall-footer-block
+        .wall-commercial
+          - if pd.price.present?
+            %span.wall-price= format_placard_price(pd.price)
+          - if pd.sales_notes.present?
+            %span.wall-sales-notes= pd.sales_notes
+
+        .wall-rights
+          - copy_line = ["©", pd.copyright_year, pd.copyright_holder].compact.join(" ")
+          - if copy_line != "©"
+            %span.wall-copyright= copy_line
+          %span.wall-license= pd.cc_license_label
