@@ -65,6 +65,7 @@ class Photo < ApplicationRecord
   def placard_attributes
     {
       title:                photo_dsc.presence || File.basename(filename.to_s, ".*").presence,
+      subject:              talent&.talent_name.presence,
       date_created_display: photodate&.year&.to_s,
       location_display:     formatted_coordinates,
       curatorial_notes:     notes.presence

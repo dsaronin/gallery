@@ -66,6 +66,7 @@ module Gallery
       ITEM_FIELDS = %i[
         title
         subtitle
+        subject
         curatorial_notes
         date_created_display
         location_display
@@ -82,6 +83,14 @@ module Gallery
         copyright_year
         copyright_holder
       ].freeze
+
+      SOURCE_LABELS = {
+        "Photo"         => "Photo",
+        "Portfolio"     => "Portfolio",
+        "Exhibition"    => "Exhibition",
+        "PortfolioItem" => "InheritedItem"
+      }.freeze
+
 
       ALL_FIELDS = (ITEM_FIELDS + COLLECTION_FIELDS).freeze
 
@@ -189,7 +198,7 @@ module Gallery
       # @param raw_attrs [Hash] candidate attribute hash (falls back to `source.placard_attributes`)
       # @param status [Symbol] provenance status for newly applied fields (:direct, :intrinsic, :default)
       # @return [Gallery::Environ::PlacardData]
-      def merge(source, raw_attrs = nil, status: :direct)
+      def merge(source, raw_attrs = nil, status: :direct, provenance_source: nil)
         raise ArgumentError, "Invalid provenance status: #{status}" unless VALID_STATUSES.include?(status)
 
         attrs = if !raw_attrs.nil?
@@ -211,8 +220,9 @@ module Gallery
           new_provenance[field] = meta.merge(status: :cascaded)
         end
 
-        source_class_name = source.is_a?(Class) ? source.name : source.class.name
-        source_record_id  = source.respond_to?(:id) ? source.id : nil
+        attr_source       = provenance_source || source
+        source_class_name = attr_source.is_a?(Class) ? attr_source.name : attr_source.class.name
+        source_record_id  = attr_source.respond_to?(:id) ? attr_source.id : nil
 
         attrs.each do |key, val|
           field = key.to_sym
@@ -266,8 +276,7 @@ module Gallery
         meta = provenance_for(field)
         return nil unless meta
 
-        base = meta[:source_class]
-        meta[:source_id] ? "#{base}##{meta[:source_id]}" : base
+        SOURCE_LABELS.fetch(meta[:source_class], meta[:source_class])
       end
 
       # Resolves the Creative Commons license symbol key (defaults to :all_rights_reserved

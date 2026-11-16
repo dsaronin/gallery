@@ -29,6 +29,8 @@
           %span.wall-secondary-title= pd.title.presence || "Untitled"
           - if pd.date_created_display.present?
             %span.wall-year= raw("&emsp;#{h(pd.date_created_display)}")
+        - if pd.subject.present?
+          .wall-subject= "Subject: #{pd.subject}"
       - else
         .wall-primary-title-line
           %span.wall-primary-title= pd.title.presence || "Untitled"
@@ -36,6 +38,8 @@
             %span.wall-year= raw("&emsp;#{h(pd.date_created_display)}")
         - if pd.artist_name.present?
           .wall-secondary-artist= pd.artist_name
+        - if pd.subject.present?
+          .wall-subject= "Subject: #{pd.subject}"
 
       .wall-spacer-1x
 

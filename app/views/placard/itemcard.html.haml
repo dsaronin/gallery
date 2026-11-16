@@ -10,7 +10,7 @@
   .placard-detail-card
     .card-header-bar
       .header-left
-        %h3.placard-title= pd.title.presence || "Untitled Placard"
+        %h3.placard-title= pd.title.presence || "Untitled"
         = link_to "« back", back_path, class: "header-back-link"
         = link_to "edit", edit_link_path, class: "header-action-link"
         - if @placard.present?
@@ -20,41 +20,37 @@
         = link_to "display", target_placard_display_path(@target, @placard), class: "header-action-link primary-action"
 
       .header-right
-        .provenance-legend
-          %span.legend-chip.direct Direct
-          %span.legend-chip.cascaded Cascaded / Inherited
-        - if @target
-          %span.target-meta= "#{@target.class.name} ##{@target.id}"
+        - if @preview_photo
+          .card-thumbnail-preview
+            %a{ href: photo_path(@preview_photo), title: (@preview_photo.photo_dsc.presence || @preview_photo.filename) }
+              %img{ src: public_fn(@preview_photo.filename), class: "image", alt: (@preview_photo.photo_dsc.presence || @preview_photo.filename) }
 
     .placard-subcards-grid
       -# Left Subcard: Work Identity & Curatorial Narrative (ITEM_FIELDS)
       .placard-subcard#placard-identity-card
         .card-header
-          %h4.card-title Work & Narrative
-          %span.header-badge Item Track
+          %h4.card-title Item Narrative
 
         .card-body
           %dl.detail-list
-            - %i[title subtitle date_created_display location_display curatorial_notes].each do |field|
-              - label_map = { title: "Title", subtitle: "Subtitle", date_created_display: "Year / Date", location_display: "Location", curatorial_notes: "Notes" }
+            - %i[title subtitle subject date_created_display location_display curatorial_notes].each do |field|
+              - label_map = { title: "Title", subtitle: "Subtitle", subject: "Model", date_created_display: "Year", location_display: "Location", curatorial_notes: "Notes" }
               .detail-row{ class: ("detail-row-notes" if field == :curatorial_notes) }
                 %dt= "#{label_map[field]}:"
-                %dd{ class: placard_provenance_class(pd, field) }
+                %dd{ class: placard_provenance_class(pd, field), title: placard_provenance_tooltip(pd, field) }
                   - val = pd.public_send(field)
                   - if val.present?
                     - if field == :curatorial_notes
                       = simple_format(val)
                     - else
                       = val
-                    %span.prov-tag= placard_provenance_badge(pd, field)
                   - else
                     %span.subdued —
 
       -# Right Subcard: Physical Specs, Pricing & Licensing (COLLECTION_FIELDS)
       .placard-subcard#placard-specs-card
         .card-header
-          %h4.card-title Specs, Pricing & License
-          %span.header-badge Collection Track
+          %h4.card-title Collection Metadata
 
         .card-body
           %dl.detail-list
@@ -62,22 +58,18 @@
               - label_map = { artist_name: "Artist", medium: "Medium", dimensions_display: "Dimensions", edition_info: "Edition", price: "Price", sales_notes: "Sales Notes", cc_license: "CC License", copyright_year: "Copyright Year", copyright_holder: "Copyright Holder" }
               .detail-row
                 %dt= "#{label_map[field]}:"
-                %dd{ class: placard_provenance_class(pd, field) }
+                %dd{ class: placard_provenance_class(pd, field), title: placard_provenance_tooltip(pd, field) }
                   - if field == :price
                     - formatted = format_placard_price(pd.price)
                     - if formatted.present?
                       = formatted
-                      %span.prov-tag= placard_provenance_badge(pd, field)
                     - else
                       %span.subdued —
                   - elsif field == :cc_license
                     = pd.cc_license_label
-                    - if pd.present_field?(:cc_license)
-                      %span.prov-tag= placard_provenance_badge(pd, field)
                   - else
                     - val = pd.public_send(field)
                     - if val.present?
                       = val
-                      %span.prov-tag= placard_provenance_badge(pd, field)
                     - else
                       %span.subdued —

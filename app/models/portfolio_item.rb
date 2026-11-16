@@ -16,7 +16,7 @@ class PortfolioItem < ApplicationRecord
   def placard_data(preceding_data = nil)
     col_pd  = portfolio ? portfolio.placard_data(preceding_data) : (preceding_data || ::Gallery::Environ::PlacardData.new)
     item_pd = photo ? photo.placard_data(col_pd) : col_pd
-    placard ? placard.placard_data(item_pd) : item_pd
+    placard ? placard.placard_data(item_pd, provenance_source: self) : item_pd
   end
 
 end  # class

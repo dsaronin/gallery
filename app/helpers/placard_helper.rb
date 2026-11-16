@@ -18,17 +18,13 @@ module PlacardHelper
     end
   end
 
-  # Returns concise human-readable provenance badge label for administrative display
-  def placard_provenance_badge(placard_data, field)
+  # Returns concise human-readable provenance description for hover tooltips
+  # Returns concise human-readable provenance label for hover tooltips
+  def placard_provenance_tooltip(placard_data, field)
     meta = placard_data&.provenance_for(field)
     return nil unless meta && placard_data.present_field?(field)
 
-    case meta[:status]
-    when :direct    then "Direct"
-    when :intrinsic then "Photo"
-    when :default   then "Default"
-    when :cascaded  then "Cascaded (#{meta[:source_class]})"
-    end
+    meta[:status] == :direct ? "Direct" : placard_data.source_label_for(field)
   end
 
   # Builds path to Placard#show for a Portfolio or Exhibition

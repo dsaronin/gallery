@@ -280,8 +280,8 @@
   font-weight: 700
 
 .placard-val-cascaded
-  color: colors.$colorSecondary800
-  font-style: italic
+  color: colors.$colorSecondary900
+  font-style: normal
 
 .placard-val-empty
   color: colors.$colorBGray400
@@ -352,32 +352,30 @@
 
       .header-right
         display: inline-flex
-        flex-direction: column
-        align-items: flex-end
-        gap: 0.25em
+        align-items: center
 
-        .provenance-legend
-          display: inline-flex
-          gap: 0.5em
+        .card-thumbnail-preview
+          width: md.$thumbCellWidth
+          flex-shrink: 0
+          display: flex
+          justify-content: center
+          align-items: center
+          background-color: colors.$colorBGray050
+          padding: 3px
+          +md.BEVEL_CORNER(3px)
+          border: 1px solid colors.$colorBGray100
 
-          .legend-chip
-            font-size: 0.65rem
-            font-weight: bold
-            padding: 0.12em 0.45em
-            +md.BEVEL_CORNER(3px)
+          a
+            display: block
+            line-height: 0
 
-            &.direct
-              background-color: colors.$colorBGray200
-              color: colors.$BG_HEADER
-
-            &.cascaded
-              background-color: colors.$colorSecondary100
-              color: colors.$colorSecondary900
-
-        .target-meta
-          font-size: 0.65rem
-          font-family: monospace
-          color: colors.$colorBGray500
+          img
+            width: md.$thumbImageWidth
+            height: auto
+            max-height: 80px
+            object-fit: cover
+            display: block
+            border-radius: 2px
 
     .placard-subcards-grid
       display: grid
@@ -419,17 +417,6 @@
           min-width: 0
           word-break: break-word
 
-          .prov-tag
-            display: inline-block
-            margin-left: 0.5em
-            font-size: 0.62rem
-            font-style: normal
-            font-weight: bold
-            padding: 0.05em 0.4em
-            background-color: colors.$colorBGray100
-            color: colors.$colorBGray600
-            +md.BEVEL_CORNER(2px)
-
           .subdued
             font-style: italic
             color: colors.$colorBGray500
@@ -438,12 +425,6 @@
         margin-top: 0.35em
         padding-top: 0.5em
         border-top: 1px solid colors.$colorBGray200
-
-        dd p
-          margin: 0
-          padding: 0
-          font-size: 0.85rem
-          line-height: 1.4
 
 // ----------------------------------------------------
 // Placard Display View (WYSIWYG Physical Wall Card)
@@ -553,6 +534,15 @@
         font-weight: 400
         font-style: normal
         color: colors.$colorBlack
+
+    // Subject / Model Attribution: 12pt Regular (1em)
+    .wall-subject
+      margin-top: 0.35em
+      font-size: 0.9em
+      font-weight: 400
+      font-style: italic
+      line-height: 1.25
+      color: colors.$colorBlack
 
     // Blank line spacers (14pt = 1.1667em at 12pt base)
     .wall-spacer-1x

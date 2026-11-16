@@ -23,10 +23,10 @@ class ExhibitionItem < ApplicationRecord
     source_pi = matching_portfolio_item
     if source_pi&.placard
       pi_item_attrs = source_pi.placard.placard_attributes.slice(*::Gallery::Environ::PlacardData::ITEM_FIELDS)
-      item_pd = item_pd.merge(source_pi, pi_item_attrs, status: :direct) if pi_item_attrs.any?
+      item_pd = item_pd.merge(source_pi, pi_item_attrs, status: :cascaded) if pi_item_attrs.any?
     end
 
-    placard ? placard.placard_data(item_pd) : item_pd
+    placard ? placard.placard_data(item_pd, provenance_source: self) : item_pd
   end
 # *****************************************************************
 

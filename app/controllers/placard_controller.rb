@@ -45,6 +45,7 @@ class PlacardController < ApplicationController
 
     @placard_data = @target ? @target.placard_data : @placard.placard_data
     @parent_collection = parent_collection_for(@target)
+    @preview_photo     = (@target || @placard)&.placard_photo
   end
 
   # GET /placard/:id/display or GET /placard/display?target_type=...&target_id=...
@@ -188,7 +189,7 @@ class PlacardController < ApplicationController
                   end
       if source_pi&.placard
         pi_attrs = source_pi.placard.placard_attributes.slice(*::Gallery::Environ::PlacardData::ITEM_FIELDS)
-        item_pd = item_pd.merge(source_pi, pi_attrs, status: :direct) if pi_attrs.any?
+        item_pd = item_pd.merge(source_pi, pi_attrs, status: :cascaded) if pi_attrs.any?
       end
       item_pd
     else
@@ -210,6 +211,7 @@ class PlacardController < ApplicationController
       :subtitle,
       :curatorial_notes,
       :artist_name,
+      :subject,
       :date_created_display,
       :location_display,
       :medium,

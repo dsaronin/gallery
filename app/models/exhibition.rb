@@ -45,11 +45,12 @@ class Exhibition < ApplicationRecord
   # Class-level fallback PlacardData factory when no persisted Placard exists
   def self.default_placard_data(exhibition, preceding_data = nil)
     base = preceding_data || ::Gallery::Environ::PlacardData.new
-    title_seed = base.merge(
-      Placard,
-      { title: exhibition.title },
-      status: :default
-    )
+    item_seed_attrs = {
+      title:   exhibition.title,
+      subject: exhibition.talent&.talent_name.presence
+    }.compact
+
+    title_seed = base.merge(Placard, item_seed_attrs, status: :default, provenance_source: exhibition)
     attrs = {
       artist_name:      ::Gallery::Environ::DEFAULT_ARTIST_NAME,
       copyright_holder: ::Gallery::Environ::DEFAULT_ARTIST_NAME,
@@ -64,13 +65,16 @@ class Exhibition < ApplicationRecord
   def placard_data(preceding_data = nil)
     upstream = if portfolio
                  port_pd = portfolio.placard_data(preceding_data)
-                 # Carry exhibition title as :default unless overridden by Exhibition#placard
-                 port_pd.merge(Placard, { title: title }, status: :default)
+                 item_seed_attrs = {
+                   title:   title,
+                   subject: talent&.talent_name.presence
+                 }.compact
+                 port_pd.merge(Placard, item_seed_attrs, status: :default, provenance_source: self)
                else
                  self.class.default_placard_data(self, preceding_data)
                end
 
-    placard ? placard.placard_data(upstream) : upstream
+    placard ? placard.placard_data(upstream, provenance_source: self) : upstream
   end
 # *******************************************************
 

@@ -5,6 +5,7 @@ class CreatePlacards < ActiveRecord::Migration[7.1]
       t.string  :subtitle
       t.text    :curatorial_notes
       t.string  :artist_name
+      t.string  :subject
       t.string  :date_created_display
       t.string  :location_display
       t.string  :medium

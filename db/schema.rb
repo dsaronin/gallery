@@ -95,6 +95,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
     t.string "subtitle"
     t.text "curatorial_notes"
     t.string "artist_name"
+    t.string "subject"
     t.string "date_created_display"
     t.string "location_display"
     t.string "medium"

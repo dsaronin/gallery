@@ -15,9 +15,9 @@ module Placardable
   #
   # @param preceding_data [Gallery::Environ::PlacardData, nil]
   # @return [Gallery::Environ::PlacardData]
-  def placard_data(preceding_data = nil)
+  def placard_data(preceding_data = nil, provenance_source: nil)
     base = preceding_data || ::Gallery::Environ::PlacardData.new
-    base.merge(self, placard_attributes, status: placard_provenance_status)
+    base.merge(self, placard_attributes, status: placard_provenance_status, provenance_source: provenance_source)
   end
 
   # Override in including models to supply the raw hash of placard attributes.
@@ -30,4 +30,25 @@ module Placardable
   def placard_provenance_status
     :direct
   end
-end
+
+  # Resolves the representative Photo for any Placardable model:
+  # - Collection (Portfolio / Exhibition): first curated item's photo
+  # - Item (PortfolioItem / ExhibitionItem): self.photo
+  # - Photo: self
+  # - Placard: delegates to its primary attached owner
+  def placard_photo
+    if is_a?(Photo)
+      self
+    elsif respond_to?(:items_association)
+      items_association.first&.photo
+    elsif respond_to?(:photo)
+      photo
+    elsif is_a?(Placard)
+      owner = exhibition_items.first || portfolio_items.first || exhibitions.first || portfolios.first
+      owner&.placard_photo
+    end
+  end
+
+# ***********************************
+end   # module
+

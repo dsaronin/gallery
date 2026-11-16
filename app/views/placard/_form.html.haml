@@ -37,6 +37,9 @@
 
     - if @placard.persisted?
       .form-field
+        = f.label :subject, "Model"
+        = f.text_field :subject, class: "form-input", placeholder: (@upstream_data&.subject.presence || "Inherited from photo/exhibition talent")
+      .form-field
         = f.label :date_created_display, "Date / Year Created"
         = f.text_field :date_created_display, class: "form-input", placeholder: (@upstream_data&.date_created_display.presence || "e.g. 2025")
 

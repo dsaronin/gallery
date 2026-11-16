@@ -42,7 +42,7 @@ class Environ
   APP_NAME_HEAD = "#{APP_NAME}: "
 
 # Application identity & attribution defaults
-  DEFAULT_ARTIST_NAME   = "daudi".freeze
+  DEFAULT_ARTIST_NAME   = "Kishindo".freeze
   DEFAULT_PREP_DAYS     = 1
   DEFAULT_TEARDOWN_DAYS = 1
 

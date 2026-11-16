@@ -12,8 +12,8 @@ PlacardData = Gallery::Environ::PlacardData
 # 1. Verify field partitions are mutually exclusive and cover all 14 columns
 overlap = PlacardData::ITEM_FIELDS & PlacardData::COLLECTION_FIELDS
 raise "Expected ITEM_FIELDS and COLLECTION_FIELDS to be disjoint, got #{overlap}" unless overlap.empty?
-raise "Expected 14 total fields, got #{PlacardData::ALL_FIELDS.size}" unless PlacardData::ALL_FIELDS.size == 14
-puts "1. Disjoint ITEM_FIELDS (5) and COLLECTION_FIELDS (9) verified."
+raise "Expected 15 total fields, got #{PlacardData::ALL_FIELDS.size}" unless PlacardData::ALL_FIELDS.size == 15
+puts "1. Disjoint ITEM_FIELDS (6) and COLLECTION_FIELDS (9) verified."
 
 # 2. Verify Ruby class introspection across domain types
 raise "Expected Photo => :item"          unless PlacardData.partition_for(Photo) == :item

@@ -42,7 +42,8 @@ class Portfolio < ApplicationRecord
     title_seed = base.merge(
       Placard,
       { title: portfolio.title.presence || portfolio.name },
-      status: :default
+      status: :default,
+      provenance_source: portfolio
     )
     attrs = {
       artist_name:      ::Gallery::Environ::DEFAULT_ARTIST_NAME,
@@ -56,7 +57,7 @@ class Portfolio < ApplicationRecord
   # Resolves COLLECTION partition cascade: default fallback -> persisted Portfolio#placard
   def placard_data(preceding_data = nil)
     base = self.class.default_placard_data(self, preceding_data)
-    placard ? placard.placard_data(base) : base
+    placard ? placard.placard_data(base, provenance_source: self) : base
   end
 
 # **********************************************************
