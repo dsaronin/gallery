@@ -52,13 +52,6 @@ module Gallery
       canceled:    3
     }.freeze
 
-  SHOWING_STATUSES = {
-      scheduled:   0,
-      in_progress: 1,
-      completed:   2,
-      canceled:    3
-    }.freeze
-
     PLACARD_DISPLAY_MODES = {
       solo:  0,
       group: 1
