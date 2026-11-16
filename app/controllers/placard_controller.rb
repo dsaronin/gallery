@@ -52,8 +52,10 @@ class PlacardController < ApplicationController
   def display
     return unless @target || @placard
 
-    @placard_data = @target ? @target.placard_data : @placard.placard_data
+    @placard_data      = @target ? @target.placard_data : @placard.placard_data
     @parent_collection = parent_collection_for(@target)
+    @display_mode      = helpers.normalize_placard_display_mode(params[:mode])
+    @paper_size        = helpers.normalize_placard_paper_size(params[:size])
   end
 
   # GET /placard/new?target_type=...&target_id=...

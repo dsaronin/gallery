@@ -49,6 +49,17 @@ class Environ
 # Operational curation capacity bounds
     MAX_PORTFOLIO_SIZE  = 60
     MAX_EXHIBITION_SIZE = 40
+
+# Physical wall placard paper dimensions & proportional scales (A6 / 4x6 baseline)
+  DEFAULT_PLACARD_DISPLAY_MODE = :solo
+  DEFAULT_PLACARD_PAPER_SIZE   = :a6
+
+  PLACARD_PAPER_SIZES = {
+    a6: { label: "4×6 (A6)", width: "6in",   height: "4in",   scale: 1.0   }.freeze,
+    a5: { label: "A5",       width: "210mm", height: "148mm", scale: 1.414 }.freeze,
+    a7: { label: "A7",       width: "105mm", height: "74mm",  scale: 0.707 }.freeze
+  }.freeze
+  #  ------------------------------------------------------------
   #  ------------------------------------------------------------
   attr_reader :photo_path, :photo_base, :photo_source, :target_pictures_path, :initialized_at, :app_name, :app_version
   #  ------------------------------------------------------------

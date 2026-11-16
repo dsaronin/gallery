@@ -452,126 +452,175 @@
   width: 100%
   box-sizing: border-box
   padding: 1em 0.5em
-  max-width: 760px
+  max-width: 960px
   margin: 0 auto
 
   .display-toolbar
     display: flex
     justify-content: space-between
     align-items: center
+    flex-wrap: wrap
+    gap: 0.75em
     margin-bottom: 1em
+
+    .toolbar-left, .toolbar-controls, .control-group
+      display: inline-flex
+      align-items: center
+      flex-wrap: wrap
+      gap: 0.45em
+
+    .toolbar-controls
+      gap: 1em
+
+    .control-label
+      font-size: 0.72rem
+      font-weight: bold
+      color: colors.$colorBGray600
 
     .btn-card
       +md.MD_BUTTON
 
-    .toolbar-hint
-      font-size: 0.72rem
-      font-style: italic
-      color: colors.$colorBGray500
-
   .wall-placard-sheet
     display: flex
     justify-content: center
-    padding: 1.5em
-    background-color: colors.$colorBGray100
+    padding: 2em 1em
+    background-color: colors.$colorGray200
     +md.MD_CORNER(6px)
 
   .wall-placard-card
-    width: 100%
-    max-width: 540px
-    background-color: #ffffff
-    border: 1px solid colors.$colorBGray300
-    box-shadow: md.$elevation_4dp
-    padding: 2.2em 2.5em
-    box-sizing: border-box
-    color: #1a1a1a
-    display: flex
-    flex-direction: column
-    gap: 0.9em
+    &.size-a6
+      +md.WALL_PLACARD(a6)
 
-    .wall-artist
-      font-size: 0.95rem
-      font-weight: 700
-      letter-spacing: 0.04em
-      text-transform: uppercase
-      color: #333333
+    &.size-a5
+      +md.WALL_PLACARD(a5)
 
-    .wall-title-block
-      display: flex
-      align-items: baseline
-      flex-wrap: wrap
-      gap: 0.5em
+    &.size-a7
+      +md.WALL_PLACARD(a7)
 
-      .wall-title
-        margin: 0
-        padding: 0
-        font-size: 1.35rem
-        font-weight: 900
+    // Solo Mode Hierarchy:
+    // Title: 32pt Bold Italic (2.6667em), Year: 14pt Regular (1.1667em)
+    // Artist: 16pt Regular (1.3333em), 90% grey ($colorGray950)
+    .wall-primary-title-line
+      margin: 0
+      padding: 0
+      line-height: 1.15
+      color: colors.$colorBlack
+
+      .wall-primary-title
+        font-size: 2.6667em
+        font-weight: 700
         font-style: italic
-        color: #111111
+        color: colors.$colorBlack
 
       .wall-year
-        font-size: 0.95rem
+        font-size: 1.1667em
         font-weight: 400
-        color: #444444
+        font-style: normal
+        color: colors.$colorBlack
 
+    .wall-secondary-artist
+      margin-top: 0.55em
+      font-size: 1.3333em
+      font-weight: 400
+      font-style: normal
+      color: colors.$colorGray950
+
+    // Group Mode Hierarchy:
+    // Artist: 32pt Bold (2.6667em)
+    // Title: 16pt Italic (1.3333em), Year: 14pt Regular (1.1667em)
+    .wall-primary-artist
+      margin: 0
+      padding: 0
+      line-height: 1.15
+      font-size: 2.6667em
+      font-weight: 700
+      font-style: normal
+      color: colors.$colorBlack
+
+    .wall-secondary-title-line
+      margin-top: 0.55em
+      line-height: 1.25
+      color: colors.$colorBlack
+
+      .wall-secondary-title
+        font-size: 1.3333em
+        font-weight: 400
+        font-style: italic
+        color: colors.$colorBlack
+
+      .wall-year
+        font-size: 1.1667em
+        font-weight: 400
+        font-style: normal
+        color: colors.$colorBlack
+
+    // Blank line spacers (14pt = 1.1667em at 12pt base)
+    .wall-spacer-1x
+      height: 1.1667em
+      width: 100%
+      flex-shrink: 0
+
+    .wall-spacer-2x
+      height: 2.3333em
+      width: 100%
+      flex-shrink: 0
+
+    // Medium & Canvas Size: 12pt Regular (1em)
+    .wall-body-line
+      font-size: 1em
+      font-weight: 400
+      color: colors.$colorBlack
+      margin: 0
+      padding: 0
+
+    // Price: 14pt Bold (1.1667em)
+    .wall-price
+      font-size: 1.1667em
+      font-weight: 700
+      color: colors.$colorBlack
+      margin: 0
+      padding: 0
+
+    // Subtitle: 14pt Regular (1.1667em) on line before Notes
     .wall-subtitle
-      font-size: 0.9rem
-      font-weight: 600
-      color: #444444
-      margin-top: -0.5em
+      font-size: 1.1667em
+      font-weight: 400
+      font-style: italic
+      color: colors.$colorBlack
+      margin: 0 0 0.35em 0
+      padding: 0
 
-    .wall-location
-      font-size: 0.82rem
-      color: #555555
-
-    .wall-specs-block
-      border-top: 1px solid colors.$colorBGray200
-      padding-top: 0.75em
-      display: flex
-      flex-direction: column
-      gap: 0.25em
-      font-size: 0.82rem
-      color: #333333
-
-    .wall-narrative
-      border-top: 1px solid colors.$colorBGray200
-      padding-top: 0.75em
+    // Notes: 12pt Regular (1em)
+    .wall-notes
+      width: 100%
+      margin: 0
+      padding: 0
 
       p
-        margin: 0
+        margin: 0 0 0.6em 0
         padding: 0
-        font-size: 0.85rem
-        line-height: 1.55
-        color: #222222
+        font-size: 1em
+        font-weight: 400
+        line-height: 1.4
+        color: colors.$colorBlack
 
-    .wall-footer-block
-      border-top: 1px solid colors.$colorBGray200
-      padding-top: 0.75em
-      display: flex
-      justify-content: space-between
-      align-items: flex-end
-      flex-wrap: wrap
-      gap: 0.75em
-      font-size: 0.75rem
-      color: #555555
+        &:last-child
+          margin-bottom: 0
 
-      .wall-commercial
-        display: flex
-        flex-direction: column
-        gap: 0.2em
+@media print
+  #header, #footer, #flash-message, #placard-display-view .display-toolbar
+    display: none !important
 
-        .wall-price
-          font-weight: 700
-          font-size: 0.85rem
-          color: #111111
+  body, .container, #wrapper, #content, #placard-display-view, #placard-display-view .wall-placard-sheet
+    margin: 0 !important
+    padding: 0 !important
+    width: 100% !important
+    max-width: none !important
+    background: colors.$colorWhite !important
 
-      .wall-rights
-        display: flex
-        flex-direction: column
-        align-items: flex-end
-        gap: 0.2em
-
+  #placard-display-view .wall-placard-card
+    box-shadow: none !important
+    margin: 0 auto !important
 // ----------------------------------------------------
 // Placard New & Edit Form View
 // ----------------------------------------------------

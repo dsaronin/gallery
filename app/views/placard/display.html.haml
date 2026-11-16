@@ -4,46 +4,56 @@
 
 .view-container#placard-display-view
   .display-toolbar
-    = link_to "« Item Card", back_path, class: "btn-card"
-    %span.toolbar-hint Print Preview — Physical Gallery Wall Placard
+    .toolbar-left
+      = link_to "« Item Card", back_path, class: "btn-card"
+
+    .toolbar-controls
+      .control-group
+        %span.control-label Mode:
+        - Gallery::Environ::PLACARD_DISPLAY_MODES.each_key do |mode_sym|
+          - mode_key = mode_sym.to_s
+          = link_to "#{mode_key.humanize} Exhibition", placard_display_variant_path(@target, @placard, mode: mode_key, size: @paper_size), class: ("btn-card" + (@display_mode == mode_key ? " primary" : ""))
+
+      .control-group
+        %span.control-label Size:
+        - Gallery::Environ::PLACARD_PAPER_SIZES.each do |size_sym, spec|
+          - size_key = size_sym.to_s
+          = link_to spec[:label], placard_display_variant_path(@target, @placard, mode: @display_mode, size: size_key), class: ("btn-card" + (@paper_size == size_key ? " primary" : ""))
 
   .wall-placard-sheet
-    .wall-placard-card
-      - if pd.artist_name.present?
-        .wall-artist= pd.artist_name
+    .wall-placard-card{ class: ["mode-#{@display_mode}", "size-#{@paper_size}"] }
+      - if @display_mode == "group"
+        - if pd.artist_name.present?
+          .wall-primary-artist= pd.artist_name
+        .wall-secondary-title-line
+          %span.wall-secondary-title= pd.title.presence || "Untitled"
+          - if pd.date_created_display.present?
+            %span.wall-year= raw("&emsp;#{h(pd.date_created_display)}")
+      - else
+        .wall-primary-title-line
+          %span.wall-primary-title= pd.title.presence || "Untitled"
+          - if pd.date_created_display.present?
+            %span.wall-year= raw("&emsp;#{h(pd.date_created_display)}")
+        - if pd.artist_name.present?
+          .wall-secondary-artist= pd.artist_name
 
-      .wall-title-block
-        %h2.wall-title= pd.title.presence || "Untitled"
-        - if pd.date_created_display.present?
-          %span.wall-year= pd.date_created_display
+      .wall-spacer-1x
+
+      - if pd.medium.present?
+        .wall-body-line= pd.medium
+      - if pd.dimensions_display.present?
+        .wall-body-line= pd.dimensions_display
+
+      .wall-spacer-1x
+
+      - if pd.price.present?
+        .wall-price= format_placard_price(pd.price)
+
+      .wall-spacer-2x
 
       - if pd.subtitle.present?
         .wall-subtitle= pd.subtitle
 
-      - if pd.location_display.present?
-        .wall-location= pd.location_display
-
-      .wall-specs-block
-        - if pd.medium.present?
-          .wall-medium= pd.medium
-        - if pd.dimensions_display.present?
-          .wall-dimensions= pd.dimensions_display
-        - if pd.edition_info.present?
-          .wall-edition= pd.edition_info
-
       - if pd.curatorial_notes.present?
-        .wall-narrative
+        .wall-notes
           = simple_format(pd.curatorial_notes)
-
-      .wall-footer-block
-        .wall-commercial
-          - if pd.price.present?
-            %span.wall-price= format_placard_price(pd.price)
-          - if pd.sales_notes.present?
-            %span.wall-sales-notes= pd.sales_notes
-
-        .wall-rights
-          - copy_line = ["©", pd.copyright_year, pd.copyright_holder].compact.join(" ")
-          - if copy_line != "©"
-            %span.wall-copyright= copy_line
-          %span.wall-license= pd.cc_license_label

@@ -69,4 +69,35 @@ module PlacardHelper
 
     "$#{number_with_delimiter(price)}"
   end
+
+  def normalize_placard_display_mode(raw)
+    sym = raw.to_s.downcase.to_sym
+    if ::Gallery::Environ::PLACARD_DISPLAY_MODES.key?(sym)
+      sym.to_s
+    else
+      ::Gallery::Environ::DEFAULT_PLACARD_DISPLAY_MODE.to_s
+    end
+  end
+
+  def normalize_placard_paper_size(raw)
+    sym = raw.to_s.downcase.to_sym
+    if ::Gallery::Environ::PLACARD_PAPER_SIZES.key?(sym)
+      sym.to_s
+    else
+      ::Gallery::Environ::DEFAULT_PLACARD_PAPER_SIZE.to_s
+    end
+  end
+
+  # Builds path to Placard#display preserving mode and paper size params
+  def placard_display_variant_path(target, placard, mode:, size:)
+    if target
+      display_placard_index_path(target_type: target.class.name, target_id: target.id, mode: mode, size: size)
+    elsif placard
+      display_placard_path(placard, mode: mode, size: size)
+    else
+      placard_index_path
+    end
+  end
+
+# ****************************************************
 end   # class
