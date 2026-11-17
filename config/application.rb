@@ -22,6 +22,7 @@ module Gallery
     config.photo_path   = env.photo_path
     config.photo_base   = env.photo_base
     config.photo_source = env.photo_source
+    config.photo_dotfile = env.photo_dotfile
 
     config.public_file_server.enabled = true
  

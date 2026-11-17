@@ -52,18 +52,20 @@ class CatalogController < ApplicationController
       redirect_to catalog_index_path and return
     end
 
-    dirpath = file_to_path(@my_catalog)
+    dirpath, dotfile_warning = resolve_catalog_dirpath(@my_catalog)
 
     # Policy A: Directory must exist and contain at least one JPEG
     unless Dir.exist?(dirpath)
-      flash[:alert] = "Ingestion aborted: Directory '#{dirpath}' does not exist."
+      abort_msg = "Ingestion aborted: Directory '#{dirpath}' does not exist."
+      flash[:alert] = [dotfile_warning, abort_msg].compact.join(" ")
       flash[:show_flash] = true
       redirect_to catalog_index_path and return
     end
 
     photo_files = Dir.glob(File.join(dirpath, "*.{jpg,JPG,jpeg,JPEG}"))
     if photo_files.empty?
-      flash[:alert] = "Ingestion aborted: No JPEG images found in '#{@my_catalog}'."
+      abort_msg = "Ingestion aborted: No JPEG images found in '#{@my_catalog}'."
+      flash[:alert] = [dotfile_warning, abort_msg].compact.join(" ")
       flash[:show_flash] = true
       redirect_to catalog_index_path and return
     end
@@ -73,6 +75,7 @@ class CatalogController < ApplicationController
       c.fpath = dirpath
       c.name  = custom_name if custom_name.present?
     end
+    catalog.update!(fpath: dirpath) if catalog.fpath != dirpath
 
     # Update session state hook
     gallery_state.current_catalog_id = catalog.id
@@ -108,6 +111,7 @@ class CatalogController < ApplicationController
       ingested_count += 1
     end
 
+    flash[:alert]  = "#{dotfile_warning} " if dotfile_warning.present?
     flash[:notice] = "Ingested catalog '#{catalog.name}' (#{ingested_count} photos loaded)."
     flash[:show_flash] = true
     redirect_to catalog_index_path

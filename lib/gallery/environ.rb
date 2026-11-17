@@ -69,7 +69,7 @@ class Environ
   }.freeze
   #  ------------------------------------------------------------
   #  ------------------------------------------------------------
-  attr_reader :photo_path, :photo_base, :photo_source, :target_pictures_path, :initialized_at, :app_name, :app_version
+  attr_reader :photo_path, :photo_base, :photo_source, :photo_dotfile, :target_pictures_path, :initialized_at, :app_name, :app_version
   #  ------------------------------------------------------------
 
   #  ------------------------------------------------------------
@@ -80,6 +80,7 @@ class Environ
     @photo_path           = ENV["GALLERY_PATH"] || ENV["HOME"] || "/"
     @photo_base           = ENV["GALLERY_BASE"] || "Pictures"
     @photo_source         = ENV["GALLERY_SOURCE"] || "darktable_exported"
+    @photo_dotfile        = ENV["GALLERY_DOTFILE"] || ".gallery"
     @target_pictures_path = File.join(@photo_path, @photo_base)
     @initialized_at       = nil
   end
