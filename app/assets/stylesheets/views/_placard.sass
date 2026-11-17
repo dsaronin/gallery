@@ -127,6 +127,8 @@
   .placard-master-card
     +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
     padding: 0.6em 1.2em 1.2em 1.2em
+    width: 100%
+    overflow: hidden
 
     .card-header-bar
       display: flex
@@ -176,101 +178,156 @@
             background-color: colors.$BASIC_BG
             color: colors.$BASIC_FG
 
-        .item-count
+        .collection-talent
           font-size: 0.75rem
+          font-weight: bold
+          color: colors.$BG_HEADER
+
+        .item-count
+          font-size: 0.72rem
           font-weight: bold
           color: colors.$colorBGray700
 
-    .master-summary-body
-      background-color: colors.$colorBGray050
-      border: 1px solid colors.$colorBGray200
-      padding: 0.75em 1em
+    .placard-subcards-grid
+      display: grid
+      grid-template-columns: 1fr 1fr
+      gap: 1.2em
+      align-items: stretch
       margin-bottom: 1.2em
-      +md.MD_CORNER(4px)
 
-      .master-meta-grid
-        display: grid
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))
-        gap: 0.6em 1.2em
+      @media (max-width: 767px)
+        grid-template-columns: 1fr
+
+    .placard-subcard
+      +md.MD_CARD(colors.$colorBGray050, colors.$colorBGray200)
+
+      .detail-list
         margin: 0
-
-        .meta-cell
-          display: flex
-          flex-direction: row
-          align-items: baseline
-          gap: 0.45em
-          font-size: 0.80rem
-
-          dt
-            font-weight: 900
-            text-transform: lowercase
-            color: colors.$BG_HEADER
-            margin: 0
-
-          dd
-            margin: 0
-
-    .placard-thumbnail-grid
-      .pseudo-placard-thumb
-        width: 170px
-        min-height: 155px
-        padding: 0.45em
-        background-color: colors.$colorBGray050
-        border: 1px solid colors.$colorBGray200
-        +md.MD_CORNER(4px)
+        padding: 0
         display: flex
         flex-direction: column
-        justify-content: space-between
+        gap: 0.45em
 
-        &.has-direct-override
-          border-left: 3px solid colors.$BASIC_BG
+      .detail-row
+        display: flex
+        flex-direction: row
+        align-items: baseline
+        font-size: 0.85rem
+        line-height: 1.4
+
+        dt
+          min-width: 9em
+          flex-shrink: 0
+          font-weight: 900
+          text-transform: lowercase
+          color: colors.$BG_HEADER
+          margin: 0
+
+        dd
+          margin: 0
+          flex-grow: 1
+          min-width: 0
+          word-break: break-word
+
+          .subdued
+            font-style: italic
+            color: colors.$colorBGray500
+
+      .detail-row-notes
+        margin-top: 0.35em
+        padding-top: 0.5em
+        border-top: 1px solid colors.$colorBGray200
+
+        dd p
+          margin: 0
+          padding: 0
+          font-size: 0.85rem
+          line-height: 1.4
+
+    .thumbnail-grid-wrapper
+      width: 100%
+      box-sizing: border-box
+
+    .placard-thumbnail-grid
+      display: grid
+      grid-template-columns: repeat(auto-fill, minmax(md.$placardThumbWidth, 1fr))
+      gap: 0.85em
+      width: 100%
+      box-sizing: border-box
+
+      .placard-thumb-card
+        +md.MD_CARD(colors.$colorBGray050, colors.$colorBGray200)
+        width: 100%
+        min-width: 0
+        aspect-ratio: md.$placardThumbCardRatio
+        overflow: hidden
 
         .pseudo-placard-link
-          text-decoration: none
-          color: inherit
-          display: block
-
-        .pseudo-placard-mini
           display: flex
           flex-direction: column
-          gap: 0.35em
+          width: 100%
+          height: 100%
+          text-decoration: none
+          color: inherit
+          box-sizing: border-box
+
+          &:hover
+            background-color: colors.$colorBGray100
+
+        .thumb-image-frame
+          width: 100%
+          aspect-ratio: md.$placardThumbImageRatio
+          flex-shrink: 0
+          overflow: hidden
+          background-color: colors.$colorBGray200
+          border-bottom: 1px solid colors.$colorBGray200
 
           .mini-thumb-img
             width: 100%
-            height: 75px
+            height: 100%
             object-fit: cover
-            border: 1px solid colors.$colorBGray200
+            display: block
 
-          .mini-placard-text
-            text-align: left
+        .mini-placard-text
+          flex-grow: 1
+          padding: 0.45em 0.55em
+          display: flex
+          flex-direction: column
+          justify-content: space-between
+          gap: 0.2em
+          min-width: 0
+          text-align: left
 
-            .mini-title
-              font-size: 0.75rem
-              font-weight: bold
-              color: colors.$BG_HEADER
-              line-height: 1.2
+          .mini-title-group
+            display: flex
+            flex-direction: column
+            gap: 0.15em
+            min-width: 0
 
-            .mini-meta
-              font-size: 0.65rem
-              color: colors.$colorBGray600
-              margin-top: 0.15em
+          .mini-title
+            font-size: 0.72rem
+            line-height: 1.2
+            display: -webkit-box
+            -webkit-line-clamp: 2
+            -webkit-box-orient: vertical
+            overflow: hidden
+            word-break: break-word
 
-            .mini-badge
-              margin-top: 0.25em
+          .mini-specs
+            font-size: 0.60rem
+            line-height: 1.2
+            color: colors.$BG_HEADER
+            white-space: nowrap
+            overflow: hidden
+            text-overflow: ellipsis
 
-              .badge-direct, .badge-cascaded
-                font-size: 0.58rem
-                font-weight: bold
-                padding: 0.1em 0.35em
-                +md.BEVEL_CORNER(2px)
-
-              .badge-direct
-                background-color: colors.$BASIC_BG
-                color: colors.$BASIC_FG
-
-              .badge-cascaded
-                background-color: colors.$colorSecondary100
-                color: colors.$colorSecondary900
+          .mini-meta
+            font-size: 0.60rem
+            line-height: 1.2
+            color: colors.$colorBGray600
+            white-space: nowrap
+            overflow: hidden
+            text-overflow: ellipsis
 
 // ----------------------------------------------------
 // Provenance Color Coding (Direct vs Cascaded)

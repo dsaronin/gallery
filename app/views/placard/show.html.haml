@@ -1,6 +1,7 @@
 -# app/views/placard/show.html.haml
 - pd = @collection_placard_data
 - is_exhibition = @collection.is_a?(Exhibition)
+- talent_name = (@collection.respond_to?(:talent) ? @collection.talent&.talent_name : nil) || pd.subject.presence
 
 .view-container#placard-show-view
   .placard-master-card
@@ -17,52 +18,81 @@
       .header-right
         %span.collection-type-pill{ class: (is_exhibition ? "type-exhibition" : "type-portfolio") }
           = @collection.class.name
+        - if talent_name.present?
+          %span.collection-talent= "Talent: #{talent_name}"
         %span.item-count= "#{@item_entries.size} #{'placard'.pluralize(@item_entries.size)}"
 
-    .master-summary-body
-      %dl.master-meta-grid
-        .meta-cell
-          %dt Artist:
-          %dd{ class: placard_provenance_class(pd, :artist_name) }= pd.artist_name.presence || "—"
-        .meta-cell
-          %dt Medium:
-          %dd{ class: placard_provenance_class(pd, :medium) }= pd.medium.presence || "—"
-        .meta-cell
-          %dt Dimensions:
-          %dd{ class: placard_provenance_class(pd, :dimensions_display) }= pd.dimensions_display.presence || "—"
-        .meta-cell
-          %dt Edition:
-          %dd{ class: placard_provenance_class(pd, :edition_info) }= pd.edition_info.presence || "—"
-        .meta-cell
-          %dt Price:
-          %dd{ class: placard_provenance_class(pd, :price) }= format_placard_price(pd.price) || "—"
-        .meta-cell
-          %dt License:
-          %dd{ class: placard_provenance_class(pd, :cc_license) }= pd.cc_license_label
+    .placard-subcards-grid
+      -# Left Subcard: Staging, Medium & Pricing
+      .placard-subcard#placard-collection-primary
+        .card-header
+          %h4.card-title Specs & Pricing
+
+        .card-body
+          %dl.detail-list
+            - %i[artist_name price medium dimensions_display edition_info sales_notes].each do |field|
+              - label_map = { artist_name: "Artist", price: "Price", medium: "Medium", dimensions_display: "Dimensions", edition_info: "Edition", sales_notes: "Sales Notes" }
+              .detail-row
+                %dt= "#{label_map[field]}:"
+                %dd{ class: placard_provenance_class(pd, field), title: placard_provenance_tooltip(pd, field) }
+                  - if field == :price
+                    - formatted = format_placard_price(pd.price)
+                    - if formatted.present?
+                      = formatted
+                    - else
+                      %span.subdued —
+                  - else
+                    - val = pd.public_send(field)
+                    - if val.present?
+                      = val
+                    - else
+                      %span.subdued —
+
+      -# Right Subcard: Licensing & Collection Metadata
+      .placard-subcard#placard-collection-secondary
+        .card-header
+          %h4.card-title Licensing & Notes
+
+        .card-body
+          %dl.detail-list
+            - %i[cc_license copyright_year copyright_holder subtitle date_created_display location_display curatorial_notes].each do |field|
+              - label_map = { cc_license: "CC License", copyright_year: "Copyright Year", copyright_holder: "Copyright Holder", subtitle: "Subtitle", date_created_display: "Year", location_display: "Location", curatorial_notes: "Notes" }
+              .detail-row{ class: ("detail-row-notes" if field == :curatorial_notes) }
+                %dt= "#{label_map[field]}:"
+                %dd{ class: placard_provenance_class(pd, field), title: placard_provenance_tooltip(pd, field) }
+                  - if field == :cc_license
+                    = pd.cc_license_label
+                  - else
+                    - val = pd.public_send(field)
+                    - if val.present?
+                      - if field == :curatorial_notes
+                        = simple_format(val)
+                      - else
+                        = val
+                    - else
+                      %span.subdued —
 
     .thumbnail-grid-wrapper
       - if @item_entries.empty?
         .empty-items-note
           %p No items have been curated into this #{@collection.class.name.downcase} yet.
       - else
-        .thumbnail-grid.placard-thumbnail-grid
+        .placard-thumbnail-grid
           - @item_entries.each do |entry|
             - item    = entry[:item]
             - photo   = entry[:photo]
             - item_pd = entry[:placard_data]
-            - has_override = entry[:placard].present?
-            .thumbnail.pseudo-placard-thumb{ class: ("has-direct-override" if has_override) }
-              = link_to target_placard_itemcard_path(item), class: "pseudo-placard-link", title: "Inspect Placard Card" do
-                .pseudo-placard-mini
+            - override_specs = [(:medium if item_pd.direct?(:medium)), (:dimensions_display if item_pd.direct?(:dimensions_display))].compact.map { |f| item_pd.public_send(f) }.compact
+            .placard-thumb-card
+              = link_to target_placard_itemcard_path(item), class: "pseudo-placard-link", title: (item_pd.title.presence || "Inspect Placard Card") do
+                .thumb-image-frame
                   - if photo
-                    %img{ src: public_fn(photo.filename), class: "mini-thumb-img", alt: item_pd.title }
-                  .mini-placard-text
-                    .mini-title= truncate(item_pd.title.to_s, length: 24)
-                    .mini-meta= [item_pd.date_created_display, format_placard_price(item_pd.price)].compact.join(" • ")
-                    .mini-badge
-                      - if has_override
-                        %span.badge-direct Direct Override
-                      - else
-                        %span.badge-cascaded Cascaded
-
-              = link_to truncate(item_pd.title.to_s, length: 22), target_placard_itemcard_path(item), class: "photo-desc-link"
+                    %img{ src: public_fn(photo.filename), class: "mini-thumb-img", alt: (item_pd.title.presence || photo.filename) }
+                .mini-placard-text
+                  .mini-title-group
+                    .mini-title{ class: placard_provenance_class(item_pd, :title) }= item_pd.title.presence || "Untitled"
+                    - if override_specs.any?
+                      .mini-specs= override_specs.join(":  ")
+                  - meta_parts = [format_placard_price(item_pd.price), item_pd.date_created_display].compact
+                  - if meta_parts.any?
+                    .mini-meta= safe_join(meta_parts, raw("&emsp;"))
