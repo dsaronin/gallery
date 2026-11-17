@@ -42,7 +42,15 @@ class Environ
   APP_NAME_HEAD = "#{APP_NAME}: "
 
 # Application identity & attribution defaults
-  DEFAULT_ARTIST_NAME   = "Kishindo".freeze
+# Candidate Artist Name / Kanji pairs:
+#   1. "Kishindo" / "気震"
+#   2. "Kurobi"   / "黒火"
+#   3. "Kageki"   / "影気"
+  ARTIST_NAME       = "Kishindo".freeze
+  ARTIST_NAME_KANJI = "気震".freeze
+  ARTIST_BRAND      = "DARKFIRE".freeze
+
+  DEFAULT_ARTIST_NAME   = ARTIST_NAME
   DEFAULT_PREP_DAYS     = 1
   DEFAULT_TEARDOWN_DAYS = 1
 

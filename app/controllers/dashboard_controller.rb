@@ -16,4 +16,8 @@ class DashboardController < ApplicationController
     }
   end
 
+  def branding
+    @dark_background = (params[:theme] == "dark")
+  end
+
 end   # class

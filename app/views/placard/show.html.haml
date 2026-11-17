@@ -8,7 +8,7 @@
     .card-header-bar
       .header-left
         %h3.placard-collection-title= pd.name
-        = link_to "« placards", placard_index_path, class: "header-back-link"
+        = link_to "« collections", placard_index_path, class: "header-back-link"
         - if @collection.placard.present?
           = link_to "edit", edit_placard_path(@collection.placard, target_type: @collection.class.name, target_id: @collection.id), class: "header-action-link"
         - else

@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   get 'catalog/index'
   get 'catalog/selectcatalog'
   get 'dashboard', to: 'dashboard#index'
+  get 'dashboard/branding', to: 'dashboard#branding'
   post 'catalog/loadphotos'
   resources :catalog, only: [:show, :update, :destroy]
   resources :photo,  only: [:show, :update] do

@@ -1,7 +1,7 @@
 -# app/views/placard/_card.html.haml
 - pd = collection.placard_data
-- item_count = collection.items_association.size
 - is_exhibition = collection.is_a?(Exhibition)
+- preview_photo = collection.placard_photo
 
 .placard-collection-card
   .card-header
@@ -10,33 +10,34 @@
       = collection.class.name
 
   .card-body
-    %dl.assoc-list
-      .assoc-row
-        %dt Collection:
-        %dd= is_exhibition ? collection.title : collection.name
-      .assoc-row
-        %dt Artist:
-        %dd= pd.artist_name.presence || "—"
-      .assoc-row
-        %dt Medium:
-        %dd
-          - if pd.medium.present?
-            = truncate(pd.medium, length: 42)
-          - else
-            %span.subdued —
-      .assoc-row
-        %dt License:
-        %dd= pd.cc_license_label
-      .assoc-row
-        %dt Items:
-        %dd= "#{item_count} #{'item'.pluralize(item_count)}"
-      .assoc-row
-        %dt Override:
-        %dd
-          - if collection.placard.present?
-            %span.override-badge.is-persisted Custom Master Placard
-          - else
-            %span.override-badge.is-inherited Inherited / Default
+    .card-content-layout
+      %dl.assoc-list
+        - %i[artist_name price medium dimensions_display edition_info sales_notes].each do |field|
+          - label_map = { artist_name: "Artist", price: "Price", medium: "Medium", dimensions_display: "Dimensions", edition_info: "Edition", sales_notes: "Sales Notes" }
+          .assoc-row
+            %dt= "#{label_map[field]}:"
+            %dd{ class: placard_provenance_class(pd, field), title: placard_provenance_tooltip(pd, field) }
+              - if field == :price
+                - formatted = format_placard_price(pd.price)
+                - if formatted.present?
+                  = formatted
+                - else
+                  %span.subdued —
+              - else
+                - val = pd.public_send(field)
+                - if val.present?
+                  = val
+                - else
+                  %span.subdued —
+      - if preview_photo
+        .card-thumbnail-preview
+          %a{ href: collection_placard_show_path(collection), title: (pd.name.presence || preview_photo.filename) }
+            %img{ src: public_fn(preview_photo.filename), class: "image", alt: (preview_photo.photo_dsc.presence || preview_photo.filename) }
 
   .card-actions
-    = link_to "Placards »", collection_placard_show_path(collection), class: "btn-card primary"
+    - edit_path = if collection.placard.present?
+      - edit_placard_path(collection.placard, target_type: collection.class.name, target_id: collection.id)
+    - else
+      - new_placard_path(target_type: collection.class.name, target_id: collection.id)
+    = link_to "Edit", edit_path, class: "btn-card"
+    = link_to "Placards »", collection_placard_show_path(collection), class: "btn-card"

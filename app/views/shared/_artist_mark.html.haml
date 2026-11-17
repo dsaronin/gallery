@@ -1,0 +1,18 @@
+-# Reusable Two-Cell Artist Mark Lockup
+-# Optional local: dark (Boolean) - forces dark-theme ink palette
+- mark_classes = ["artist-mark--framed"]
+- mark_classes << "artist-mark--dark" if local_assigns[:dark]
+- artist_name = Gallery::Environ::ARTIST_NAME
+- artist_kanji = Gallery::Environ::ARTIST_NAME_KANJI
+- artist_brand = Gallery::Environ::ARTIST_BRAND
+
+.artist-mark-frame
+  .artist-mark{class: mark_classes, role: "img", "aria-label": "#{artist_name} (#{artist_kanji}) #{artist_brand}"}
+    .artist-mark__latin= artist_name
+    .artist-mark__stack
+      .artist-mark__kanji
+        - artist_kanji.each_char do |ch|
+          %span.artist-mark__kanji-char= ch
+      .artist-mark__brand
+        - artist_brand.each_char do |ch|
+          %span.artist-mark__brand-char= ch

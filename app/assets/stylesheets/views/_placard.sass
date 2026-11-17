@@ -56,13 +56,40 @@
       padding: 0.2em 0.55em
       +md.BEVEL_CORNER(3px)
 
-      &.type-portfolio
+      &.type-portfolio, &.type-exhibition
         background-color: colors.$colorSecondary100
         color: colors.$colorSecondary900
 
-      &.type-exhibition
-        background-color: colors.$BASIC_BG
-        color: colors.$BASIC_FG
+    .card-content-layout
+      display: flex
+      flex-direction: row
+      justify-content: space-between
+      align-items: flex-start
+      gap: 0.75em
+      width: 100%
+
+    .card-thumbnail-preview
+      width: md.$thumbCellWidth
+      flex-shrink: 0
+      display: flex
+      justify-content: center
+      align-items: center
+      background-color: colors.$colorBGray050
+      padding: 3px
+      +md.BEVEL_CORNER(3px)
+      border: 1px solid colors.$colorBGray100
+
+      a
+        display: block
+        line-height: 0
+
+      img
+        width: md.$thumbImageWidth
+        height: auto
+        max-height: 80px
+        object-fit: cover
+        display: block
+        border-radius: 2px
 
     .assoc-list
       margin: 0
@@ -91,25 +118,11 @@
         margin: 0
         flex-grow: 1
         min-width: 0
-        color: colors.$colorBGray700
+        word-break: break-word
 
         .subdued
           font-style: italic
           color: colors.$colorBGray400
-
-        .override-badge
-          font-size: 0.70rem
-          font-weight: bold
-          padding: 0.1em 0.45em
-          +md.BEVEL_CORNER(3px)
-
-          &.is-persisted
-            background-color: colors.$colorSecondaryAccent100
-            color: colors.$colorSecondaryAccent700
-
-          &.is-inherited
-            background-color: colors.$colorBGray200
-            color: colors.$colorBGray700
 
     .btn-card
       +md.MD_BUTTON
@@ -165,18 +178,15 @@
         gap: 0.25em
 
         .collection-type-pill
-          font-size: 0.70rem
+          font-size: 0.65rem
           font-weight: bold
-          padding: 0.15em 0.5em
+          text-transform: uppercase
+          padding: 0.2em 0.55em
           +md.BEVEL_CORNER(3px)
 
-          &.type-portfolio
+          &.type-portfolio, &.type-exhibition
             background-color: colors.$colorSecondary100
             color: colors.$colorSecondary900
-
-          &.type-exhibition
-            background-color: colors.$BASIC_BG
-            color: colors.$BASIC_FG
 
         .collection-talent
           font-size: 0.75rem

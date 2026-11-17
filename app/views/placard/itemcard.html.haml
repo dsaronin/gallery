@@ -11,7 +11,7 @@
     .card-header-bar
       .header-left
         %h3.placard-title= pd.title.presence || "Untitled"
-        = link_to "« back", back_path, class: "header-back-link"
+        = link_to "« collection", back_path, class: "header-back-link"
         = link_to "edit", edit_link_path, class: "header-action-link"
         - if @placard.present?
           = button_to placard_path(@placard, target_type: @target&.class&.name, target_id: @target&.id), method: :delete, form_class: "inline-action-form", form: { data: { turbo_confirm: "Remove direct placard overrides and revert to inherited values?" } }, onclick: "return confirm('Remove direct placard overrides and revert to inherited values?')", class: "header-action-link btn-link-action" do

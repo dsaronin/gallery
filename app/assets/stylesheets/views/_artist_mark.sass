@@ -1,0 +1,137 @@
+@use '../colors'
+
+// Proportional geometry knobs (all internal metrics scale from .artist-mark font-size)
+$mark-cell-gap:      0.35em
+$mark-latin-scale:   0.90em
+$mark-kanji-scale:   0.84em
+$mark-brand-scale:   0.112em
+$mark-brand-gap:     1em
+
+// --------------------------------------------------------
+// Reusable Artist Mark Component
+// --------------------------------------------------------
+// Host frame establishes a container query context so the mark scales
+// seamlessly to fill 100% of whatever container width it is placed in.
+.artist-mark-frame
+  container-type: inline-size
+  width: 100%
+  display: flex
+  align-items: center
+  justify-content: center
+
+.artist-mark
+  // ~17.5cqi calibrates the full two-cell lockup width (including 1em gap) to span ~100% of .artist-mark-frame
+  font-size: 17.5cqi
+  display: inline-flex
+  align-items: stretch
+  justify-content: center
+  gap: $mark-cell-gap
+  line-height: 1
+  user-select: none
+
+.artist-mark__latin
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  font-family: 'Marcellus', serif
+  font-size: $mark-latin-scale
+  font-weight: 800
+  font-synthesis-weight: auto
+  letter-spacing: -0.025em
+  line-height: 1
+  white-space: nowrap
+  padding: 0.04em 0.02em
+  color: colors.$MARK_PRIMARY_LIGHT
+
+.artist-mark__stack
+  display: inline-flex
+  flex-direction: column
+  align-items: stretch
+  justify-content: center
+  color: colors.$MARK_SECONDARY_LIGHT
+
+.artist-mark__kanji
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  font-family: 'Shippori Mincho', serif
+  font-size: $mark-kanji-scale
+  font-weight: 700
+  line-height: 1
+  white-space: nowrap
+
+.artist-mark__kanji-char
+  display: inline-block
+  font-size: 1em
+  font-weight: 700
+  line-height: 1
+  letter-spacing: -0.02em
+  &:first-child
+    margin-right: -0.02em
+
+.artist-mark__brand
+  display: flex
+  align-items: center
+  justify-content: space-between
+  width: 100%
+  font-family: 'Marcellus', serif
+  font-size: $mark-brand-scale
+  font-weight: 600
+  font-synthesis-weight: auto
+  line-height: 1
+  text-transform: uppercase
+  margin-top: $mark-brand-gap
+  white-space: nowrap
+
+.artist-mark__brand-char
+  display: inline-block
+  line-height: 1
+
+// Optional Seal / Nameplate Rectangular Frame (remove .artist-mark--framed to disable)
+.artist-mark--framed
+  font-size: 16.2cqi
+  padding: 0.14em 0.22em
+  border: clamp(1px, 0.016em, 2px) solid colors.$MARK_BORDER_LIGHT
+
+// Dark Theme Override (via #darkbg container or explicit .artist-mark--dark modifier)
+#darkbg .artist-mark,
+.artist-mark--dark
+  .artist-mark__latin
+    color: colors.$MARK_PRIMARY_DARK
+
+  .artist-mark__stack
+    color: colors.$MARK_SECONDARY_DARK
+
+#darkbg .artist-mark--framed,
+.artist-mark--framed.artist-mark--dark
+  border-color: colors.$MARK_BORDER_DARK
+
+// --------------------------------------------------------
+
+// --------------------------------------------------------
+// Dashboard #branding Showcase Stage
+// --------------------------------------------------------
+.branding-stage
+  width: 100%
+  min-height: calc(100vh - 5rem)
+  display: flex
+  align-items: flex-start
+  justify-content: center
+  padding: 1em 0.75rem 2rem
+  box-sizing: border-box
+  background-color: colors.$MARK_BG_LIGHT
+
+#darkbg .branding-stage
+  background-color: colors.$MARK_BG_DARK
+
+.branding-stage__lockup
+  width: 100%
+  margin: 0 auto
+
+// Desktop & wide screens: 65% viewport width
+@media (min-width: 768px)
+  .branding-stage
+    padding: 3em 0 3rem
+
+  .branding-stage__lockup
+    width: 65vw
