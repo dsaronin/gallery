@@ -1,7 +1,11 @@
 -# Reusable Two-Cell Artist Mark Lockup
 -# Optional local: dark (Boolean) - forces dark-theme ink palette
-- mark_classes = ["artist-mark--framed"]
+- framed = local_assigns.fetch(:framed, true)
+- mark_classes = []
+- mark_classes << "artist-mark--framed" if framed
 - mark_classes << "artist-mark--dark" if local_assigns[:dark]
+- mark_classes << "artist-mark--watermark" if local_assigns[:watermark]
+- mark_classes << "artist-mark--muted" if local_assigns[:muted]
 - artist_name = Gallery::Environ::ARTIST_NAME
 - artist_kanji = Gallery::Environ::ARTIST_NAME_KANJI
 - artist_brand = Gallery::Environ::ARTIST_BRAND

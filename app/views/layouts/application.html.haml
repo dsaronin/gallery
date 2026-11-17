@@ -40,7 +40,11 @@
           document.addEventListener('DOMContentLoaded', updateVw);
         #content
           != yield
-        
+
+      - unless @hide_watermark
+        .viewport-watermark{"aria-hidden": "true"}
+          = render 'shared/artist_mark', framed: false, watermark: true
+
       #footer
         %p
           &copy;&nbsp;

@@ -18,6 +18,7 @@ class DashboardController < ApplicationController
 
   def branding
     @dark_background = (params[:theme] == "dark")
+    @hide_watermark  = true
   end
 
 end   # class

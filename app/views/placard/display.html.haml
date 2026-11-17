@@ -61,3 +61,6 @@
       - if pd.curatorial_notes.present?
         .wall-notes
           = simple_format(pd.curatorial_notes)
+
+      .wall-placard-colophon
+        = render 'shared/artist_mark', framed: false, muted: true

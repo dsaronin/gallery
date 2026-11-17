@@ -664,8 +664,17 @@
         &:last-child
           margin-bottom: 0
 
+    // Lower-right artist colophon (extends halfway into the 3em right & bottom margin)
+    .wall-placard-colophon
+      margin-top: auto
+      align-self: flex-end
+      margin-right: -1.5em
+      margin-bottom: -1.5em
+      padding-top: 1em
+      width: 9.5em
+
 @media print
-  #header, #footer, #flash-message, #placard-display-view .display-toolbar
+  #header, #footer, #flash-message, #placard-display-view .display-toolbar, .viewport-watermark
     display: none !important
 
   body, .container, #wrapper, #content, #placard-display-view, #placard-display-view .wall-placard-sheet
