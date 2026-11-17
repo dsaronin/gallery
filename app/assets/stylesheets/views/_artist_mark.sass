@@ -165,3 +165,28 @@ $mark-brand-gap:     1em
 @media (max-width: 500px)
   .viewport-watermark
     display: none
+
+// --------------------------------------------------------
+// Compact Header Variant (omits sub-legible ARTIST_BRAND)
+// --------------------------------------------------------
+.artist-mark--compact
+  align-items: center
+
+  .artist-mark__latin
+    font-weight: 400
+    font-synthesis-weight: none
+
+  .artist-mark__stack
+    justify-content: center
+
+  .artist-mark__kanji,
+  .artist-mark__kanji-char
+    font-weight: 700
+    font-synthesis-weight: none
+
+  .artist-mark__brand
+    display: none
+
+#darkbg .artist-mark--compact .artist-mark__latin,
+.artist-mark--compact .artist-mark__latin
+  color: colors.$BASIC_ON_DARK

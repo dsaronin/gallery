@@ -138,6 +138,11 @@ input[type="submit"]
   margin: 0 auto
   width: 100%
   background-color: colors.$BG_HEADER
+  display: flex
+  align-items: center
+  justify-content: space-between
+  padding-right: 0.65em
+  box-sizing: border-box
   h1, h2, h3
     color: colors.$FG_HEADER
     padding: 0.2em 0.2em
@@ -153,7 +158,13 @@ input[type="submit"]
       &:hover
         color: inherit
         text-decoration: none
- 
+
+  .header-mark
+    width: clamp(95px, 9vw, 130px)
+    flex-shrink: 0
+    display: flex
+    align-items: center
+
 #footer
   margin: 0 auto
   width: 100%

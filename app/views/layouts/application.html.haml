@@ -27,7 +27,9 @@
       #header
         -# = link_to( image_tag( "/images/flash-icon-2.png", {:class => 'logo',:alt => 'DrillTutor logo'} ) , '/', { :title => "main page" } )
         %h3= link_to "Gallery", root_path
-      
+        .header-mark
+          = render 'shared/artist_mark', framed: false, dark: true, compact: true
+
       #wrapper
         #actionbox
           = yield @action_box
