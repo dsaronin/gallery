@@ -49,6 +49,5 @@
 
       #footer
         %p
-          &copy;&nbsp;
-          =link_to("Copyright 2026 David S. Anderson, All rights reserved ","/about")
-          &emsp;&bull;&emsp;v 1.01 &ensp;
+          = link_to(raw("&copy; 2026 David S. Anderson, All rights reserved "), "/about")
+          &emsp;&bull;&emsp;v #{Gallery::VERSION} &ensp;
