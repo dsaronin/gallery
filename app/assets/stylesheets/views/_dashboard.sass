@@ -19,6 +19,13 @@
     width: 100%
     box-sizing: border-box
 
+  .dashboard-mark-slot
+    display: flex
+    align-items: center
+    justify-content: center
+    padding: 0.75em 1.25em
+    box-sizing: border-box
+
   .dashboard-card
     +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
     min-height: auto
@@ -85,6 +92,9 @@
   // Mobile (Pixel 8a & small screens): boost readability ~20%
   // *****************************************************
   @media (max-width: 500px)
+    .dashboard-mark-slot
+      display: none
+
     .dashboard-grid
       grid-template-columns: 1fr
 
