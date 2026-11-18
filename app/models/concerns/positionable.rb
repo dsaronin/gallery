@@ -3,6 +3,7 @@ module Positionable
   extend ActiveSupport::Concern
 
   class_methods do
+
     def acts_as_positionable(scope:)
       validates :position, presence: true, numericality: { only_integer: true, greater_than: 0 }
       validates :position, uniqueness: { scope: scope }
@@ -12,8 +13,33 @@ module Positionable
           parent = public_send(scope.to_s.delete_suffix("_id"))
           max_position = parent&.public_send(self.class.table_name)&.maximum(:position) || 0
           self.position = max_position + 1
-        end
-      end
-    end
-  end
-end
+        end   # fi
+      end   # before_validation on
+
+      define_method(:prev_item) do
+        scope_id = public_send(scope)
+        return nil if position.blank? || scope_id.nil?
+
+        self.class
+            .where(scope => scope_id)
+            .where("position < ?", position)
+            .order(position: :desc)
+            .first
+      end   #  define_method
+
+      define_method(:next_item) do
+        scope_id = public_send(scope)
+        return nil if position.blank? || scope_id.nil?
+
+        self.class
+            .where(scope => scope_id)
+            .where("position > ?", position)
+            .order(position: :asc)
+            .first
+      end  #  define_method
+
+    end   # def acts_as_positionable
+
+  end  # class_methods
+
+end  # module

@@ -184,6 +184,42 @@ $elevation_6dp: 0 14px 28px rgba(0, 0, 0, 0.20), 0 5px 10px rgba(0, 0, 0, 0.22)
     text-decoration: none
 
 // --------------------------------------------------------
+// Canonical Material Flat Bevelled Directional Icon Button
+// --------------------------------------------------------
+=MD_ICON_NAV($size: 24px, $bg: colors.$colorBGray200, $fg: colors.$colorBGray800)
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  width: $size
+  height: $size
+  min-width: $size
+  min-height: $size
+  padding: 0
+  margin: 0
+  font-size: 0.72rem
+  font-weight: 800
+  line-height: 1
+  text-decoration: none
+  color: $fg
+  background-color: $bg
+  border: none
+  +MD_CORNER(4px)
+  cursor: pointer
+  user-select: none
+  transition: background-color 0.15s ease, color 0.15s ease
+
+  &:hover:not(.disabled)
+    background-color: colors.$colorBGray300
+    color: colors.$colorBGray900
+    text-decoration: none
+
+  &.disabled
+    background-color: colors.$colorBGray050
+    color: colors.$colorBGray300
+    cursor: default
+    pointer-events: none
+
+// --------------------------------------------------------
 // Physical Gallery Wall Placard Mixin (ISO A6 / 4x6 Default)
 // Scales dimensions, margins, and typography proportionally
 // --------------------------------------------------------

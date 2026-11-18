@@ -18,6 +18,17 @@
             delete
             %span.clear-glyph ✘
         = link_to "display", target_placard_display_path(@target, @placard), class: "header-action-link primary-action"
+        - if @show_item_nav
+          .item-nav-group
+            - if @prev_item.present?
+              = link_to ::Gallery::Environ::NAV_PREV_GLYPH, target_placard_itemcard_path(@prev_item), class: "item-nav-btn nav-prev", title: "Previous item placard"
+            - else
+              %span.item-nav-btn.nav-prev.disabled{ title: "First item in collection" }= ::Gallery::Environ::NAV_PREV_GLYPH
+
+            - if @next_item.present?
+              = link_to ::Gallery::Environ::NAV_NEXT_GLYPH, target_placard_itemcard_path(@next_item), class: "item-nav-btn nav-next", title: "Next item placard"
+            - else
+              %span.item-nav-btn.nav-next.disabled{ title: "Last item in collection" }= ::Gallery::Environ::NAV_NEXT_GLYPH
 
       .header-right
         - if @preview_photo

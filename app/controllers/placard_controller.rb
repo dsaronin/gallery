@@ -43,9 +43,13 @@ class PlacardController < ApplicationController
   def itemcard
     return unless @target || @placard
 
-    @placard_data = @target ? @target.placard_data : @placard.placard_data
+    @target ||= inferred_owner_for(@placard)
+    @placard_data      = @target ? @target.placard_data : @placard.placard_data
     @parent_collection = parent_collection_for(@target)
     @preview_photo     = (@target || @placard)&.placard_photo
+    @show_item_nav     = @target.respond_to?(:prev_item) && @target.respond_to?(:next_item)
+    @prev_item         = @show_item_nav ? @target.prev_item : nil
+    @next_item         = @show_item_nav ? @target.next_item : nil
   end
 
   # GET /placard/:id/display or GET /placard/display?target_type=...&target_id=...

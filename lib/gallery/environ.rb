@@ -54,6 +54,15 @@ class Environ
   DEFAULT_PREP_DAYS     = 1
   DEFAULT_TEARDOWN_DAYS = 1
 
+# UI navigation glyphs
+  NAV_PREV_GLYPH = "◀".freeze
+  NAV_NEXT_GLYPH = "▶".freeze
+  NAV_GRID_GLYPH = "⊞".freeze
+  NAV_LAQO_GLYPH = "«".freeze
+  NAV_RAQO_GLYPH = "»".freeze
+  NAV_PLUS_GLYPH = "+".freeze
+  NAV_DELX_GLYPH = "✘".freeze
+
 # Operational curation capacity bounds
     MAX_PORTFOLIO_SIZE  = 60
     MAX_EXHIBITION_SIZE = 40
