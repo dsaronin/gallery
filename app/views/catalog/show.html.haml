@@ -25,6 +25,9 @@
             = render partial: "photo/star_rating", locals: { photo: p }
             = link_to p.photo_dsc, p, class: "photo-desc-link"
 
+    - if @catalog.photos.any?
+      = render partial: "shared/collection_gang_tag", locals: { assign_tag_path: assign_tag_catalog_path(@catalog) }
+
     - if is_curated
       - portfolios  = @catalog.curated_portfolios
       - exhibitions = @catalog.curated_exhibitions
@@ -42,5 +45,4 @@
             .usage-links
               - exhibitions.each do |exhibition|
                 = link_to exhibition.title, exhibition_path(exhibition), class: "usage-link"
-
 

@@ -1,10 +1,19 @@
 Rails.application.routes.draw do
-  get 'catalog/index'
-  get 'catalog/selectcatalog'
+
   get 'dashboard', to: 'dashboard#index'
   get 'dashboard/branding', to: 'dashboard#branding'
+
+  concern :gang_taggable do
+    member do
+      post :assign_tag
+    end
+  end
+
+  get 'catalog/index'
+  get 'catalog/selectcatalog'
   post 'catalog/loadphotos'
-  resources :catalog, only: [:show, :update, :destroy]
+  resources :catalog, only: [:show, :update, :destroy], concerns: :gang_taggable
+
   resources :photo,  only: [:show, :update] do
     member do
       post 'assign_tag'
@@ -28,14 +37,14 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :portfolio, controller: :portfolio, concerns: :curatable do
+  resources :portfolio, controller: :portfolio, concerns: [:curatable, :gang_taggable] do
     member do
       delete :clear_items
       patch  :move_item
     end
   end
 
-  resources :exhibition, controller: :exhibition, concerns: :curatable do
+  resources :exhibition, controller: :exhibition, concerns: [:curatable, :gang_taggable] do
     member do
       delete :clear_items
       patch  :move_item

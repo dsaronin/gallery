@@ -279,6 +279,74 @@
         &:hover
           background-color: colors.$colorBGray100
 
-// *****************************************************
+// ----------------------------------------------------
+// Collection Show Footer Gang-Tag Section
+// ----------------------------------------------------
+.collection-gang-tag-section
+  margin-top: 1.5em
+  padding-top: 0.9em
+  border-top: 1px solid colors.$colorBGray200
+  width: 100%
+  box-sizing: border-box
 
+  .assoc-list
+    margin: 0
+    padding: 0
+    display: flex
+    flex-direction: column
+    gap: 0.35em
+
+  .assoc-row.assoc-tags-row
+    display: flex
+    flex-direction: row
+    align-items: baseline
+    font-size: 0.75rem
+    line-height: 1.3
+
+    dt
+      width: 6.5em
+      flex-shrink: 0
+      font-weight: 900
+      text-transform: lowercase
+      color: colors.$BG_HEADER
+      margin: 0
+      padding: 0
+
+    dd
+      margin: 0
+      padding: 0
+      flex-grow: 1
+      color: colors.$colorBGray500
+
+    .inline-tag-form
+      display: inline-flex
+      align-items: center
+      gap: 0.2em
+      margin: 0
+
+      select.tag-select
+        width: auto
+        margin: 0
+        padding: 0.1em 0.25em
+        font-size: 0.7rem
+        background-color: colors.$colorBGray050
+        border: 1px solid colors.$colorBGray200
+
+      .btn-tag-add
+        width: auto !important
+        padding: 0.1em 0.4em !important
+        margin: 0 !important
+        font-size: 0.7rem !important
+        font-weight: bold
+        background-color: colors.$FG_HEADER
+        color: colors.$BG_HEADER
+        border: 1px solid colors.$colorBGray200
+        cursor: pointer
+        +md.BEVEL_CORNER(3px)
+
+        &:hover
+          background-color: colors.$colorBGray100
+
+// *****************************************************
+// *****************************************************
 

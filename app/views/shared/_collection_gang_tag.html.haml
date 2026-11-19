@@ -1,0 +1,11 @@
+-# app/views/shared/_collection_gang_tag.html.haml
+- ordered_tags = Tag.includes(:category).order("categories.name, tags.name")
+- if ordered_tags.any?
+  .collection-gang-tag-section
+    %dl.assoc-list
+      .assoc-row.assoc-tags-row
+        %dt tags:
+        %dd
+          = form_with url: assign_tag_path, method: :post, class: "inline-tag-form" do |f|
+            = f.grouped_collection_select :tag_id, Category.includes(:tags).order(:name), :tags, :name, :id, :name, { prompt: "Add tag...", selected: default_tag_id_from(ordered_tags) }, { class: "tag-select" }
+            = f.submit "+ Add", class: "btn-tag-add"

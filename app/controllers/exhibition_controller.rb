@@ -7,8 +7,10 @@
 
 # app/controllers/exhibition_controller.rb
 class ExhibitionController < ApplicationController
-  before_action :set_exhibition, only: %i[show edit update destroy move_item download_placards]
+  include CollectionGangTaggable
+  before_action :set_exhibition, only: %i[show edit update destroy move_item download_placards assign_tag]
 
+# ----------------------------------------------------------
   def index
     @exhibitions = Exhibition.includes(:portfolio, :venue).order(created_at: :desc)
   end

@@ -5,7 +5,8 @@
 
 class CatalogController < ApplicationController
   include CatalogHelper
-  before_action :validate_catalog, :only => [:show]
+  include CollectionGangTaggable
+  before_action :validate_catalog, :only => [:show, :assign_tag]
  
 # ----------------------------------------------------------
   # GALLERY_PATH, GALLERY_BASE, GALLERY_SOURCE

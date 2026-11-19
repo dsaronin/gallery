@@ -25,4 +25,5 @@
     - else
       .thumbnail-grid-wrapper
         = render partial: "shared/collection_thumbnail_grid", locals: { collection: @portfolio, items: @portfolio_items }
+      = render partial: "shared/collection_gang_tag", locals: { assign_tag_path: assign_tag_portfolio_path(@portfolio) }
 

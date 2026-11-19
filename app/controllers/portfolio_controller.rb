@@ -5,7 +5,8 @@
 
 # app/controllers/portfolio_controller.rb
 class PortfolioController < ApplicationController
-  before_action :set_portfolio, only: %i[show edit update destroy move_item]
+  include CollectionGangTaggable
+  before_action :set_portfolio, only: %i[show edit update destroy move_item assign_tag]
 
   def index
     @portfolios = Portfolio.order(created_at: :desc)
