@@ -50,7 +50,7 @@ module Gallery
     CROP_EDGE_INSET_PT     = 14.0
 
     # Artist Mark Colophon Geometry (mirrors _artist_mark.sass two-cell modular lockup)
-    COLOPHON_BOX_WIDTH_EM    = 14.0
+    COLOPHON_BOX_WIDTH_EM    = 13.0
     COLOPHON_REF_WIDTH_EM    = 10.5
     COLOPHON_BLEED_EM        = 0.0
     COLOPHON_CQI_RATIO       = 0.145
@@ -58,10 +58,17 @@ module Gallery
     COLOPHON_LATIN_EM        = 0.90
     COLOPHON_LATIN_STROKE_PT = 0.45
     COLOPHON_KANJI_EM        = 0.82
-    COLOPHON_KANJI_DROP_EM   = 0.34
+    COLOPHON_KANJI_DROP_EM   = 0.16
     COLOPHON_BRAND_EM        = 0.135
-    COLOPHON_BRAND_GAP_EM    = 0.04
+    COLOPHON_BRAND_GAP_EM    = 0.30
     COLOPHON_HEIGHT_EM       = 2.40
+
+    ColophonMetrics = Struct.new(
+      :box_left, :box_top, :box_w, :box_h,
+      :latin_pt, :latin_w, :kanji_pt, :kanji_w, :brand_pt,
+      :start_x, :stack_x, :kanji_top_y, :kanji_line_h, :brand_top_y,
+      keyword_init: true
+    )
 
     # --------------------------------------------------------
     # Monochrome Printer Shading Constants (Hex RGB Strings)
@@ -79,7 +86,7 @@ module Gallery
     FONTS_DIR              = File.expand_path("../../app/assets/fonts", __dir__).freeze
     BODY_FONT_FAMILY       = "LiberationSans"
     LATIN_MARK_FAMILY      = "Marcellus"
-    CJK_MARK_FAMILY        = "NotoSerifCJK"
+    CJK_MARK_FAMILY        = "ShipporiMincho"
 
     BODY_FONT_FILES = {
       normal:      File.join(FONTS_DIR, "LiberationSans-Regular.ttf").freeze,
@@ -89,7 +96,7 @@ module Gallery
     }.freeze
 
     LATIN_MARK_FONT_FILE   = File.join(FONTS_DIR, "Marcellus-Regular.ttf").freeze
-    CJK_MARK_FONT_FILE     = File.join(FONTS_DIR, "NotoSerifCJK-Bold.ttc").freeze
+    CJK_MARK_FONT_FILE     = File.join(FONTS_DIR, "ShipporiMincho-Bold.ttf").freeze
     CJK_FALLBACK_FONT_FILE = "/usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf"
 
     # --------------------------------------------------------
@@ -195,7 +202,7 @@ module Gallery
     end
 
     def resolve_cjk_font_spec
-      return { file: CJK_MARK_FONT_FILE, font: 0 } if File.exist?(CJK_MARK_FONT_FILE)
+      return CJK_MARK_FONT_FILE if File.exist?(CJK_MARK_FONT_FILE)
       return CJK_FALLBACK_FONT_FILE if File.exist?(CJK_FALLBACK_FONT_FILE)
 
       nil
@@ -393,95 +400,119 @@ module Gallery
     end
 
     def render_colophon(pdf, base_pt, pad_pt)
-      # Mirrors .wall-placard-colophon in _placard.sass & .artist-mark in _artist_mark.sass
+      metrics = colophon_metrics(pdf, base_pt, pad_pt)
+
+      pdf.bounding_box([metrics.box_left, metrics.box_top], width: metrics.box_w, height: metrics.box_h) do
+        render_colophon_latin(pdf, metrics)
+        render_colophon_kanji(pdf, metrics) if @cjk_font_available && metrics.kanji_w.positive?
+        render_colophon_brand(pdf, metrics) if metrics.kanji_w.positive?
+      end
+    end
+
+    def colophon_metrics(pdf, base_pt, pad_pt)
       box_w    = COLOPHON_BOX_WIDTH_EM * base_pt
-      ref_w    = COLOPHON_REF_WIDTH_EM * base_pt
+      box_h    = COLOPHON_HEIGHT_EM * base_pt
       bleed_pt = COLOPHON_BLEED_EM * base_pt
-      mark_em  = ref_w * COLOPHON_CQI_RATIO
+      mark_em  = (COLOPHON_REF_WIDTH_EM * base_pt) * COLOPHON_CQI_RATIO
 
       latin_pt = COLOPHON_LATIN_EM * mark_em
       kanji_pt = COLOPHON_KANJI_EM * mark_em
       brand_pt = COLOPHON_BRAND_EM * mark_em
       gap_pt   = COLOPHON_CELL_GAP_EM * mark_em
 
-      box_h    = COLOPHON_HEIGHT_EM * base_pt
-      box_left = pdf.bounds.width - pad_pt - box_w + bleed_pt
-      box_top  = pad_pt - bleed_pt + box_h
+      latin_w  = measure_text_width(pdf, ::Gallery::Environ::ARTIST_NAME, family: LATIN_MARK_FAMILY, style: :bold, size: latin_pt)
+      kanji_w  = measure_colophon_kanji_width(pdf, kanji_pt, brand_pt)
 
-      artist_name  = ::Gallery::Environ::ARTIST_NAME
-      artist_kanji = ::Gallery::Environ::ARTIST_NAME_KANJI
-      artist_brand = ::Gallery::Environ::ARTIST_BRAND
+      start_x  = [box_w - (latin_w + gap_pt + kanji_w), 0.0].max
+      stack_x  = start_x + latin_w + gap_pt
 
-      pdf.bounding_box([box_left, box_top], width: box_w, height: box_h) do
-        latin_w = pdf.width_of(artist_name, font: LATIN_MARK_FAMILY, style: :bold, size: latin_pt)
-        kanji_chars = artist_kanji.to_s.chars
-        kanji_w = if @cjk_font_available && kanji_chars.any?
-                    kanji_chars.length * kanji_pt
-                  else
-                    pdf.width_of(artist_brand, font: LATIN_MARK_FAMILY, style: :bold, size: brand_pt) * 1.6
-                  end
+      kanji_line_h  = kanji_pt * 1.05
+      brand_line_h  = brand_pt * 1.20
+      brand_gap     = COLOPHON_BRAND_GAP_EM * brand_pt
+      stack_total_h = (@cjk_font_available ? kanji_line_h + brand_gap : 0.0) + brand_line_h
+      kanji_top_y   = ((box_h + stack_total_h) / 2.0) - (COLOPHON_KANJI_DROP_EM * kanji_pt)
+      brand_top_y   = @cjk_font_available ? (kanji_top_y - kanji_line_h - brand_gap) : kanji_top_y
 
-        total_w = latin_w + gap_pt + kanji_w
-        start_x = [box_w - total_w, 0.0].max
+      ColophonMetrics.new(
+        box_left:     pdf.bounds.width - pad_pt - box_w + bleed_pt,
+        box_top:      pad_pt - bleed_pt + box_h,
+        box_w:        box_w,
+        box_h:        box_h,
+        latin_pt:     latin_pt,
+        latin_w:      latin_w,
+        kanji_pt:     kanji_pt,
+        kanji_w:      kanji_w,
+        brand_pt:     brand_pt,
+        start_x:      start_x,
+        stack_x:      stack_x,
+        kanji_top_y:  kanji_top_y,
+        kanji_line_h: kanji_line_h,
+        brand_top_y:  brand_top_y
+      )
+    end
 
-        # Left Cell: Latin Artist Name (Marcellus thickened via matching-color :fill_stroke mode)
-        pdf.save_graphics_state do
-          pdf.fill_color(COLOR_COLOPHON_PRIMARY)
-          pdf.stroke_color(COLOR_COLOPHON_PRIMARY)
-          pdf.line_width(COLOPHON_LATIN_STROKE_PT * @paper_spec.fetch(:scale))
-          pdf.font(LATIN_MARK_FAMILY, style: :bold, size: latin_pt) do
-            pdf.text_box(
-              artist_name,
-              at:          [start_x, box_h],
-              width:       latin_w + 6.0,
-              height:      box_h,
-              valign:      :center,
-              mode:        :fill_stroke,
-              single_line: true
-            )
-          end
-        end
+    def measure_text_width(pdf, text, family:, style:, size:)
+      measured = 0.0
+      pdf.font(family, style: style, size: size) do
+        measured = pdf.width_of(text)
+      end
+      measured
+    end
 
-        # Right Cell Stack: Kanji (Mincho serif, explicit 1-em cells) + justified Brand
-        stack_x       = start_x + latin_w + gap_pt
-        kanji_line_h  = kanji_pt * 1.15
-        brand_line_h  = brand_pt * 1.25
-        brand_gap     = COLOPHON_BRAND_GAP_EM * brand_pt
-        stack_total_h = (@cjk_font_available ? kanji_line_h + brand_gap : 0.0) + brand_line_h
-        stack_top_y   = (box_h + stack_total_h) / 2.0
-        kanji_top_y   = stack_top_y - (COLOPHON_KANJI_DROP_EM * kanji_pt)
+    def measure_colophon_kanji_width(pdf, kanji_pt, brand_pt)
+      if @cjk_font_available
+        measure_text_width(pdf, ::Gallery::Environ::ARTIST_NAME_KANJI, family: CJK_MARK_FAMILY, style: :bold, size: kanji_pt)
+      else
+        measure_text_width(pdf, ::Gallery::Environ::ARTIST_BRAND, family: LATIN_MARK_FAMILY, style: :bold, size: brand_pt) * 1.6
+      end
+    end
 
-        pdf.fill_color(COLOR_COLOPHON_SECOND)
-
-        if @cjk_font_available && kanji_chars.any?
-          pdf.font(CJK_MARK_FAMILY, style: :bold, size: kanji_pt) do
-            kanji_chars.each_with_index do |ch, idx|
-              pdf.text_box(
-                ch,
-                at:          [stack_x + (idx * kanji_pt), kanji_top_y],
-                width:       kanji_pt * 1.3,
-                height:      kanji_line_h * 1.3,
-                align:       :left,
-                mode:        :fill,
-                single_line: true
-              )
-            end
-          end
-        end
-
-        if kanji_w.positive?
-          brand_top_y = @cjk_font_available ? (stack_top_y - kanji_line_h - brand_gap) : stack_top_y
-          render_justified_brand(
-            pdf,
-            artist_brand,
-            x:     stack_x,
-            top_y: brand_top_y,
-            width: kanji_w,
-            size:  brand_pt
+    def render_colophon_latin(pdf, metrics)
+      pdf.save_graphics_state do
+        pdf.fill_color(COLOR_COLOPHON_PRIMARY)
+        pdf.stroke_color(COLOR_COLOPHON_PRIMARY)
+        pdf.line_width(COLOPHON_LATIN_STROKE_PT * @paper_spec.fetch(:scale))
+        pdf.font(LATIN_MARK_FAMILY, style: :bold, size: metrics.latin_pt) do
+          pdf.text_box(
+            ::Gallery::Environ::ARTIST_NAME,
+            at:          [metrics.start_x, metrics.box_h],
+            width:       metrics.latin_w + 6.0,
+            height:      metrics.box_h,
+            valign:      :center,
+            mode:        :fill_stroke,
+            single_line: true
           )
         end
       end
     end
+
+    def render_colophon_kanji(pdf, metrics)
+      pdf.fill_color(COLOR_COLOPHON_SECOND)
+      pdf.font(CJK_MARK_FAMILY, style: :bold, size: metrics.kanji_pt) do
+        pdf.text_box(
+          ::Gallery::Environ::ARTIST_NAME_KANJI,
+          at:          [metrics.stack_x, metrics.kanji_top_y],
+          width:       metrics.kanji_w + 4.0,
+          height:      metrics.kanji_line_h * 1.3,
+          align:       :left,
+          mode:        :fill,
+          single_line: true
+        )
+      end
+    end
+
+    def render_colophon_brand(pdf, metrics)
+      pdf.fill_color(COLOR_COLOPHON_SECOND)
+      render_justified_brand(
+        pdf,
+        ::Gallery::Environ::ARTIST_BRAND,
+        x:     metrics.stack_x,
+        top_y: metrics.brand_top_y,
+        width: metrics.kanji_w,
+        size:  metrics.brand_pt
+      )
+    end
+
 
     def render_justified_brand(pdf, text, x:, top_y:, width:, size:)
       chars = text.to_s.chars
@@ -493,7 +524,7 @@ module Gallery
           return
         end
 
-        char_widths   = chars.map { |ch| pdf.width_of(ch, font: LATIN_MARK_FAMILY, style: :bold, size: size) }
+        char_widths   = chars.map { |ch| pdf.width_of(ch) }
         total_glyph_w = char_widths.sum
         step_gap      = (width - total_glyph_w) / (chars.length - 1).to_f
 
