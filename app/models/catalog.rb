@@ -4,6 +4,7 @@
 # ----------------------------------------------------------
 
 class Catalog < ApplicationRecord
+  include GangTaggable
 
 # ------------------------------------------------------------------------------
   belongs_to :talent, optional: true

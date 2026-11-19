@@ -1,7 +1,9 @@
 class Exhibition < ApplicationRecord
   include Curatable
   include Placardable
+  include GangTaggable
 
+# *******************************************************
   enum :status, ::Gallery::Environ::EXHIBITION_STATUSES, default: :draft
   enum :sales_policy, ::Gallery::Environ::SALES_POLICIES, default: :not_for_sale
 

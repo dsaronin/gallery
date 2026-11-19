@@ -1,7 +1,9 @@
 class Portfolio < ApplicationRecord
   include Curatable
   include Placardable
+  include GangTaggable
 
+# **********************************************************
   enum :status, ::Gallery::Environ::PORTFOLIO_STATUSES, default: :draft
 
   belongs_to :placard, optional: true
