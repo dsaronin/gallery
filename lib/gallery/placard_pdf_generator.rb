@@ -64,6 +64,16 @@ module Gallery
     COLOPHON_BRAND_GAP_EM    = 0.30
     COLOPHON_HEIGHT_EM       = 2.40
 
+    SheetGridMetrics = Struct.new(
+      :cols, :rows, :per_sheet, :cell_w, :cell_h, :origin_x, :origin_y,
+      keyword_init: true
+    )
+
+    CellMetrics = Struct.new(
+      :base_pt, :pad_pt, :box_left, :box_top, :inner_w, :content_h,
+      keyword_init: true
+    )
+
     ColophonMetrics = Struct.new(
       :box_left, :box_top, :box_w, :box_h,
       :latin_pt, :latin_w, :kanji_pt, :kanji_w, :brand_pt,
@@ -116,56 +126,80 @@ module Gallery
 
     def render
       items = ordered_items
-      sheet_layout = @paper_spec.fetch(:sheet_layout, :landscape)
-
-      pdf = Prawn::Document.new(
-        page_size:   ::Gallery::Environ::PLACARD_SHEET_SIZE,
-        page_layout: sheet_layout,
-        margin:      0
-      )
-
-      register_fonts(pdf)
+      pdf   = build_prawn_document
 
       if items.empty?
         render_empty_sheet(pdf)
         return pdf.render
       end
 
-      cols      = @paper_spec.fetch(:grid_cols)
-      rows      = @paper_spec.fetch(:grid_rows)
-      per_sheet = cols * rows
-
-      cell_w = @paper_spec.fetch(:width_mm) * PT_PER_MM
-      cell_h = @paper_spec.fetch(:height_mm) * PT_PER_MM
-
-      # Center the ganged block cleanly on the physical sheet
-      grid_w   = cols * cell_w
-      grid_h   = rows * cell_h
-      origin_x = (pdf.bounds.width - grid_w) / 2.0
-      origin_y = pdf.bounds.height - ((pdf.bounds.height - grid_h) / 2.0)
-
-      items.each_slice(per_sheet).with_index do |sheet_items, sheet_index|
-        pdf.start_new_page if sheet_index.positive?
-
-        sheet_items.each_with_index do |item, slot_index|
-          col = slot_index % cols
-          row = slot_index / cols
-
-          cell_left = origin_x + (col * cell_w)
-          cell_top  = origin_y - (row * cell_h)
-
-          pdf.bounding_box([cell_left, cell_top], width: cell_w, height: cell_h) do
-            render_placard_cell(pdf, item.placard_data)
-          end
-        end
-
-        draw_crop_marks(pdf, origin_x: origin_x, origin_y: origin_y, cols: cols, rows: rows, cell_w: cell_w, cell_h: cell_h)
+      grid = sheet_grid_metrics(pdf)
+      items.each_slice(grid.per_sheet).with_index do |sheet_items, sheet_index|
+        render_sheet_page(pdf, sheet_items, sheet_index, grid)
       end
 
       pdf.render
     end
 
     private
+
+    def build_prawn_document
+      pdf = Prawn::Document.new(
+        page_size:   ::Gallery::Environ::PLACARD_SHEET_SIZE,
+        page_layout: @paper_spec.fetch(:sheet_layout, :landscape),
+        margin:      0
+      )
+      register_fonts(pdf)
+      pdf
+    end
+
+    def sheet_grid_metrics(pdf)
+      cols   = @paper_spec.fetch(:grid_cols)
+      rows   = @paper_spec.fetch(:grid_rows)
+      cell_w = @paper_spec.fetch(:width_mm) * PT_PER_MM
+      cell_h = @paper_spec.fetch(:height_mm) * PT_PER_MM
+      grid_w = cols * cell_w
+      grid_h = rows * cell_h
+
+      SheetGridMetrics.new(
+        cols:      cols,
+        rows:      rows,
+        per_sheet: cols * rows,
+        cell_w:    cell_w,
+        cell_h:    cell_h,
+        origin_x:  (pdf.bounds.width - grid_w) / 2.0,
+        origin_y:  pdf.bounds.height - ((pdf.bounds.height - grid_h) / 2.0)
+      )
+    end
+
+    def render_sheet_page(pdf, sheet_items, sheet_index, grid)
+      pdf.start_new_page if sheet_index.positive?
+
+      sheet_items.each_with_index do |item, slot_index|
+        render_grid_slot(pdf, item, slot_index, grid)
+      end
+
+      draw_crop_marks(
+        pdf,
+        origin_x: grid.origin_x,
+        origin_y: grid.origin_y,
+        cols:     grid.cols,
+        rows:     grid.rows,
+        cell_w:   grid.cell_w,
+        cell_h:   grid.cell_h
+      )
+    end
+
+    def render_grid_slot(pdf, item, slot_index, grid)
+      col       = slot_index % grid.cols
+      row       = slot_index / grid.cols
+      cell_left = grid.origin_x + (col * grid.cell_w)
+      cell_top  = grid.origin_y - (row * grid.cell_h)
+
+      pdf.bounding_box([cell_left, cell_top], width: grid.cell_w, height: grid.cell_h) do
+        render_placard_cell(pdf, item.placard_data)
+      end
+    end
 
     def ordered_items
       return [] unless @collection.respond_to?(:items_association)
@@ -221,141 +255,158 @@ module Gallery
       end
     end
 
-    def render_placard_cell(pdf, pd)
-      scale   = @paper_spec.fetch(:scale)
-      base_pt = BASE_FONT_PT * scale
-      pad_pt  = CELL_PADDING_EM * base_pt
+def render_placard_cell(pdf, pd)
+      cell = cell_layout_metrics(pdf)
 
-      inner_w = pdf.bounds.width - (2.0 * pad_pt)
-      inner_h = pdf.bounds.height - (2.0 * pad_pt)
-
-      # Reserve bottom band so long curatorial notes never collide with the colophon
-      colophon_reserve_h = (COLOPHON_HEIGHT_EM * base_pt)
-
-      pdf.bounding_box([pad_pt, pdf.bounds.height - pad_pt], width: inner_w, height: inner_h - colophon_reserve_h) do
-        pdf.font(BODY_FONT_FAMILY)
-        pdf.fill_color(COLOR_DEEP_BLACK)
-
-        if @display_mode == :group
-          render_group_header(pdf, pd, base_pt)
-        else
-          render_solo_header(pdf, pd, base_pt)
-        end
-
-        pdf.move_down(SPACER_1X_EM * base_pt)
-
-        if pd.medium.present?
-          render_body_line(pdf, pd.medium, base_pt)
-        end
-
-        if pd.dimensions_display.present?
-          render_body_line(pdf, pd.dimensions_display, base_pt)
-        end
-
-        pdf.move_down(SPACER_1X_EM * base_pt)
-
-        if pd.price.present?
-          price_str = format_price(pd.price)
-          price_pt  = PRICE_EM * base_pt
-          if price_str.present? && pdf.cursor >= price_pt
-            pdf.fill_color(COLOR_DEEP_BLACK)
-            pdf.font(BODY_FONT_FAMILY, style: :bold, size: price_pt) do
-              pdf.text(price_str, leading: leading_for(price_pt))
-            end
-          end
-        end
-
-        pdf.move_down([SPACER_2X_EM * base_pt, pdf.cursor].min)
-
-        if pd.subtitle.present?
-          sub_pt = SUBTITLE_EM * base_pt
-          if pdf.cursor >= sub_pt
-            pdf.fill_color(COLOR_DEEP_BLACK)
-            pdf.font(BODY_FONT_FAMILY, style: :italic, size: sub_pt) do
-              pdf.text(pd.subtitle, leading: leading_for(sub_pt))
-            end
-            pdf.move_down([SUBTITLE_BOTTOM_GAP_EM * base_pt, pdf.cursor].min)
-          end
-        end
-
-        if pd.curatorial_notes.present? && pdf.cursor.positive?
-          render_notes(pdf, pd.curatorial_notes, base_pt)
-        end
+      pdf.bounding_box([cell.box_left, cell.box_top], width: cell.inner_w, height: cell.content_h) do
+        render_cell_body(pdf, pd, cell.base_pt)
       end
 
-      render_colophon(pdf, base_pt, pad_pt)
+      render_colophon(pdf, cell.base_pt, cell.pad_pt)
     end
 
-    def render_solo_header(pdf, pd, base_pt)
+    def cell_layout_metrics(pdf)
+      base_pt            = BASE_FONT_PT * @paper_spec.fetch(:scale)
+      pad_pt             = CELL_PADDING_EM * base_pt
+      inner_w            = pdf.bounds.width - (2.0 * pad_pt)
+      inner_h            = pdf.bounds.height - (2.0 * pad_pt)
+      colophon_reserve_h = COLOPHON_HEIGHT_EM * base_pt
+
+      CellMetrics.new(
+        base_pt:   base_pt,
+        pad_pt:    pad_pt,
+        box_left:  pad_pt,
+        box_top:   pdf.bounds.height - pad_pt,
+        inner_w:   inner_w,
+        content_h: inner_h - colophon_reserve_h
+      )
+    end
+
+    def render_cell_body(pdf, pd, base_pt)
+      pdf.font(BODY_FONT_FAMILY)
+      pdf.fill_color(COLOR_DEEP_BLACK)
+
+      render_cell_header(pdf, pd, base_pt)
+      pdf.move_down(SPACER_1X_EM * base_pt)
+
+      render_cell_specifications(pdf, pd, base_pt)
+      pdf.move_down(SPACER_1X_EM * base_pt)
+
+      render_cell_price(pdf, pd, base_pt)
+      pdf.move_down([SPACER_2X_EM * base_pt, pdf.cursor].min)
+
+      render_cell_subtitle(pdf, pd, base_pt)
+      render_notes(pdf, pd.curatorial_notes, base_pt) if pd.curatorial_notes.present? && pdf.cursor.positive?
+    end
+
+    def render_cell_header(pdf, pd, base_pt)
+      if @display_mode == :group
+        render_group_header(pdf, pd, base_pt)
+      else
+        render_solo_header(pdf, pd, base_pt)
+      end
+    end
+
+    def render_cell_specifications(pdf, pd, base_pt)
+      render_body_line(pdf, pd.medium, base_pt) if pd.medium.present?
+      render_body_line(pdf, pd.dimensions_display, base_pt) if pd.dimensions_display.present?
+    end
+
+    def render_cell_price(pdf, pd, base_pt)
+      return unless pd.price.present?
+
+      price_str = format_price(pd.price)
+      price_pt  = PRICE_EM * base_pt
+      return unless price_str.present? && pdf.cursor >= price_pt
+
+      pdf.fill_color(COLOR_DEEP_BLACK)
+      pdf.font(BODY_FONT_FAMILY, style: :bold, size: price_pt) do
+        pdf.text(price_str, leading: leading_for(price_pt))
+      end
+    end
+
+    def render_cell_subtitle(pdf, pd, base_pt)
+      return unless pd.subtitle.present?
+
+      sub_pt = SUBTITLE_EM * base_pt
+      return unless pdf.cursor >= sub_pt
+
+      pdf.fill_color(COLOR_DEEP_BLACK)
+      pdf.font(BODY_FONT_FAMILY, style: :italic, size: sub_pt) do
+        pdf.text(pd.subtitle, leading: leading_for(sub_pt))
+      end
+      pdf.move_down([SUBTITLE_BOTTOM_GAP_EM * base_pt, pdf.cursor].min)
+    end
+
+def render_solo_header(pdf, pd, base_pt)
+      render_solo_title_line(pdf, pd, base_pt)
+      render_solo_artist(pdf, pd.artist_name, base_pt) if pd.artist_name.present?
+      render_subject_line(pdf, pd, base_pt)
+    end
+
+    def render_solo_title_line(pdf, pd, base_pt)
       title_text = pd.title.presence || "Untitled"
       title_pt   = PRIMARY_TITLE_EM * base_pt
       year_pt    = YEAR_EM * base_pt
+      fragments  = title_year_fragments(title_text, title_pt, [:bold, :italic], pd.date_created_display, year_pt)
 
-      fragments = [
-        { text: title_text, styles: [:bold, :italic], size: title_pt, color: COLOR_DEEP_BLACK }
-      ]
-      if pd.date_created_display.present?
-        fragments << { text: "   #{pd.date_created_display}", styles: [], size: year_pt, color: COLOR_DEEP_BLACK }
-      end
-
-      # Render a zero-offset bold-italic overstrike pass for the title alone, then lay out title + year normally
       start_y = pdf.cursor
+      render_stroke_emphasized_text(pdf, title_text, title_pt, style: :bold_italic, leading_ratio: 1.15)
+      pdf.move_cursor_to(start_y)
+      pdf.formatted_text(fragments, leading: leading_for(title_pt, 1.15))
+    end
+
+    def render_solo_artist(pdf, artist_name, base_pt)
+      pdf.move_down(SECONDARY_TOP_GAP_EM * base_pt)
+      artist_pt = SECONDARY_EM * base_pt
+      pdf.fill_color(COLOR_CHARCOAL)
+      pdf.font(BODY_FONT_FAMILY, style: :normal, size: artist_pt) do
+        pdf.text(artist_name, leading: leading_for(artist_pt))
+      end
+    end
+
+    def title_year_fragments(title_text, title_pt, title_styles, date_display, year_pt)
+      fragments = [
+        { text: title_text, styles: title_styles, size: title_pt, color: COLOR_DEEP_BLACK }
+      ]
+      if date_display.present?
+        fragments << { text: "   #{date_display}", styles: [], size: year_pt, color: COLOR_DEEP_BLACK }
+      end
+      fragments
+    end
+
+    def render_stroke_emphasized_text(pdf, text, pt, style:, leading_ratio:)
       pdf.save_graphics_state do
         pdf.fill_color(COLOR_DEEP_BLACK)
         pdf.stroke_color(COLOR_DEEP_BLACK)
         pdf.line_width(TITLE_STROKE_PT * @paper_spec.fetch(:scale))
         pdf.text_rendering_mode(:fill_stroke) do
-          pdf.font(BODY_FONT_FAMILY, style: :bold_italic, size: title_pt) do
-            pdf.text(title_text, leading: leading_for(title_pt, 1.15))
+          pdf.font(BODY_FONT_FAMILY, style: style, size: pt) do
+            pdf.text(text, leading: leading_for(pt, leading_ratio))
           end
         end
       end
+    end
 
-      pdf.move_cursor_to(start_y)
-      pdf.formatted_text(fragments, leading: leading_for(title_pt, 1.15))
-
-      if pd.artist_name.present?
-        pdf.move_down(SECONDARY_TOP_GAP_EM * base_pt)
-        artist_pt = SECONDARY_EM * base_pt
-        pdf.fill_color(COLOR_CHARCOAL)
-        pdf.font(BODY_FONT_FAMILY, style: :normal, size: artist_pt) do
-          pdf.text(pd.artist_name, leading: leading_for(artist_pt))
-        end
-      end
-
+def render_group_header(pdf, pd, base_pt)
+      render_group_artist(pdf, pd.artist_name, base_pt) if pd.artist_name.present?
+      render_group_title_line(pdf, pd, base_pt)
       render_subject_line(pdf, pd, base_pt)
     end
 
-    def render_group_header(pdf, pd, base_pt)
-      if pd.artist_name.present?
-        artist_pt = PRIMARY_ARTIST_EM * base_pt
-        pdf.save_graphics_state do
-          pdf.fill_color(COLOR_DEEP_BLACK)
-          pdf.stroke_color(COLOR_DEEP_BLACK)
-          pdf.line_width(TITLE_STROKE_PT * @paper_spec.fetch(:scale))
-          pdf.text_rendering_mode(:fill_stroke) do
-            pdf.font(BODY_FONT_FAMILY, style: :bold, size: artist_pt) do
-              pdf.text(pd.artist_name, leading: leading_for(artist_pt, 1.15))
-            end
-          end
-        end
-        pdf.move_down(SECONDARY_TOP_GAP_EM * base_pt)
-      end
+    def render_group_artist(pdf, artist_name, base_pt)
+      artist_pt = PRIMARY_ARTIST_EM * base_pt
+      render_stroke_emphasized_text(pdf, artist_name, artist_pt, style: :bold, leading_ratio: 1.15)
+      pdf.move_down(SECONDARY_TOP_GAP_EM * base_pt)
+    end
 
+    def render_group_title_line(pdf, pd, base_pt)
       title_text = pd.title.presence || "Untitled"
       title_pt   = SECONDARY_EM * base_pt
       year_pt    = YEAR_EM * base_pt
-
-      fragments = [
-        { text: title_text, styles: [:italic], size: title_pt, color: COLOR_DEEP_BLACK }
-      ]
-      if pd.date_created_display.present?
-        fragments << { text: "   #{pd.date_created_display}", styles: [], size: year_pt, color: COLOR_DEEP_BLACK }
-      end
+      fragments  = title_year_fragments(title_text, title_pt, [:italic], pd.date_created_display, year_pt)
 
       pdf.formatted_text(fragments, leading: leading_for(title_pt, 1.25))
-
-      render_subject_line(pdf, pd, base_pt)
     end
 
     def render_subject_line(pdf, pd, base_pt)

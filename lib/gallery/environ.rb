@@ -47,8 +47,8 @@ class Environ
 #   1. "Kishindo" / "気震"
 #   2. "Kurobi"   / "黒火"
 #   3. "Kageki"   / "影気"
-  ARTIST_NAME       = "Kishindo".freeze
-  ARTIST_NAME_KANJI = "気震".freeze
+  ARTIST_NAME       = "Kurobi".freeze
+  ARTIST_NAME_KANJI = "黒火".freeze
   ARTIST_BRAND      = "DARKFIRE".freeze
 
   DEFAULT_ARTIST_NAME   = ARTIST_NAME
