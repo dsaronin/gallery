@@ -13,7 +13,9 @@
           = link_to "edit", edit_placard_path(@collection.placard, target_type: @collection.class.name, target_id: @collection.id), class: "header-action-link"
         - else
           = link_to "edit", new_placard_path(target_type: @collection.class.name, target_id: @collection.id), class: "header-action-link"
-        = link_to "show", target_placard_itemcard_path(@collection), class: "header-action-link"
+        = link_to "show »", target_placard_itemcard_path(@collection), class: "header-action-link"
+        - if is_exhibition && @item_entries.any?
+          = link_to "pdf placards »", download_placards_exhibition_path(@collection), class: "header-action-link", target: "_blank", rel: "noopener"
 
       .header-right
         %span.collection-type-pill{ class: (is_exhibition ? "type-exhibition" : "type-portfolio") }

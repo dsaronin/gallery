@@ -20,7 +20,10 @@ created_ids = {
   catalog_id: nil,
   photo_ids: [],
   exhibition_id: nil,
+  empty_exhibition_id: nil,
   exhibition_item_ids: [],
+  portfolio_id: nil,
+  portfolio_item_ids: [],
   placard_ids: []
 }
 
@@ -114,6 +117,33 @@ begin
     raise "Expected Exhibition#show to render download link" unless session.response.body.include?(helpers.download_placards_exhibition_path(exhibition))
     puts "6. Exhibition#show PDF download link rendering verified."
 
+    # 6b. Test Placard#show renders 'pdf placards' link for populated Exhibition
+    session.get(helpers.placard_path(master_placard, target_type: "Exhibition", target_id: exhibition.id))
+    raise "Expected 200 OK on GET /placard/:id for Exhibition, got #{session.status}" unless session.status == 200
+    raise "Expected Placard#show to render download_placards link for populated Exhibition" unless session.response.body.include?(helpers.download_placards_exhibition_path(exhibition))
+    puts "6b. Placard#show PDF download link rendering for populated Exhibition verified."
+
+    # 6c. Test Placard#show omits 'pdf placards' link for empty Exhibition
+    empty_exhibition = Exhibition.create!(title: "Empty PDF Exhibition #{rand_suffix}")
+    created_ids[:empty_exhibition_id] = empty_exhibition.id
+    session.get(helpers.collection_show_placard_index_path(target_type: "Exhibition", target_id: empty_exhibition.id))
+    raise "Expected 200 OK on Placard#show for empty Exhibition, got #{session.status}" unless session.status == 200
+    raise "Expected Placard#show to omit download_placards link for empty Exhibition" if session.response.body.include?(helpers.download_placards_exhibition_path(empty_exhibition))
+    puts "6c. Placard#show omission of PDF link for empty Exhibition verified."
+
+    # 6d. Test Placard#show omits 'pdf placards' link for populated Portfolio
+    portfolio = Portfolio.create!(
+      name:  "pdf_test_portfolio_#{rand_suffix}",
+      title: "PDF Test Portfolio #{rand_suffix}"
+    )
+    created_ids[:portfolio_id] = portfolio.id
+    portfolio_item = PortfolioItem.create!(portfolio: portfolio, photo_id: created_ids[:photo_ids].first)
+    created_ids[:portfolio_item_ids] << portfolio_item.id
+    session.get(helpers.collection_show_placard_index_path(target_type: "Portfolio", target_id: portfolio.id))
+    raise "Expected 200 OK on Placard#show for Portfolio, got #{session.status}" unless session.status == 200
+    raise "Expected Placard#show to omit download_placards link for Portfolio" if session.response.body.include?("download_placards")
+    puts "6d. Placard#show omission of PDF link for Portfolio verified."
+
     # 7. Test missing Exhibition guard
     session.get(helpers.download_placards_exhibition_path(999_999_999))
     raise "Expected 302 redirect on missing Exhibition, got #{session.status}" unless session.status == 302
@@ -122,17 +152,23 @@ begin
 
     raise ActiveRecord::Rollback
   end
+
 ensure
   ActionController::Base.allow_forgery_protection = original_forgery_setting
+  PortfolioItem.where(id: created_ids[:portfolio_item_ids]).delete_all if created_ids[:portfolio_item_ids].any?
+  Portfolio.where(id: created_ids[:portfolio_id]).delete_all if created_ids[:portfolio_id]
   ExhibitionItem.where(id: created_ids[:exhibition_item_ids]).delete_all if created_ids[:exhibition_item_ids].any?
-  Exhibition.where(id: created_ids[:exhibition_id]).delete_all if created_ids[:exhibition_id]
+  exhibition_cleanup_ids = [created_ids[:exhibition_id], created_ids[:empty_exhibition_id]].compact
+  Exhibition.where(id: exhibition_cleanup_ids).delete_all if exhibition_cleanup_ids.any?
   Photo.where(id: created_ids[:photo_ids]).delete_all if created_ids[:photo_ids].any?
   Catalog.where(id: created_ids[:catalog_id]).delete_all if created_ids[:catalog_id]
   Placard.where(id: created_ids[:placard_ids]).delete_all if created_ids[:placard_ids].any?
 end
 
 raise "Residual Placards detected!" if created_ids[:placard_ids].any? && Placard.where(id: created_ids[:placard_ids]).exists?
-raise "Residual Exhibition detected!" if created_ids[:exhibition_id] && Exhibition.exists?(created_ids[:exhibition_id])
+raise "Residual Portfolio detected!" if created_ids[:portfolio_id] && Portfolio.exists?(created_ids[:portfolio_id])
+exhibition_check_ids = [created_ids[:exhibition_id], created_ids[:empty_exhibition_id]].compact
+raise "Residual Exhibition detected!" if exhibition_check_ids.any? && Exhibition.where(id: exhibition_check_ids).exists?
 raise "Residual Photos detected!" if created_ids[:photo_ids].any? && Photo.where(id: created_ids[:photo_ids]).exists?
 raise "Residual Catalog detected!" if created_ids[:catalog_id] && Catalog.exists?(created_ids[:catalog_id])
 puts "8. Zero residual test records verified."
