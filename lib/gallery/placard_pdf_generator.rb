@@ -11,6 +11,7 @@
 # ----------------------------------------------------------
 
 require "prawn"
+require "active_support"
 require "active_support/number_helper"
 
 module Gallery
