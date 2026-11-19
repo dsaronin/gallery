@@ -83,3 +83,5 @@ end
 
 gem "dartsass-rails", "~> 0.5.0"
 gem 'acts_as_list'
+
+gem "prawn", "~> 2.5"

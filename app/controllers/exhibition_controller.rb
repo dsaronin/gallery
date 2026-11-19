@@ -7,7 +7,7 @@
 
 # app/controllers/exhibition_controller.rb
 class ExhibitionController < ApplicationController
-  before_action :set_exhibition, only: %i[show edit update destroy]
+  before_action :set_exhibition, only: %i[show edit update destroy move_item download_placards]
 
   def index
     @exhibitions = Exhibition.includes(:portfolio, :venue).order(created_at: :desc)
@@ -61,6 +61,33 @@ class ExhibitionController < ApplicationController
     @exhibition.update!(curation_criteria: nil)
 
     redirect_to @exhibition, notice: "Exhibition cleared: all photos removed and curation criteria reset."
+  end
+
+  # PATCH /exhibition/:id/move_item
+  def move_item
+    item = @exhibition.exhibition_items.find_by(id: params[:item_id])
+    if item
+      case params[:direction].to_s
+      when "higher" then item.move_higher!
+      when "lower"  then item.move_lower!
+      end
+    end
+
+    redirect_to @exhibition
+  end
+
+  # GET /exhibition/:id/download_placards
+  def download_placards
+    pdf_data = ::Gallery::PlacardPdfGenerator.render(
+      @exhibition,
+      paper_size: params[:size],
+      mode:       params[:mode]
+    )
+
+    send_data pdf_data,
+              filename:    "#{@exhibition.title.parameterize}-placards.pdf",
+              type:        "application/pdf",
+              disposition: "inline"
   end
 
   private

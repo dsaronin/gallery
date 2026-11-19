@@ -104,6 +104,28 @@ begin
     raise "Expected unpersisted PortfolioItem.next_item to be nil" unless unpersisted_pi.next_item.nil?
     puts "5. Scope isolation, single-item collection & unpersisted guards passed."
 
+    # 6. Adjacent position swap mechanics (move_higher! / move_lower!) & boundary clamping
+    raise "Expected pi_1.move_higher! to return false at top boundary" unless pi_1.move_higher! == false
+    raise "Expected pi_1 position to remain 1" unless pi_1.reload.position == 1
+
+    raise "Expected pi_3.move_lower! to return false at bottom boundary" unless pi_3.move_lower! == false
+    raise "Expected pi_3 position to remain 3" unless pi_3.reload.position == 3
+
+    raise "Expected pi_2.move_higher! to return true" unless pi_2.move_higher! == true
+    raise "Expected pi_2 position to become 1" unless pi_2.reload.position == 1
+    raise "Expected pi_1 position to become 2" unless pi_1.reload.position == 2
+    raise "Expected portfolio_a ordered items to be [pi_2, pi_1, pi_3]" unless portfolio_a.portfolio_items.reload.to_a == [pi_2, pi_1, pi_3]
+
+    raise "Expected pi_2.move_lower! to return true" unless pi_2.move_lower! == true
+    raise "Expected pi_2 position to return to 2" unless pi_2.reload.position == 2
+    raise "Expected pi_1 position to return to 1" unless pi_1.reload.position == 1
+
+    # Verify ExhibitionItem swap across non-contiguous positions (ei_1 at 1, ei_3 at 3)
+    raise "Expected ei_3.move_higher! to return true" unless ei_3.move_higher! == true
+    raise "Expected ei_3 position to become 1" unless ei_3.reload.position == 1
+    raise "Expected ei_1 position to become 3" unless ei_1.reload.position == 3
+    puts "6. Positionable move_higher! / move_lower! SQLite-safe swaps & boundary guards passed."
+
     raise ActiveRecord::Rollback
   end
 ensure
@@ -121,6 +143,6 @@ raise "Residual PortfolioItems detected!" if PortfolioItem.where(id: created_ids
 raise "Residual Portfolios detected!" if Portfolio.where(id: created_ids[:portfolio_ids]).exists?
 raise "Residual Photos detected!" if Photo.where(id: created_ids[:photo_ids]).exists?
 raise "Residual Catalog detected!" if created_ids[:catalog_id] && Catalog.exists?(created_ids[:catalog_id])
-puts "6. Zero residual test records verified."
+puts "7. Zero residual test records verified."
 
 puts "=== All Step 1 Positionable Navigation Tests Passed ==="

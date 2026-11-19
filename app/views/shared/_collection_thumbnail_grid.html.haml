@@ -1,0 +1,22 @@
+-# app/views/shared/_collection_thumbnail_grid.html.haml
+- move_path = polymorphic_path([:move_item, collection])
+- last_idx = items.size - 1
+.thumbnail-grid#collection-thumbnail-grid
+  - items.each_with_index do |item, idx|
+    - p = item.photo
+    .thumbnail{ id: dom_id(item) }
+      .thumb-order-bar
+        - if idx > 0
+          = button_to ::Gallery::Environ::NAV_PREV_GLYPH, move_path, method: :patch, params: { item_id: item.id, direction: :higher }, class: "thumb-order-btn nav-prev", title: "Move earlier in collection"
+        - else
+          %span.thumb-order-btn.nav-prev.disabled{ title: "First item in collection" }= ::Gallery::Environ::NAV_PREV_GLYPH
+
+        - if idx < last_idx
+          = button_to ::Gallery::Environ::NAV_NEXT_GLYPH, move_path, method: :patch, params: { item_id: item.id, direction: :lower }, class: "thumb-order-btn nav-next", title: "Move later in collection"
+        - else
+          %span.thumb-order-btn.nav-next.disabled{ title: "Last item in collection" }= ::Gallery::Environ::NAV_NEXT_GLYPH
+
+      %a{ href: url_for(p) }
+        %img{ src: public_fn(p.filename), class: "image", alt: p.photo_dsc }
+      = render partial: "photo/star_rating", locals: { photo: p }
+      = link_to p.photo_dsc, p, class: "photo-desc-link"

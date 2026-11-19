@@ -5,7 +5,7 @@
 
 # app/controllers/portfolio_controller.rb
 class PortfolioController < ApplicationController
-  before_action :set_portfolio, only: %i[show edit update destroy]
+  before_action :set_portfolio, only: %i[show edit update destroy move_item]
 
   def index
     @portfolios = Portfolio.order(created_at: :desc)
@@ -59,6 +59,19 @@ class PortfolioController < ApplicationController
     @portfolio.update!(curation_criteria: nil)
 
     redirect_to @portfolio, notice: "Portfolio cleared: all photos removed and curation criteria reset."
+  end
+
+  # PATCH /portfolio/:id/move_item
+  def move_item
+    item = @portfolio.portfolio_items.find_by(id: params[:item_id])
+    if item
+      case params[:direction].to_s
+      when "higher" then item.move_higher!
+      when "lower"  then item.move_lower!
+      end
+    end
+
+    redirect_to @portfolio
   end
 
   private

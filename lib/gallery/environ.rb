@@ -14,6 +14,7 @@
   require_relative 'version'
   require 'securerandom'
   require_relative "curation_criteria"
+  require_relative "placard_pdf_generator"
   
 #----------------------------------------------------------
 # +++++++++++++++++++++++++++++++++++++++++++++++++
@@ -67,15 +68,20 @@ class Environ
     MAX_PORTFOLIO_SIZE  = 60
     MAX_EXHIBITION_SIZE = 40
 
-# Physical wall placard paper dimensions & proportional scales (A6 / 4x6 baseline)
+# Physical wall placard paper dimensions & proportional scales
+# Symbolic keys (:a6, :a5, :a7) and UI labels remain A-series; physical dimensions
+# are mapped to US Letter subdivisions (L6: 5.5x4.25in, L5: 8.5x5.5in, L7: 4.25x2.75in).
   DEFAULT_PLACARD_DISPLAY_MODE = :solo
   DEFAULT_PLACARD_PAPER_SIZE   = :a6
 
+  PLACARD_SHEET_SIZE = "LETTER".freeze
+
   PLACARD_PAPER_SIZES = {
-    a6: { label: "4×6 (A6)", width: "6in",   height: "4in",   scale: 1.0   }.freeze,
-    a5: { label: "A5",       width: "210mm", height: "148mm", scale: 1.414 }.freeze,
-    a7: { label: "A7",       width: "105mm", height: "74mm",  scale: 0.707 }.freeze
+    a6: { label: "4×6 (A6)", width: "139.7mm",  height: "107.95mm", width_mm: 139.7,  height_mm: 107.95, scale: 1.0,   grid_cols: 2, grid_rows: 2, sheet_layout: :landscape }.freeze,
+    a5: { label: "A5",       width: "215.9mm",  height: "139.7mm",  width_mm: 215.9,  height_mm: 139.7,  scale: 1.414, grid_cols: 1, grid_rows: 2, sheet_layout: :portrait  }.freeze,
+    a7: { label: "A7",       width: "107.95mm", height: "69.85mm",  width_mm: 107.95, height_mm: 69.85,  scale: 0.707, grid_cols: 2, grid_rows: 4, sheet_layout: :portrait  }.freeze
   }.freeze
+
   #  ------------------------------------------------------------
   #  ------------------------------------------------------------
   attr_reader :photo_path, :photo_base, :photo_source, :photo_dotfile, :target_pictures_path, :initialized_at, :app_name, :app_version

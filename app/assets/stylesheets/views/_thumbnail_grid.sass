@@ -114,4 +114,60 @@
     position: relative
     z-index: 2
 
+  // Hover-revealed collection item ordering overlay
+  .thumb-order-bar
+    position: absolute
+    top: 3px
+    left: 4px
+    right: 4px
+    display: flex
+    justify-content: space-between
+    align-items: center
+    z-index: 3
+    opacity: 0
+    pointer-events: none
+    transition: opacity 0.15s ease
+
+    form, .button_to
+      display: inline-flex
+      margin: 0
+      padding: 0
+      border: none
+
+    .thumb-order-btn
+      display: inline-flex
+      align-items: center
+      justify-content: center
+      width: 16px
+      height: 16px
+      min-width: 16px
+      min-height: 16px
+      padding: 0
+      margin: 0
+      font-size: 0.55rem
+      font-weight: 800
+      line-height: 1
+      color: colors.$colorBGray800
+      background-color: rgba(colors.$colorBGray050, 0.88)
+      border: 1px solid colors.$colorBGray300
+      +md.MD_CORNER(3px)
+      cursor: pointer
+      user-select: none
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease
+
+      &:hover:not(.disabled)
+        background-color: colors.$colorBGray300
+        border-color: colors.$colorBGray500
+        color: colors.$colorBGray900
+
+      &.disabled
+        background-color: rgba(colors.$colorBGray050, 0.65)
+        border-color: colors.$colorBGray150
+        color: colors.$colorBGray300
+        cursor: default
+        pointer-events: none
+
+  &:hover .thumb-order-bar, &:focus-within .thumb-order-bar
+    opacity: 1
+    pointer-events: auto
 // --------------------------------------------------------

@@ -31,12 +31,15 @@ Rails.application.routes.draw do
   resources :portfolio, controller: :portfolio, concerns: :curatable do
     member do
       delete :clear_items
+      patch  :move_item
     end
   end
 
   resources :exhibition, controller: :exhibition, concerns: :curatable do
     member do
       delete :clear_items
+      patch  :move_item
+      get    :download_placards
     end
   end
 

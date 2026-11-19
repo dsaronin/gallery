@@ -38,6 +38,31 @@ module Positionable
             .first
       end  #  define_method
 
+      define_method(:move_higher!) do
+        swap_position_with!(prev_item)
+      end
+
+      define_method(:move_lower!) do
+        swap_position_with!(next_item)
+      end
+
+      private
+
+      define_method(:swap_position_with!) do |other|
+        return false if other.nil? || position.blank? || other.position.blank?
+
+        my_pos    = position
+        other_pos = other.position
+
+        self.class.transaction do
+          update_columns(position: 0)
+          other.update_columns(position: my_pos)
+          update_columns(position: other_pos)
+        end
+
+        true
+      end
+
     end   # def acts_as_positionable
 
   end  # class_methods
