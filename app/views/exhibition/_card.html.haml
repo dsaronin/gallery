@@ -23,9 +23,6 @@
             - else
               %span.subdued private
         .assoc-row
-          %dt Curated photos:
-          %dd= "#{items_count} #{'photo'.pluralize(items_count)}"
-        .assoc-row
           %dt Portfolio:
           %dd
             - if exhibition.portfolio.present?
@@ -39,6 +36,9 @@
               = exhibition.venue.name
             - else
               %span.subdued —
+        .assoc-row
+          %dt Curated:
+          %dd= "#{items_count} #{'photo'.pluralize(items_count)}"
         .assoc-row
           %dt Placard:
           %dd

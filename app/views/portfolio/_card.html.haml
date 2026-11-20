@@ -12,15 +12,9 @@
     .card-content-layout
       %dl.assoc-list
         .assoc-row
-          %dt Name:
-          %dd= portfolio.name
-        .assoc-row
           %dt Status:
           %dd
             %span{ class: "status-pill status-#{portfolio.status}" }= portfolio.status.humanize
-        .assoc-row
-          %dt Curated photos:
-          %dd= "#{items_count} #{'photo'.pluralize(items_count)}"
         .assoc-row.assoc-share-row
           %dt Share:
           %dd
@@ -28,6 +22,12 @@
               = render "shared/copy_button", text: portfolio.share_copy_target, title: "Copy share token", label: "copy »"
             - else
               %span.subdued private
+        .assoc-row
+          %dt Name:
+          %dd= portfolio.name
+        .assoc-row
+          %dt Curated:
+          %dd= "#{items_count} #{'photo'.pluralize(items_count)}"
         .assoc-row
           %dt Placard:
           %dd
@@ -49,5 +49,5 @@
       = button_to "Private »", make_private_portfolio_path(portfolio), method: :patch, class: "btn-card"
     - else
       = button_to "Public »", make_public_portfolio_path(portfolio), method: :patch, class: "btn-card"
-    = link_to "Edit", edit_portfolio_path(portfolio), class: "btn-card"
+    = link_to "Edit »", edit_portfolio_path(portfolio), class: "btn-card"
     = link_to "View »", portfolio_path(portfolio), class: "btn-card"
