@@ -12,6 +12,21 @@ Rails.application.configure do
   # Rake tasks automatically ignore this option for performance.
   config.eager_load = true
 
+  # Restrict HostAuthorization to uwanda LAN/OpenVPN interfaces and local loopback
+  config.hosts = [
+    "localhost",
+    "127.0.0.1",
+    "uwanda",
+    "uwanda.local",
+    "192.168.1.68",
+    "10.8.0.1"
+  ]
+  # Allow health check probes regardless of Host header
+  config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+  # Plain HTTP is used over trusted LAN (192.168.1.0/24) and OpenVPN (10.8.0.0/24)
+  config.force_ssl = false
+
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
