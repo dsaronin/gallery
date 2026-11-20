@@ -2,6 +2,7 @@ class Portfolio < ApplicationRecord
   include Curatable
   include Placardable
   include GangTaggable
+  include Shareable
 
 # **********************************************************
   enum :status, ::Gallery::Environ::PORTFOLIO_STATUSES, default: :draft
@@ -14,9 +15,6 @@ class Portfolio < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   validates :title, presence: true
   validates :likes_count, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-  validates :share_token, uniqueness: true, allow_nil: true
-
-  before_validation :assign_share_token, on: :create
 
 # **********************************************************
   def self.dashboard_metrics
@@ -64,10 +62,6 @@ class Portfolio < ApplicationRecord
 
 # **********************************************************
 
-# **********************************************************
-  private
 
-  def assign_share_token
-    self.share_token ||= ::Gallery::Environ.generate_token(16)
-  end
-end
+# **********************************************************
+end  # class

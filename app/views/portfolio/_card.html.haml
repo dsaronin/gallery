@@ -21,9 +21,13 @@
         .assoc-row
           %dt Curated photos:
           %dd= "#{items_count} #{'photo'.pluralize(items_count)}"
-        .assoc-row
-          %dt Likes:
-          %dd= portfolio.likes_count
+        .assoc-row.assoc-share-row
+          %dt Share:
+          %dd
+            - if portfolio.publicly_shared?
+              = render "shared/copy_button", text: portfolio.share_copy_target, title: "Copy share token", label: "copy »"
+            - else
+              %span.subdued private
         .assoc-row
           %dt Placard:
           %dd
@@ -41,5 +45,9 @@
     = button_to portfolio_path(portfolio), method: :delete, form: { data: { turbo_confirm: "Are you sure you want to delete portfolio \"#{portfolio.name}\"?" } }, onclick: "return confirm('Are you sure you want to delete portfolio \"#{j(portfolio.name)}\"?')", class: "btn-card btn-card-delete" do
       Delete
       %span.clear-glyph ✘
+    - if portfolio.publicly_shared?
+      = button_to "Private »", make_private_portfolio_path(portfolio), method: :patch, class: "btn-card"
+    - else
+      = button_to "Public »", make_public_portfolio_path(portfolio), method: :patch, class: "btn-card"
     = link_to "Edit", edit_portfolio_path(portfolio), class: "btn-card"
     = link_to "View »", portfolio_path(portfolio), class: "btn-card"

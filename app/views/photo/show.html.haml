@@ -35,12 +35,14 @@
     .pane-col-secondary
       .pane-associations-box
         %dl.assoc-list
-          .assoc-row
+          .assoc-row.assoc-portfolios-row
             %dt portfolios:
-            %dd ~
-          .assoc-row
+            %dd
+              = render partial: "photo/collection_memberships", locals: { photo: @photo, kind: :portfolio }
+          .assoc-row.assoc-exhibitions-row
             %dt exhibitions:
-            %dd ~
+            %dd
+              = render partial: "photo/collection_memberships", locals: { photo: @photo, kind: :exhibition }
           .assoc-row.assoc-tags-row
             %dt tags:
             %dd

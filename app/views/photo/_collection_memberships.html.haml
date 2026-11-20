@@ -1,0 +1,17 @@
+-# app/views/photo/_collection_memberships.html.haml
+- view = collection_membership_view_for(photo, kind)
+= turbo_frame_tag view.frame_id do
+  .tags-wrapper
+    - if view.assigned.empty?
+      %span.no-tags-notice None yet…
+    - else
+      .tag-badges
+        - view.assigned.each do |record|
+          %span.tag-badge
+            %span.tag-name= record.title
+            = button_to ::Gallery::Environ::NAV_DELX_GLYPH, view.remove_path_for.call(record), method: :delete, class: "tag-remove-btn", title: "Remove #{record.title}"
+
+    - if view.available.any?
+      = form_with url: view.assign_path, method: :post, class: "inline-tag-form" do |f|
+        = f.collection_select view.param_key, view.available, :id, :title, { prompt: view.prompt_text, selected: view.default_id }, { class: "tag-select" }
+        = f.submit "+ Add", class: "btn-tag-add"

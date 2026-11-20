@@ -2,6 +2,7 @@ class Exhibition < ApplicationRecord
   include Curatable
   include Placardable
   include GangTaggable
+  include Shareable
 
 # *******************************************************
   enum :status, ::Gallery::Environ::EXHIBITION_STATUSES, default: :draft

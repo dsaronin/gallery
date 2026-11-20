@@ -57,11 +57,13 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
     t.integer "venue_id"
     t.integer "placard_id"
     t.integer "talent_id"
+    t.string "share_token"
     t.text "curation_criteria"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["placard_id"], name: "index_exhibitions_on_placard_id"
     t.index ["portfolio_id"], name: "index_exhibitions_on_portfolio_id"
+    t.index ["share_token"], name: "index_exhibitions_on_share_token", unique: true
     t.index ["showing_id"], name: "index_exhibitions_on_showing_id"
     t.index ["talent_id"], name: "index_exhibitions_on_talent_id"
     t.index ["venue_id"], name: "index_exhibitions_on_venue_id"

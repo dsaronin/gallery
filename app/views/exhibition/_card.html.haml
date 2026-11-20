@@ -15,9 +15,13 @@
           %dt Status:
           %dd
             %span{ class: "status-pill status-#{exhibition.status}" }= exhibition.status.humanize
-        .assoc-row
-          %dt Sales policy:
-          %dd= exhibition.sales_policy.humanize
+        .assoc-row.assoc-share-row
+          %dt Share:
+          %dd
+            - if exhibition.publicly_shared?
+              = render "shared/copy_button", text: exhibition.share_copy_target, title: "Copy share token", label: "copy »"
+            - else
+              %span.subdued private
         .assoc-row
           %dt Curated photos:
           %dd= "#{items_count} #{'photo'.pluralize(items_count)}"
@@ -52,5 +56,9 @@
     = button_to exhibition_path(exhibition), method: :delete, form: { data: { turbo_confirm: "Are you sure you want to delete exhibition \"#{exhibition.title}\"?" } }, onclick: "return confirm('Are you sure you want to delete exhibition \"#{j(exhibition.title)}\"?')", class: "btn-card btn-card-delete" do
       Delete
       %span.clear-glyph ✘
-    = link_to "Edit", edit_exhibition_path(exhibition), class: "btn-card"
+    - if exhibition.publicly_shared?
+      = button_to "Private »", make_private_exhibition_path(exhibition), method: :patch, class: "btn-card"
+    - else
+      = button_to "Public »", make_public_exhibition_path(exhibition), method: :patch, class: "btn-card"
+    = link_to "Edit »", edit_exhibition_path(exhibition), class: "btn-card"
     = link_to "View »", exhibition_path(exhibition), class: "btn-card"

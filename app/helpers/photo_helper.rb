@@ -61,6 +61,74 @@ module PhotoHelper
     default_tag_id_from(available_tags)
   end
 
+  CollectionMembershipView = Data.define(
+    :frame_id,
+    :assigned,
+    :available,
+    :default_id,
+    :assign_path,
+    :remove_path_for,
+    :param_key,
+    :prompt_text
+  )
+
+  def available_portfolios_for(photo)
+    Portfolio.where.not(status: :archived)
+             .where.not(id: photo.portfolio_ids)
+             .order(:title)
+  end
+
+  def available_exhibitions_for(photo)
+    Exhibition.where.not(status: %i[completed archived])
+              .where.not(id: photo.exhibition_ids)
+              .order(:title)
+  end
+
+  def default_collection_id_for(available_collections, sticky_id)
+    return nil if available_collections.empty?
+    return sticky_id if sticky_id && available_collections.any? { |c| c.id == sticky_id }
+
+    available_collections.first.id
+  end
+
+  def collection_membership_view_for(photo, kind)
+    case kind.to_sym
+    when :portfolio  then portfolio_membership_view(photo)
+    when :exhibition then exhibition_membership_view(photo)
+    else raise ArgumentError, "Unsupported collection kind: #{kind}"
+    end
+  end
+
+  private
+
+  def portfolio_membership_view(photo)
+    available = available_portfolios_for(photo)
+    CollectionMembershipView.new(
+      frame_id:        "photo_portfolios_#{photo.id}",
+      assigned:        photo.portfolios.order(:title),
+      available:       available,
+      default_id:      default_collection_id_for(available, gallery_state.current_portfolio_id),
+      assign_path:     assign_portfolio_photo_path(photo),
+      remove_path_for: ->(portfolio) { remove_portfolio_photo_path(photo, portfolio) },
+      param_key:       :portfolio_id,
+      prompt_text:     "Add portfolio..."
+    )
+  end
+
+  def exhibition_membership_view(photo)
+    available = available_exhibitions_for(photo)
+    CollectionMembershipView.new(
+      frame_id:        "photo_exhibitions_#{photo.id}",
+      assigned:        photo.exhibitions.order(:title),
+      available:       available,
+      default_id:      default_collection_id_for(available, gallery_state.current_exhibition_id),
+      assign_path:     assign_exhibition_photo_path(photo),
+      remove_path_for: ->(exhibition) { remove_exhibition_photo_path(photo, exhibition) },
+      param_key:       :exhibition_id,
+      prompt_text:     "Add exhibition..."
+    )
+  end
+
 # *******************************************************
 
   private

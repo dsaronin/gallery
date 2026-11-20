@@ -8,7 +8,8 @@
 # app/controllers/exhibition_controller.rb
 class ExhibitionController < ApplicationController
   include CollectionGangTaggable
-  before_action :set_exhibition, only: %i[show edit update destroy move_item download_placards assign_tag]
+  include CollectionShareable
+  before_action :set_exhibition, only: %i[show edit update destroy move_item download_placards assign_tag make_public make_private]
 
 # ----------------------------------------------------------
   def index

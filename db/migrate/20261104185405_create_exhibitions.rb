@@ -13,11 +13,13 @@ class CreateExhibitions < ActiveRecord::Migration[7.1]
       t.references :venue, null: true, foreign_key: true, index: true
       t.references :placard, foreign_key: true, index: true
       t.references :talent, foreign_key: true, index: true
+      t.string     :share_token
       t.text       :curation_criteria
 
       t.timestamps
     end
 
     add_index :exhibitions, :showing_id
+    add_index :exhibitions, :share_token, unique: true
   end
 end

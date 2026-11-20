@@ -16,8 +16,12 @@ Rails.application.routes.draw do
 
   resources :photo,  only: [:show, :update] do
     member do
-      post 'assign_tag'
+      post   'assign_tag'
       delete 'remove_tag/:tag_id', action: :remove_tag, as: :remove_tag
+      post   'assign_portfolio'
+      delete 'remove_portfolio/:portfolio_id', action: :remove_portfolio, as: :remove_portfolio
+      post   'assign_exhibition'
+      delete 'remove_exhibition/:exhibition_id', action: :remove_exhibition, as: :remove_exhibition
     end
   end
 
@@ -37,14 +41,21 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :portfolio, controller: :portfolio, concerns: [:curatable, :gang_taggable] do
+  concern :shareable do
+    member do
+      patch :make_public
+      patch :make_private
+    end
+  end
+
+  resources :portfolio, controller: :portfolio, concerns: [:curatable, :gang_taggable, :shareable] do
     member do
       delete :clear_items
       patch  :move_item
     end
   end
 
-  resources :exhibition, controller: :exhibition, concerns: [:curatable, :gang_taggable] do
+  resources :exhibition, controller: :exhibition, concerns: [:curatable, :gang_taggable, :shareable] do
     member do
       delete :clear_items
       patch  :move_item

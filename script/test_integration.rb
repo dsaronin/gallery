@@ -25,14 +25,16 @@ ActiveRecord::Base.transaction do
   )
   puts "3. Venue created: ID #{venue.id} [type: #{venue.venue_type}, wall: #{venue.wall_linear_meters}m]"
 
-  # 3. Assemble Portfolio & Verify Automatic Position + Share Token
+  # 3. Assemble Portfolio & Verify Default Private State + Explicit Share Token
   portfolio = Portfolio.create!(
     name: "retrospective_2026",
     title: "Cinematic Natural Light Retrospective",
     placard: placard
   )
+  raise "Portfolio should start private (share_token nil)" unless portfolio.share_token.nil?
+  portfolio.make_public!
   raise "Portfolio share_token generation failed" if portfolio.share_token.blank?
-  puts "4. Portfolio created: '#{portfolio.title}' [share_token: #{portfolio.share_token} (len: #{portfolio.share_token.length})]"
+  puts "4. Portfolio created & published: '#{portfolio.title}' [share_token: #{portfolio.share_token} (len: #{portfolio.share_token.length})]"
 
   item1 = portfolio.portfolio_items.create!(photo: photo)
   raise "Positionable failed: expected position 1, got #{item1.position}" unless item1.position == 1
