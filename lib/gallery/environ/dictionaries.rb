@@ -57,6 +57,12 @@ module Gallery
       group: 1
     }.freeze
 
+    PUBLIC_ACCESS_SCOPES = {
+      all_public:       0,
+      portfolios_only:  1,
+      exhibitions_only: 2
+    }.freeze
+
 # ********************************************************
     
   end  # class

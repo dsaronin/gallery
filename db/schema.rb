@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
+ActiveRecord::Schema[7.1].define(version: 2026_11_20_160000) do
   create_table "catalogs", force: :cascade do |t|
     t.string "name"
     t.string "fname"
@@ -140,6 +140,20 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_04_185836) do
     t.index ["name"], name: "index_portfolios_on_name", unique: true
     t.index ["placard_id"], name: "index_portfolios_on_placard_id"
     t.index ["share_token"], name: "index_portfolios_on_share_token", unique: true
+  end
+
+  create_table "public_accesses", force: :cascade do |t|
+    t.string "label", null: false
+    t.string "token", null: false
+    t.integer "access_scope", default: 0, null: false
+    t.date "expires_at"
+    t.datetime "revoked_at"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["access_scope"], name: "index_public_accesses_on_access_scope"
+    t.index ["revoked_at"], name: "index_public_accesses_on_revoked_at"
+    t.index ["token"], name: "index_public_accesses_on_token", unique: true
   end
 
   create_table "showings", force: :cascade do |t|
