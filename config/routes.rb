@@ -101,6 +101,15 @@ Rails.application.routes.draw do
   end
 
 # *********************************************
+  # Serve local/NFS photo repository in memory during development or standalone production tests.
+  # In production behind Nginx, RAILS_SERVE_STATIC_FILES is unset and Nginx serves /photos/ directly.
+# *********************************************
+  if Rails.env.development? || ENV["RAILS_SERVE_STATIC_FILES"].present?
+    mount Rack::Files.new(Gallery::Environ.instance.target_pictures_path), at: "/photos"
+  end
+
+# *********************************************
+# *********************************************
   # Defines the root path route ("/")
 # *********************************************
   root "dashboard#index"
