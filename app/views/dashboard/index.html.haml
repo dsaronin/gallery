@@ -57,35 +57,33 @@
         = link_to "Exhibitions »", exhibition_index_path, class: "btn-card"
 
     -# ----------------------------------------------------
-    -# 4. SHOWINGS CARD
+    -# 4. VENUES & SHOWINGS CARD
     -# ----------------------------------------------------
     .dashboard-card#card-showings
       .card-header
-        %h4.card-title Showings
+        %h4.card-title Venues & Showings
         = link_to "+", new_showing_path, class: "card-fab", title: "Book Run"
 
       .card-body
-        = render 'showing/telemetry', metrics: @metrics[:showings]
+        = render 'showing/telemetry', metrics: @metrics[:showings], venue_metrics: @metrics[:venues]
 
       .card-actions
         - if gallery_state.current_showing
           = link_to "Continue", showing_path(gallery_state.current_showing), class: "btn-card primary"
+        = link_to "Venues »", venue_index_path, class: "btn-card"
         = link_to "Showings »", showing_index_path, class: "btn-card"
 
     -# ----------------------------------------------------
-    -# 5. VENUE CARD
+    -# 5. ADMIN CARD
     -# ----------------------------------------------------
     .dashboard-card#card-admin
       .card-header
-        %h4.card-title Venue…
-        = link_to "+", new_venue_path, class: "card-fab", title: "New Venue"
+        %h4.card-title Admin
 
       .card-body
-        = render 'venue/telemetry', metrics: @metrics[:admin]
+        = render 'venue/telemetry', metrics: @metrics[:venues], public_metrics: @metrics[:public_access]
 
       .card-actions.admin-actions
-        - if gallery_state.current_venue
-          = link_to "Continue", venue_path(gallery_state.current_venue), class: "btn-card primary"
-        = link_to "Venues »", venue_index_path, class: "btn-card"
         = link_to "Talents »", talent_index_path, class: "btn-card"
         = link_to "Tags »", tag_index_path, class: "btn-card"
+        = link_to "Sharing »", public_access_index_path, class: "btn-card"

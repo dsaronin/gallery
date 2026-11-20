@@ -1,0 +1,29 @@
+-# app/views/public_access/_form.html.haml
+= form_for @public_access, url: (@public_access.persisted? ? public_access_path(@public_access) : public_access_index_path), html: { class: "material-form" } do |f|
+  - if @public_access.errors.any?
+    .form-error-panel
+      %h5= "#{pluralize(@public_access.errors.count, 'error')} prevented saving:"
+      %ul
+        - @public_access.errors.full_messages.each do |message|
+          %li= message
+
+  .form-grid
+    .form-field.full-width
+      = f.label :label, "Recipient / Label *"
+      = f.text_field :label, required: true, class: "form-input", placeholder: "e.g. Pacific Fine Arts Curator"
+
+    .form-field
+      = f.label :access_scope, "Access Scope *"
+      = f.select :access_scope, PublicAccess.access_scopes.keys.map { |s| [s.humanize, s] }, {}, { class: "form-input form-select" }
+
+    .form-field
+      = f.label :expires_at, "Expiration Date (Optional)"
+      = f.date_field :expires_at, class: "form-input"
+
+    .form-field.full-width
+      = f.label :notes, "Notes"
+      = f.text_area :notes, rows: 3, class: "form-input", placeholder: "Optional context or contact details"
+
+  .form-actions-bar
+    = link_to "Cancel", public_access_index_path, class: "btn-cancel"
+    = f.submit (@public_access.persisted? ? "Update Access »" : "Issue Access »"), class: "btn-submit"

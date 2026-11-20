@@ -12,3 +12,7 @@
   .assoc-row
     %dt Booked:
     %dd= "#{metrics[:booked_count]} upcoming"
+  .assoc-row
+    %dt Venues:
+    %dd= "#{venue_metrics[:venues_count]} (#{venue_metrics[:total_wall_meters]}-m wall)"
+

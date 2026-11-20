@@ -1,0 +1,8 @@
+-# app/views/public_access/edit.html.haml
+.view-container#public-access-form-view
+  .form-card
+    .card-header-bar
+      %h3.form-title= "Edit: #{@public_access.label}"
+      = link_to "« Public Access", public_access_index_path, class: "header-back-link"
+
+    = render "form"

@@ -1,0 +1,301 @@
+// app/assets/stylesheets/views/_public_access.sass
+@use "../colors"
+@use "../materialdesign" as md
+
+// ----------------------------------------------------
+// Public Access Index View
+// ----------------------------------------------------
+#public-access-index
+  width: 100%
+  box-sizing: border-box
+  padding: 0.8em 0.5em
+  max-width: 960px
+  margin: 0 auto
+
+  .view-header
+    display: flex
+    align-items: center
+    margin-bottom: 1.2em
+    padding: 0 0.2em
+
+    .view-title
+      margin: 0
+      font-size: 1.4rem
+      font-weight: 900
+      color: colors.$BG_HEADER
+
+    .header-home
+      +md.MD_HOME_NAV
+
+    .header-fab
+      +md.MD_FAB
+
+  .summary-card
+    +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
+    margin-bottom: 1.2em
+
+    .card-body
+      .assoc-list
+        margin: 0
+        padding: 0
+        display: flex
+        flex-direction: column
+        gap: 0.35em
+
+      .assoc-row
+        display: flex
+        flex-direction: row
+        align-items: baseline
+        font-size: 0.80rem
+        line-height: 1.35
+
+        dt
+          min-width: 10.5em
+          flex-shrink: 0
+          font-weight: 900
+          text-transform: lowercase
+          color: colors.$BG_HEADER
+          margin: 0
+          padding: 0
+
+        dd
+          margin: 0
+          padding: 0
+          flex-grow: 1
+          color: colors.$colorBGray700
+
+  .passes-section
+    display: flex
+    flex-direction: column
+    gap: 0.6em
+
+    .section-title
+      margin: 0
+      font-size: 0.90rem
+      font-weight: 900
+      text-transform: uppercase
+      color: colors.$BG_HEADER
+
+    .empty-state
+      +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
+      padding: 1.2em
+      font-style: italic
+      color: colors.$colorBGray400
+
+    .pass-list
+      display: flex
+      flex-direction: column
+      gap: 0.45em
+
+    .pass-item
+      display: flex
+      flex-direction: row
+      justify-content: space-between
+      align-items: center
+      flex-wrap: wrap
+      gap: 0.5em
+      padding: 0.45em 0.75em
+      background-color: colors.$colorBGray025
+      border: 1px solid colors.$colorBGray100
+      +md.BEVEL_CORNER(3px)
+      font-size: 0.80rem
+
+      &.is-inactive
+        opacity: 0.65
+        background-color: colors.$colorBGray050
+
+      .pass-main
+        display: inline-flex
+        align-items: center
+        flex-wrap: wrap
+        gap: 0.5em
+
+        .pass-label
+          font-weight: bold
+          color: colors.$colorSecondary900
+          text-decoration: none
+          &:hover
+            text-decoration: underline
+
+        .scope-pill, .status-pill
+          font-size: 0.68rem
+          font-weight: bold
+          padding: 0.15em 0.45em
+          +md.BEVEL_CORNER(3px)
+
+        .scope-pill
+          background-color: colors.$colorSecondary050
+          color: colors.$colorSecondary900
+
+        .status-active
+          background-color: colors.$BASIC_BG
+          color: colors.$BASIC_FG
+
+        .status-revoked
+          background-color: colors.$colorBGray200
+          color: colors.$TURKIYE_RED
+
+        .status-expired
+          background-color: colors.$colorBGray200
+          color: colors.$colorBGray600
+
+        .pass-notes
+          font-style: italic
+          font-size: 0.72rem
+          color: colors.$colorBGray500
+
+      .pass-actions
+        display: inline-flex
+        align-items: center
+        gap: 0.6em
+
+        .btn-copy
+          +md.MD_COPY_BUTTON
+
+        .inline-revoke-form
+          display: inline-flex
+          margin: 0
+          padding: 0
+
+        .pass-revoke-btn
+          background: none !important
+          border: none !important
+          outline: none !important
+          cursor: pointer
+          font-size: 0.85rem !important
+          font-weight: bold
+          padding: 0 0.2em !important
+          margin: 0 !important
+          color: colors.$TURKIYE_RED
+          line-height: 1
+          width: auto !important
+
+          &:hover
+            opacity: 0.75
+
+// ----------------------------------------------------
+// Public Access New & Edit Form View
+// ----------------------------------------------------
+#public-access-form-view
+  width: 100%
+  box-sizing: border-box
+  padding: 1.5em 0.5em
+  max-width: 680px
+  margin: 0 auto
+
+  .form-card
+    +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
+    padding: 1.5em
+
+    .card-header-bar
+      display: flex
+      justify-content: space-between
+      align-items: baseline
+      border-bottom: 2px solid colors.$colorBGray200
+      padding-bottom: 0.6em
+      margin-bottom: 1.2em
+
+      .form-title
+        margin: 0
+        font-size: 1.3rem
+        font-weight: 900
+        color: colors.$BG_HEADER
+
+      .header-back-link
+        font-size: 0.8rem
+        font-weight: bold
+        color: colors.$colorSecondary900
+        text-decoration: none
+        &:hover
+          text-decoration: underline
+
+    .material-form
+      display: flex
+      flex-direction: column
+      gap: 1em
+
+  .form-error-panel
+    background-color: colors.$colorSecondary050
+    border: 1px solid colors.$colorSecondary200
+    padding: 0.8em 1em
+    +md.BEVEL_CORNER(4px)
+    margin-bottom: 0.5em
+
+    h5
+      margin: 0 0 0.4em 0
+      font-size: 0.85rem
+      color: colors.$TURKIYE_RED
+
+    ul
+      margin: 0
+      padding-left: 1.2em
+      li
+        font-size: 0.75rem
+        color: colors.$colorBGray800
+
+  .form-grid
+    display: grid
+    grid-template-columns: 1fr 1fr
+    gap: 1.2em
+    width: 100%
+
+    @media (max-width: 550px)
+      grid-template-columns: 1fr
+
+    .form-field
+      display: flex
+      flex-direction: column
+      gap: 0.3em
+
+      &.full-width
+        grid-column: 1 / -1
+
+      label
+        width: 100%
+        font-size: 0.75rem
+        font-weight: bold
+        color: colors.$BG_HEADER
+        margin: 0
+
+      .form-input
+        width: 100%
+        box-sizing: border-box
+        padding: 0.45em 0.6em
+        font-size: 0.85rem
+        border: 1px solid colors.$colorBGray300
+        background-color: colors.$colorBGray200
+        color: colors.$BG_HEADER
+        +md.BEVEL_CORNER(3px)
+        text-align: left
+
+        &:focus
+          outline: none
+          border: 2px solid colors.$colorSecondary500
+
+      .form-select
+        height: 2.2em
+
+  .form-actions-bar
+    display: flex
+    justify-content: flex-end
+    align-items: center
+    gap: 1em
+    margin-top: 1em
+    padding-top: 1em
+    border-top: 1px solid colors.$colorBGray200
+
+    .btn-cancel
+      font-size: 0.8rem
+      font-weight: bold
+      color: colors.$colorBGray600
+      text-decoration: none
+      &:hover
+        color: colors.$BG_HEADER
+        text-decoration: underline
+
+    .btn-submit
+      +md.MD_BUTTON
+      font-size: 0.85rem
+      padding: 0.4em 1em
+      width: auto !important
+      cursor: pointer

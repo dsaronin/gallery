@@ -1,19 +1,23 @@
 Rails.application.routes.draw do
+# *********************************************
 
   get 'dashboard', to: 'dashboard#index'
   get 'dashboard/branding', to: 'dashboard#branding'
 
+# *********************************************
   concern :gang_taggable do
     member do
       post :assign_tag
     end
   end
 
+# *********************************************
   get 'catalog/index'
   get 'catalog/selectcatalog'
   post 'catalog/loadphotos'
   resources :catalog, only: [:show, :update, :destroy], concerns: :gang_taggable
 
+# *********************************************
   resources :photo,  only: [:show, :update] do
     member do
       post   'assign_tag'
@@ -25,12 +29,14 @@ Rails.application.routes.draw do
     end
   end
 
+# *********************************************
   resources :talent do
     member do
       patch :set_cover
     end
   end
 
+# *********************************************
   concern :curatable do
     resource :curation, only: [:show] do
       collection do
@@ -41,6 +47,7 @@ Rails.application.routes.draw do
     end
   end
 
+# *********************************************
   concern :shareable do
     member do
       patch :make_public
@@ -48,6 +55,7 @@ Rails.application.routes.draw do
     end
   end
 
+# *********************************************
   resources :portfolio, controller: :portfolio, concerns: [:curatable, :gang_taggable, :shareable] do
     member do
       delete :clear_items
@@ -55,6 +63,7 @@ Rails.application.routes.draw do
     end
   end
 
+# *********************************************
   resources :exhibition, controller: :exhibition, concerns: [:curatable, :gang_taggable, :shareable] do
     member do
       delete :clear_items
@@ -63,9 +72,11 @@ Rails.application.routes.draw do
     end
   end
 
+# *********************************************
   resources :venue, controller: :venue
   resources :showing, controller: :showing
 
+# *********************************************
   resources :placard, controller: :placard do
     collection do
       get :collection_show, action: :show
@@ -78,11 +89,20 @@ Rails.application.routes.draw do
     end
   end
 
+# *********************************************
   resources :category, only: [:create, :update, :destroy]
   resources :tag,      only: [:index, :create, :update, :destroy]
 
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+# *********************************************
+  resources :public_access, controller: :public_access, only: [:index, :new, :create, :edit, :update] do
+    member do
+      patch :revoke
+    end
+  end
 
+# *********************************************
   # Defines the root path route ("/")
+# *********************************************
   root "dashboard#index"
+# *********************************************
 end

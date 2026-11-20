@@ -1,0 +1,51 @@
+-# app/views/public_access/index.html.haml
+.view-container#public-access-index
+  .view-header
+    %h3.view-title Public Access &emsp;
+    = link_to ::Gallery::Environ::NAV_GRID_GLYPH, root_path, class: "header-home", title: "Dashboard"
+    = link_to ::Gallery::Environ::NAV_PLUS_GLYPH, new_public_access_path, class: "header-fab", title: "New Public Access Pass"
+
+  .summary-card
+    .card-header
+      %h4.card-title Active Access Summary
+      %span.header-badge= "#{@metrics[:active_count]} active"
+
+    .card-body
+      %dl.assoc-list
+        .assoc-row
+          %dt All public:
+          %dd= "#{@metrics[:all_public_count]} active"
+        .assoc-row
+          %dt Portfolios only:
+          %dd= "#{@metrics[:portfolios_only_count]} active"
+        .assoc-row
+          %dt Exhibitions only:
+          %dd= "#{@metrics[:exhibitions_only_count]} active"
+
+  .passes-section
+    %h4.section-title Issued Access Passes
+    - if @public_accesses.empty?
+      .empty-state
+        %p No public access passes have been issued.
+    - else
+      .pass-list
+        - @public_accesses.each do |pass|
+          .pass-item{ class: ("is-inactive" unless pass.active?) }
+            .pass-main
+              = link_to pass.label, edit_public_access_path(pass), class: "pass-label", title: "Edit #{pass.label}"
+              %span{ class: "scope-pill scope-#{pass.access_scope}" }= pass.access_scope.humanize
+              - if pass.revoked?
+                %span.status-pill.status-revoked= "Revoked #{pass.revoked_at.to_date}"
+              - elsif pass.expired?
+                %span.status-pill.status-expired= "Expired #{pass.expires_at}"
+              - elsif pass.expires_at.present?
+                %span.status-pill.status-active= "Expires #{pass.expires_at}"
+              - else
+                %span.status-pill.status-active No expiry
+              - if pass.notes.present?
+                %span.pass-notes= truncate(pass.notes, length: 48)
+
+            .pass-actions
+              - if pass.active?
+                = render "shared/copy_button", text: pass.share_copy_target, title: "Copy access token", label: "copy »"
+                = button_to ::Gallery::Environ::NAV_DELX_GLYPH, revoke_public_access_path(pass), method: :patch, form: { class: "inline-revoke-form", data: { turbo_confirm: "Revoke public access for \"#{pass.label}\"?" } }, onclick: "return confirm('Revoke public access for \"#{j(pass.label)}\"?')", class: "pass-revoke-btn", title: "Revoke #{pass.label}"

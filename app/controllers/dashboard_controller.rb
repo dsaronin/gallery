@@ -8,11 +8,12 @@ class DashboardController < ApplicationController
 
   def index
     @metrics = {
-      catalogs:    Catalog.dashboard_metrics,
-      portfolios:  Portfolio.dashboard_metrics,
-      exhibitions: Exhibition.dashboard_metrics,
-      showings:    Showing.dashboard_metrics,
-      admin:       Venue.dashboard_metrics
+      catalogs:      Catalog.dashboard_metrics,
+      portfolios:    Portfolio.dashboard_metrics,
+      exhibitions:   Exhibition.dashboard_metrics,
+      showings:      Showing.dashboard_metrics,
+      venues:        Venue.dashboard_metrics,
+      public_access: PublicAccess.dashboard_metrics
     }
   end
 
