@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
 # *********************************************
+  # Reveal health status on /up (returns 200 if the app boots with no exceptions)
+  get "up" => "rails/health#show", as: :rails_health_check
 
+# *********************************************
   get 'dashboard', to: 'dashboard#index'
   get 'dashboard/branding', to: 'dashboard#branding'
 
