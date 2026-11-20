@@ -9,7 +9,7 @@
   width: 100%
   box-sizing: border-box
   padding: 0.8em 0.5em
-  max-width: 960px
+  max-width: 1440px
   margin: 0 auto
 
   .view-header
@@ -30,9 +30,16 @@
     .header-fab
       +md.MD_FAB
 
-  .summary-card
+  .public-access-grid
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(320px, 620px))
+    gap: 1em
+    width: 100%
+    box-sizing: border-box
+
+  .public-access-card
     +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
-    margin-bottom: 1.2em
+    min-height: auto
 
     .card-body
       .assoc-list
@@ -50,7 +57,7 @@
         line-height: 1.35
 
         dt
-          min-width: 10.5em
+          min-width: 8.5em
           flex-shrink: 0
           font-weight: 900
           text-transform: lowercase
@@ -62,116 +69,101 @@
           margin: 0
           padding: 0
           flex-grow: 1
+          min-width: 0
           color: colors.$colorBGray700
 
-  .passes-section
-    display: flex
-    flex-direction: column
-    gap: 0.6em
+      .subdued
+        font-size: 0.80rem
+        font-style: italic
+        color: colors.$colorBGray400
 
-    .section-title
-      margin: 0
-      font-size: 0.90rem
-      font-weight: 900
-      text-transform: uppercase
-      color: colors.$BG_HEADER
+      .pass-list
+        display: flex
+        flex-direction: column
+        gap: 0.25em
 
-    .empty-state
-      +md.MD_CARD(colors.$colorBGray025, colors.$colorBGray100)
-      padding: 1.2em
-      font-style: italic
-      color: colors.$colorBGray400
-
-    .pass-list
-      display: flex
-      flex-direction: column
-      gap: 0.45em
-
-    .pass-item
-      display: flex
-      flex-direction: row
-      justify-content: space-between
-      align-items: center
-      flex-wrap: wrap
-      gap: 0.5em
-      padding: 0.45em 0.75em
-      background-color: colors.$colorBGray025
-      border: 1px solid colors.$colorBGray100
-      +md.BEVEL_CORNER(3px)
-      font-size: 0.80rem
-
-      &.is-inactive
-        opacity: 0.65
-        background-color: colors.$colorBGray050
-
-      .pass-main
-        display: inline-flex
+      .pass-item
+        display: flex
+        flex-direction: row
+        justify-content: space-between
         align-items: center
         flex-wrap: wrap
         gap: 0.5em
+        padding: 0.1em 0
+        font-size: 0.80rem
+        line-height: 1.35
 
-        .pass-label
-          font-weight: bold
-          color: colors.$colorSecondary900
-          text-decoration: none
-          &:hover
-            text-decoration: underline
+        &.is-inactive
+          opacity: 0.65
 
-        .scope-pill, .status-pill
-          font-size: 0.68rem
-          font-weight: bold
-          padding: 0.15em 0.45em
-          +md.BEVEL_CORNER(3px)
-
-        .scope-pill
-          background-color: colors.$colorSecondary050
-          color: colors.$colorSecondary900
-
-        .status-active
-          background-color: colors.$BASIC_BG
-          color: colors.$BASIC_FG
-
-        .status-revoked
-          background-color: colors.$colorBGray200
-          color: colors.$TURKIYE_RED
-
-        .status-expired
-          background-color: colors.$colorBGray200
-          color: colors.$colorBGray600
-
-        .pass-notes
-          font-style: italic
-          font-size: 0.72rem
-          color: colors.$colorBGray500
-
-      .pass-actions
-        display: inline-flex
-        align-items: center
-        gap: 0.6em
-
-        .btn-copy
-          +md.MD_COPY_BUTTON
-
-        .inline-revoke-form
+        .pass-main
           display: inline-flex
-          margin: 0
-          padding: 0
+          align-items: center
+          flex-wrap: wrap
+          gap: 0.45em
 
-        .pass-revoke-btn
-          background: none !important
-          border: none !important
-          outline: none !important
-          cursor: pointer
-          font-size: 0.85rem !important
-          font-weight: bold
-          padding: 0 0.2em !important
-          margin: 0 !important
-          color: colors.$TURKIYE_RED
-          line-height: 1
-          width: auto !important
+          .pass-label
+            font-weight: bold
+            color: colors.$colorSecondary900
+            text-decoration: none
+            &:hover
+              text-decoration: underline
 
-          &:hover
-            opacity: 0.75
+          .scope-pill, .status-pill
+            font-size: 0.68rem
+            font-weight: bold
+            padding: 0.15em 0.45em
+            +md.BEVEL_CORNER(3px)
+
+          .scope-pill
+            background-color: colors.$colorSecondary050
+            color: colors.$colorSecondary900
+
+          .status-active
+            background-color: colors.$colorPrimaryAccent200
+            color: colors.$colorBGray100
+
+          .status-revoked
+            background-color: colors.$colorBGray200
+            color: colors.$TURKIYE_RED
+
+          .status-expired
+            background-color: colors.$colorBGray200
+            color: colors.$colorBGray600
+
+          .pass-notes
+            font-style: italic
+            font-size: 0.72rem
+            color: colors.$colorBGray500
+
+        .pass-actions
+          display: inline-flex
+          align-items: center
+          gap: 0.6em
+
+          .btn-copy
+            +md.MD_COPY_BUTTON
+
+          .inline-revoke-form
+            display: inline-flex
+            margin: 0
+            padding: 0
+
+          .pass-revoke-btn
+            background: none !important
+            border: none !important
+            outline: none !important
+            cursor: pointer
+            font-size: 0.85rem !important
+            font-weight: bold
+            padding: 0 0.2em !important
+            margin: 0 !important
+            color: colors.$TURKIYE_RED
+            line-height: 1
+            width: auto !important
+
+            &:hover
+              opacity: 0.75
 
 // ----------------------------------------------------
 // Public Access New & Edit Form View
