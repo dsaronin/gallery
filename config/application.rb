@@ -11,7 +11,7 @@ module Gallery
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
-    config.autoload_lib(ignore: %w[assets tasks])
+    config.autoload_lib(ignore: %w[assets tasks gallery])
 
     # Synchronize Rails configuration with Gallery::Environ
     env = Gallery::Environ.instance
