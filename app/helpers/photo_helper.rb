@@ -1,11 +1,8 @@
 module PhotoHelper
 # *******************************************************
-  GLYPH_REJECT_INACTIVE = "\u25C7" # White Diamond (◇)
-  GLYPH_REJECT_ACTIVE   = "\u25C6" # Black Diamond (◆)
-# *******************************************************
 
   def reject_glyph_for(photo)
-    photo.rejected? ? GLYPH_REJECT_ACTIVE : GLYPH_REJECT_INACTIVE
+    photo.rejected? ? ::Gallery::Environ::GLYPH_REJECT_ACTIVE : ::Gallery::Environ::GLYPH_REJECT_INACTIVE
   end
 
   def reject_button_class(photo)
@@ -24,7 +21,7 @@ module PhotoHelper
       star_btns = (1..5).map do |i|
         target = (photo.stars == i) ? 0 : i
         is_active = photo.stars >= i
-        star_char = is_active ? "★" : "☆"
+        star_char = is_active ? ::Gallery::Environ::GLYPH_STAR_ACTIVE : ::Gallery::Environ::GLYPH_STAR_INACTIVE
         star_btn_class = is_active ? "star-btn active" : "star-btn"
         star_button(photo, target, star_char, star_btn_class)
       end

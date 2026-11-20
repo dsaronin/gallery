@@ -64,6 +64,12 @@ class Environ
   NAV_PLUS_GLYPH = "+".freeze
   NAV_DELX_GLYPH = "✘".freeze
 
+# UI rating glyphs
+  GLYPH_REJECT_INACTIVE = "\u25C7".freeze # White Diamond (◇)
+  GLYPH_REJECT_ACTIVE   = "\u25C6".freeze # Black Diamond (◆)
+  GLYPH_STAR_INACTIVE   = "\u2606".freeze # White Star (☆)
+  GLYPH_STAR_ACTIVE     = "\u2605".freeze # Black Star (★)
+
 # Operational curation capacity bounds
     MAX_PORTFOLIO_SIZE  = 60
     MAX_EXHIBITION_SIZE = 40
