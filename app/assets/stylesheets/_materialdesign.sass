@@ -3,6 +3,7 @@
 // File: app/assets/stylesheets/_materialdesign.sass
 // --------------------------------------------------------
 
+@use 'sass:math'
 @use 'colors'
 
 // --------------------------------------------------------
@@ -11,8 +12,8 @@
 $thumbCellWidth:         90px
 $thumbImageWidth:        80px
 $placardThumbWidth:      155px
-$placardThumbCardRatio:  8 / 9
-$placardThumbImageRatio: 3 / 2
+$placardThumbCardRatio:  math.div(8, 9)
+$placardThumbImageRatio: math.div(3, 2)
 // --------------------------------------------------------
 =BEVEL_CORNER($RADIUS)
   -moz-border-radius: $RADIUS
